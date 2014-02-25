@@ -2,10 +2,11 @@
 #define ComponentFactory_h__
 
 #include <string>
+#include <memory>
 #include <functional>
 #include <map>
 
-#include "Component.h"
+struct Component;
 
 #define REGISTER_COMPONENT(NAME, TYPE) \
 	static ComponentRegistrar<TYPE> registrar(NAME);
@@ -16,7 +17,7 @@ class ComponentRegistrar
 public:
 	ComponentRegistrar(std::string name)
 	{
-		ComponentFactory::Instance()->Register(name, [](void) -> std::shared_ptr<Component> { return new T() });
+		ComponentFactory::Instance()->Register(name, [](void) -> std::shared_ptr<Component> { return std::shared_ptr<Component>(new T()); });
 	}
 };
 

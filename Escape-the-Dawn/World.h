@@ -1,3 +1,6 @@
+#ifndef World_h__
+#define World_h__
+
 #include <stack>
 #include <unordered_map>
 #include <vector>
@@ -5,7 +8,8 @@
 
 #include "Entity.h"
 #include "Component.h"
-#include "Components/Transform.h"
+#include "ComponentFactory.h"
+//#include "Components/Transform.h"
 
 class World
 {
@@ -79,3 +83,5 @@ private:
 		m_RecycledEntityIDs.push(id);
 	}
 };
+
+#endif // World_h__

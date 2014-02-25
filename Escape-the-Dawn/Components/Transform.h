@@ -1,13 +1,17 @@
+#ifndef Transform_h__
+#define Transform_h__
+
 #include "Component.h"
 
 namespace Components
 {
 
-REGISTER_COMPONENT("Transform", Transform);
 struct Transform : Component
 {
 	float Position[3];
 };
+REGISTER_COMPONENT("Transform", Transform);
 
 }
 
+#endif // Transform_h__

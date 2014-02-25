@@ -1,10 +1,8 @@
 #ifndef Component_h__
 #define Component_h__
 
-#include <memory>
-
-#include "Entity.h"
 #include "ComponentFactory.h"
+#include "Entity.h"
 
 struct Component
 {
