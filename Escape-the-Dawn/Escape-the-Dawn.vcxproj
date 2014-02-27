@@ -99,16 +99,6 @@
     <ClInclude Include="glerror.h" />
     <ClInclude Include="World.h" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Tests\Tests.vcxproj">
-      <Project>{b9a8f4aa-be85-45ea-84dd-652d13dd22be}</Project>
-      <Private>false</Private>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-      <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
-      <LinkLibraryDependencies>false</LinkLibraryDependencies>
-      <UseLibraryDependencyInputs>false</UseLibraryDependencyInputs>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
