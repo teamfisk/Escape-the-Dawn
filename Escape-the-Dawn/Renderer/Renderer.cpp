@@ -1,16 +1,6 @@
-#include "Renderer/Renderer.h"
+#include "Renderer.h"
 
 Renderer::Renderer()
-{
-
-}
-
-void Renderer::Draw()
-{
-
-}
-
-void Renderer::DrawText()
 {
 
 }
@@ -61,4 +51,5 @@ GLuint Renderer::CompileShader(GLenum shaderType, std::string fileName)
 		return 0;
 
 	return shader;
+
 }

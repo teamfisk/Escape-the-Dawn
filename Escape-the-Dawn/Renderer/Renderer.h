@@ -25,9 +25,12 @@ public:
 	GLuint VAO;
 
 	Renderer();
-	
+
 	void Draw();
 	void DrawText();
+
+	void AddObjectToDraw();
+	void AddTextToDraw();
 
 	GLuint CompileShader(GLenum, std::string);
 
