@@ -11,7 +11,7 @@ struct Component;
 #define REGISTER_COMPONENT(NAME, TYPE) \
 	static ComponentRegistrar<TYPE> registrar(NAME);
 
-template<class T>
+template <typename T>
 class ComponentRegistrar
 {
 public:

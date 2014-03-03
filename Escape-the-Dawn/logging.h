@@ -49,7 +49,7 @@ static void _LOG(_LOG_LEVEL logLevel, char* file, char* func, unsigned int line,
 	char message[512];
 	va_list args;
 	va_start(args, format);
-	vsnprintf(message, 512, format, args);
+	vsnprintf_s(message, 512, format, args);
 	va_end(args);
 
 	if (logLevel == LOG_LEVEL_ERROR)
