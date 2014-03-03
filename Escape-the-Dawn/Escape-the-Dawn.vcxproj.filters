@@ -25,9 +25,7 @@
     <ClCompile Include="Systems\SoundsSystem.cpp">
       <Filter>Systems</Filter>
     </ClCompile>
-    <ClCompile Include="Model.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
+    <ClCompile Include="Model.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component.h" />
@@ -59,11 +57,9 @@
     <ClInclude Include="Systems\SoundSystem.h">
       <Filter>Systems</Filter>
     </ClInclude>
-    <ClInclude Include="Components\Transform.h">
+    <ClInclude Include="Model.h" />
+    <ClInclude Include="Components\TransformComponent.h">
       <Filter>Components</Filter>
-    </ClInclude>
-    <ClInclude Include="Model.h">
-      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -103,7 +103,7 @@
   <ItemGroup>
     <ClInclude Include="Component.h" />
     <ClInclude Include="ComponentFactory.h" />
-    <ClInclude Include="Components\Transform.h" />
+    <ClInclude Include="Components\TransformComponent.h" />
     <ClInclude Include="Entity.h" />
     <ClInclude Include="logging.h" />
     <ClInclude Include="glerror.h" />
