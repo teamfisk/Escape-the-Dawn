@@ -9,12 +9,34 @@
 #include "logging.h"
 #include "glerror.h"
 
+#include "World.h"
+
 GLFWwindow* window;
 GLint glVersion[2];
 GLchar* glVendor;
 
 int main(int argc, char* argv[])
 {
+	World world;
+
+	EntityID ent1 = world.CreateEntity();
+	auto t1 = world.AddComponent<Components::Transform>(ent1, "Transform");
+	t1->Position[0] = 1.0f;
+	t1->Position[1] = 1.0f;
+	t1->Position[2] = 1.0f;
+	EntityID ent2 = world.CreateEntity(ent1);
+	auto t2 = world.AddComponent<Components::Transform>(ent2, "Transform");
+	t2->Position[0] = 1.0f;
+	t2->Position[1] = 1.0f;
+	t2->Position[2] = 1.0f;
+
+	world.Update(0.0);
+
+	LOG_INFO("ent1: %f %f %f", t1->Position[0], t1->Position[1], t1->Position[2]);
+	LOG_INFO("ent2: %f %f %f", t2->Position[0], t2->Position[1], t2->Position[2]);
+
+	return 0;
+
 	// Initialize GLFW
 	if (!glfwInit())
 	{
