@@ -5,6 +5,29 @@ Renderer::Renderer()
 
 }
 
+void Renderer::Draw()
+{
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glClearColor(1.0f, 1.0f, 0.0f, 1.0f);
+
+	glUseProgram(shaderProgram);
+}
+
+void Renderer::DrawText()
+{
+	//DrawShitInTextForm
+}
+
+void Renderer::AddTextToDraw()
+{
+	//Add to draw shit vector
+}
+
+void Renderer::AddObjectToDraw()
+{
+
+}
+
 //Fixa med shaders, lägga in alla verts osv.
 
 
@@ -53,3 +76,4 @@ GLuint Renderer::CompileShader(GLenum shaderType, std::string fileName)
 	return shader;
 
 }
+

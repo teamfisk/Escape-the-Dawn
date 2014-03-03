@@ -16,26 +16,26 @@
 #include <glm/gtc/type_ptr.hpp>
 
 #include "glerror.h"
+#include <cstdlib>
 
-
-class Renderer
+class Model
 {
 public:
-	GLuint shaderProgram;
+	glm::vec3 Position;
+	std::vector<float> Vertices;
+	std::vector<float> Normals;
+	std::vector<float> TextureCoords;
+
+
+
+	GLuint VertBuffer;
+	GLuint NormalBuffer;
+	GLuint TextureCoordBuffer;
 	GLuint VAO;
 
-	std::vector<std::vector<float>> Vertices;
-	std::vector<std::vector<float>> Normals;
-	std::vector<std::vector<float>> TextureCoords;
+	Model();
 
-	Renderer();
-
-	void Draw();
-	void DrawText();
-
-	void AddObjectToDraw(std::vector<float>, std::vector<float>, std::vector<float>);
-	void AddTextToDraw();
-
-	GLuint CompileShader(GLenum, std::string);
+	void temp_CreateModelShit();
+	void CreateBuffers(std::vector<float>, std::vector<float>, std::vector<float>);
 
 };
