@@ -4,7 +4,7 @@
 Model::Model()
 {
 	temp_CreateModelShit();
-	CreateBuffers();
+	CreateBuffers(Vertices, Normals, TextureCoords);
 }
 
 
@@ -22,9 +22,9 @@ void Model::temp_CreateModelShit()
 	Vertices.push_back(0.0f);
 	Vertices.push_back(2.0f);
 
-	Normals.push_back();
-	Normals.push_back();
-	Normals.push_back();
+	Normals.push_back(1.0f);
+	Normals.push_back(1.0f);
+	Normals.push_back(1.0f);
 }
 
 
@@ -32,17 +32,17 @@ void Model::CreateBuffers( std::vector<float> _Vertices, std::vector<float> _Nor
 {
 	glGenBuffers(1, &VertBuffer);
 	glBindBuffer(GL_ARRAY_BUFFER, VertBuffer);
-	glBufferData(GL_ARRAY_BUFFER, Vertices.size()*sizeof(float), Vertices.data, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, Vertices.size()*sizeof(float), Vertices.data(), GL_STATIC_DRAW);
 	GLERROR("GLEW: BufferFail1");
 
 	glGenBuffers(1, &NormalBuffer);
 	glBindBuffer(GL_ARRAY_BUFFER, NormalBuffer);
-	glBufferData(GL_ARRAY_BUFFER, Normals.size()*sizeof(float), Normals.data, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, Normals.size()*sizeof(float), Normals.data(), GL_STATIC_DRAW);
 	GLERROR("GLEW: BufferFail2");
 
 	glGenBuffers(1, &TextureCoordBuffer);
 	glBindBuffer(GL_ARRAY_BUFFER, TextureCoordBuffer);
-	glBufferData(GL_ARRAY_BUFFER, TextureCoords.size()*sizeof(float), TextureCoords.data, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, TextureCoords.size()*sizeof(float), TextureCoords.data(), GL_STATIC_DRAW);
 	GLERROR("GLEW: BufferFail3");
 
 	glGenVertexArrays(1, &VAO);

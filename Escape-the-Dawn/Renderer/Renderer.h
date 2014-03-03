@@ -33,7 +33,7 @@ public:
 	void Draw();
 	void DrawText();
 
-	void AddObjectToDraw(std::vector<float>, std::vector<float>, std::vector<float>);
+	void AddObjectToDraw();
 	void AddTextToDraw();
 
 	GLuint CompileShader(GLenum, std::string);
