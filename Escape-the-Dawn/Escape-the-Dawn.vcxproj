@@ -92,6 +92,7 @@
     <ClCompile Include="Model.cpp" />
     <ClCompile Include="Renderer\Renderer.cpp" />
     <ClCompile Include="Systems\CollisionSystem.cpp" />
+    <ClCompile Include="World.cpp" />
     <ClCompile Include="Systems\InputSystem.cpp" />
     <ClCompile Include="Systems\LevelGenerationSystem.cpp" />
     <ClCompile Include="Systems\ParticleSystem.cpp" />
@@ -108,8 +109,9 @@
     <ClInclude Include="glerror.h" />
     <ClInclude Include="Model.h" />
     <ClInclude Include="Renderer\Renderer.h" />
-    <ClInclude Include="Systems\CollisionSystem.h" />
     <ClInclude Include="Systems\InputSystem.h" />
+    <ClInclude Include="System.h" />
+    <ClInclude Include="Systems\CollisionSystem.h" />
     <ClInclude Include="Systems\LevelGenerationSystem.h" />
     <ClInclude Include="Systems\ParticleSystem.h" />
     <ClInclude Include="Systems\PlayerSystem.h" />

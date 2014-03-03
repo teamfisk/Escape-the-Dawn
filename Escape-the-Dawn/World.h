@@ -9,79 +9,60 @@
 #include "Entity.h"
 #include "Component.h"
 #include "ComponentFactory.h"
-//#include "Components/Transform.h"
+#include "System.h"
+#include "Systems/CollisionSystem.h"
 
 class World
 {
 public:
-	World()
-	{
-		m_LastEntityID = 0;
-	}
+	World();
+	~World();
 
-	EntityID CreateEntity(EntityID parent = 0)
-	{
-		EntityID newEntity = GenerateEntityID();
-		m_SceneGraph.insert(std::pair<EntityID, EntityID>(newEntity, parent));
-		return newEntity;
-	}
+	EntityID CreateEntity(EntityID parent = 0);
 
-	void RemoveEntity(EntityID entity)
-	{
-		m_SceneGraph.erase(entity);
-		RecycleEntityID(entity);
-	}
+	void RemoveEntity(EntityID entity);
 
-	bool ValidEntity(EntityID entity)
-	{
-		return m_SceneGraph.find(entity) != m_SceneGraph.end();
-	}
+	bool ValidEntity(EntityID entity);
 
-	EntityID GetEntityParent(EntityID entity)
-	{
-		auto it = m_SceneGraph.find(entity);
-		return it == m_SceneGraph.end() ? 0 : it->second;
-	}
+	EntityID GetEntityParent(EntityID entity);
 
-	std::shared_ptr<Component> AddComponent(EntityID entity, std::string componentType)
+	template <class T>
+	std::shared_ptr<T> AddComponent(EntityID entity, std::string componentType)
 	{
-		std::shared_ptr<Component> component = ComponentFactory::Instance()->Create(componentType);
+		std::shared_ptr<T> component = std::static_pointer_cast<T>(ComponentFactory::Instance()->Create(componentType));
 		m_ComponentsOfType[componentType].push_back(component);
 		m_EntityComponents[entity][componentType] = component;
+		return component;
 	}
 
-	/*std::vector<EntityID> GetEntityChildren(EntityID entity)
+	template <class T>
+	std::shared_ptr<T> GetComponent(EntityID entity, std::string componentType)
 	{
-		std::vector<EntityID> children;
-		auto range = m_SceneGraph.equal_range(entity);
-		for (auto it = range.first; it != range.second; ++it)
-			children.push_back(it->second);
-		return children;
-	}*/
+		return std::static_pointer_cast<T>(m_EntityComponents[entity][componentType]);
+	}
+
+	/*std::vector<EntityID> GetEntityChildren(EntityID entity);*/
+
+	void AddSystem(System* system);
+
+	// Recursively update through the scene graph 
+	void Update(double dt);
+
+	void RecursiveUpdate(std::shared_ptr<System> system, double dt, EntityID parentEntity);
 
 private:
 	EntityID m_LastEntityID;
 	std::stack<EntityID> m_RecycledEntityIDs;
-	// A map of child entities to parent entities
-	std::unordered_map<EntityID, EntityID> m_SceneGraph; 
+	// A bottom to top tree. A map of child entities to parent entities.
+	std::unordered_map<EntityID, EntityID> m_EntityParents;
+	
 	std::unordered_map<std::string, std::vector<std::shared_ptr<Component>>> m_ComponentsOfType;
 	std::unordered_map<EntityID, std::map<std::string, std::shared_ptr<Component>>> m_EntityComponents;
+	std::vector<std::shared_ptr<System>> m_Systems;
 
-	EntityID GenerateEntityID()
-	{
-		if (!m_RecycledEntityIDs.empty()) {
-			EntityID id = m_RecycledEntityIDs.top();
-			m_RecycledEntityIDs.pop();
-			return id;
-		} else {
-			return ++m_LastEntityID;
-		}
-	}
+	EntityID GenerateEntityID();
 
-	void RecycleEntityID(EntityID id)
-	{
-		m_RecycledEntityIDs.push(id);
-	}
+	void RecycleEntityID(EntityID id);
 };
 
 #endif // World_h__

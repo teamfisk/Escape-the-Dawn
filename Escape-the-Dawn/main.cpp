@@ -9,6 +9,8 @@
 #include "logging.h"
 #include "glerror.h"
 
+#include "World.h"
+
 GLFWwindow* window;
 GLint glVersion[2];
 GLchar* glVendor;
