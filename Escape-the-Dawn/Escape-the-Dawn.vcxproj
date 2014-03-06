@@ -109,6 +109,7 @@
     <ClInclude Include="glerror.h" />
     <ClInclude Include="Model.h" />
     <ClInclude Include="Renderer\Renderer.h" />
+    <ClInclude Include="ShaderProgram.h" />
     <ClInclude Include="Systems\InputSystem.h" />
     <ClInclude Include="System.h" />
     <ClInclude Include="Systems\CollisionSystem.h" />
