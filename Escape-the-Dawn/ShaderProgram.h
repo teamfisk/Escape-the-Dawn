@@ -17,75 +17,18 @@
 class Shader
 {
 public:
-	static GLuint CompileShader(GLenum shaderType, std::string fileName)
-	{
-		LOG_INFO("Compiling shader \"%s\"", fileName.c_str());
+	static GLuint CompileShader(GLenum shaderType, std::string fileName);
 
-		std::string shaderFile;
-		std::ifstream in(fileName, std::ios::in);
-		if(!in)
-		{
-			LOG_ERROR("Error: Failed to open shader file \"%s\"", fileName.c_str());
-			return 0;
-		}
-		in.seekg(0, std::ios::end);
-		shaderFile.resize((int)in.tellg());
-		in.seekg(0, std::ios::beg);
-		in.read(&shaderFile[0], shaderFile.size());
-		in.close();
+	Shader(GLenum shaderType, std::string fileName);
 
-		GLuint shader = glCreateShader(shaderType);
-		if(GLERROR("glCreateShader"))
-			return 0;
+	virtual ~Shader();
 
-		const GLchar* shaderFiles = shaderFile.c_str();
-		const GLint length = shaderFile.length();
-		glShaderSource(shader, 1, &shaderFiles, &length);
-		if(GLERROR("glShaderSource"))
-			return 0;
+	GLuint Compile();
 
-		glCompileShader(shader);
-
-		GLint compileStatus;
-		glGetShaderiv(shader, GL_COMPILE_STATUS, &compileStatus);
-		if(compileStatus != GL_TRUE)
-		{
-			LOG_ERROR("Shader compilation failed");
-			GLsizei infoLogLength;
-			glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &infoLogLength);
-			GLchar* infolog = new GLchar[infoLogLength];
-			glGetShaderInfoLog(shader, infoLogLength, &infoLogLength, infolog);
-			LOG_ERROR(infolog);
-			delete[] infolog;
-		}
-
-		if(GLERROR("glCompileShader"))
-			return 0;
-
-		return shader;
-	}
-
-	Shader(GLenum shaderType, std::string fileName)
-		: m_ShaderType(shaderType), m_FileName(fileName)
-	{
-		m_ShaderHandle = 0;
-	}
-
-	virtual ~Shader()
-	{
-		glDeleteShader(m_ShaderHandle);
-	}
-
-	GLuint Compile()
-	{
-		m_ShaderHandle = CompileShader(m_ShaderType, m_FileName);
-		return m_ShaderHandle;
-	}
-
-	GLenum GetType() const { return m_ShaderType; }
-	std::string GetFileName() const { return m_FileName; }
-	GLuint GetHandle() const { return m_ShaderHandle; }
-	bool IsCompiled() const { return m_ShaderHandle != 0; }
+	GLenum GetType() const;
+	std::string GetFileName() const;
+	GLuint GetHandle() const;
+	bool IsCompiled() const;
 
 protected:
 	GLenum m_ShaderType;
@@ -125,65 +68,24 @@ public:
 class ShaderProgram
 {
 public:
-	ShaderProgram()
-	{
-		Initialize();
-	}
+	ShaderProgram();
+	~ShaderProgram();
 	
-	ShaderProgram(std::string vertexShaderFile, std::string fragmentShaderFile)
-	{
-		AddShader(std::unique_ptr<Shader>(new VertexShader(vertexShaderFile)));
-		AddShader(std::unique_ptr<Shader>(new VertexShader(fragmentShaderFile)));
-		Initialize();
-	}
+	ShaderProgram(std::string vertexShaderFile, std::string fragmentShaderFile);
 
-	void AddShader(std::unique_ptr<Shader> shader)
-	{
-		if (!shader->IsCompiled()) {
-			shader->Compile();
-		}
+	void AddShader(std::unique_ptr<Shader> shader);
 
-		m_Shaders.push_back(std::move(shader));
-	}
+	GLuint Link();
 
-	GLuint Link()
-	{
-		LOG_INFO("Linking shader program");
-		m_ShaderProgramHandle = glCreateProgram();
-		for (auto &shader : m_Shaders) {
-			glAttachShader(m_ShaderProgramHandle, shader->GetHandle());
-		}
-		glLinkProgram(m_ShaderProgramHandle);
-		if (GLERROR("glLinkProgram"))
-			return 0;
+	void Bind();
 
-		for (auto &shader : m_Shaders) {
-			shader.release();
-		}
-		m_Shaders.clear();
-	}
-
-	void Bind()
-	{
-		if (m_ShaderProgramHandle == 0)
-			return;
-
-		glActiveShaderProgram(0, m_ShaderProgramHandle);
-	}
-
-	void Unbind()
-	{
-		glActiveShaderProgram(0, 0);
-	}
+	void Unbind();
 
 private:
 	GLuint m_ShaderProgramHandle;
 	std::vector<std::unique_ptr<Shader>> m_Shaders;
 	
-	void Initialize()
-	{
-		m_ShaderProgramHandle = 0;
-	}
+	void Initialize();
 };
 
 #endif // ShaderProgram_h__
