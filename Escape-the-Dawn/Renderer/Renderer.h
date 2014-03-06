@@ -16,12 +16,12 @@
 #include <glm/gtc/type_ptr.hpp>
 
 #include "glerror.h"
-
+#include "ShaderProgram.h"
 
 class Renderer
 {
 public:
-	GLuint shaderProgram;
+	std::shared_ptr<ShaderProgram> m_ShaderProgram;
 	GLuint VAO;
 
 	std::vector<std::vector<float>> Vertices;

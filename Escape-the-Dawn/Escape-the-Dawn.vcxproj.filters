@@ -26,6 +26,7 @@
       <Filter>Systems</Filter>
     </ClCompile>
     <ClCompile Include="Model.cpp" />
+    <ClCompile Include="Engine.h" />
     <ClCompile Include="AABB.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -58,10 +59,11 @@
     <ClInclude Include="Systems\SoundSystem.h">
       <Filter>Systems</Filter>
     </ClInclude>
+    <ClInclude Include="Model.h" />
     <ClInclude Include="Components\Transform.h">
       <Filter>Components</Filter>
     </ClInclude>
-    <ClInclude Include="Model.h" />
+    <ClInclude Include="ShaderProgram.h" />
     <ClInclude Include="Components\Bounds.h">
       <Filter>Components</Filter>
     </ClInclude>

@@ -5,6 +5,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Escape-the-Dawn", "Escape-t
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Tests", "Tests\Tests.vcxproj", "{B9A8F4AA-BE85-45EA-84DD-652D13DD22BE}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Executable", "Executable\Executable.vcxproj", "{A9755CAA-62DC-442D-B82C-F548546CFD38}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -19,6 +21,10 @@ Global
 		{B9A8F4AA-BE85-45EA-84DD-652D13DD22BE}.Debug|Win32.Build.0 = Debug|Win32
 		{B9A8F4AA-BE85-45EA-84DD-652D13DD22BE}.Release|Win32.ActiveCfg = Release|Win32
 		{B9A8F4AA-BE85-45EA-84DD-652D13DD22BE}.Release|Win32.Build.0 = Release|Win32
+		{A9755CAA-62DC-442D-B82C-F548546CFD38}.Debug|Win32.ActiveCfg = Debug|Win32
+		{A9755CAA-62DC-442D-B82C-F548546CFD38}.Debug|Win32.Build.0 = Debug|Win32
+		{A9755CAA-62DC-442D-B82C-F548546CFD38}.Release|Win32.ActiveCfg = Release|Win32
+		{A9755CAA-62DC-442D-B82C-F548546CFD38}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
