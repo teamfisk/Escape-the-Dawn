@@ -36,6 +36,7 @@ public:
 	void AddObjectToDraw();
 	void AddTextToDraw();
 
+	void LoadContent();
 	GLuint CompileShader(GLenum, std::string);
 
 };

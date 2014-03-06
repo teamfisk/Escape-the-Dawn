@@ -22,12 +22,12 @@ class Model
 {
 public:
 	glm::vec3 Position;
+	std::vector<float> Colors;
 	std::vector<float> Vertices;
 	std::vector<float> Normals;
 	std::vector<float> TextureCoords;
 
-
-
+	GLuint Colorbuffer;
 	GLuint VertBuffer;
 	GLuint NormalBuffer;
 	GLuint TextureCoordBuffer;

@@ -30,6 +30,23 @@ void Renderer::AddObjectToDraw()
 
 //Fixa med shaders, lägga in alla verts osv.
 
+void Renderer::LoadContent()
+{
+	glEnable(GL_DEPTH_TEST);
+	LOG_INFO("Compiling Shader");
+
+	GLuint vertexShader = CompileShader(GL_VERTEX_SHADER, "Shaders/Vertex.glsl");
+	GLuint fragmentShader = CompileShader(GL_FRAGMENT_SHADER, "Shaders\Fragment.glsl");
+
+	shaderProgram = glCreateProgram();
+	glAttachShader(shaderProgram, vertexShader);
+	glAttachShader(shaderProgram, fragmentShader);
+	LOG_INFO("Linking shader program...");
+	glLinkProgram(shaderProgram);
+	if(GLERROR("glLinkProgram"))
+		exit(EXIT_FAILURE);
+
+}
 
 GLuint Renderer::CompileShader(GLenum shaderType, std::string fileName)
 {
