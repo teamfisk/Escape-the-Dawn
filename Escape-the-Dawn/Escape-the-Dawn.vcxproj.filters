@@ -25,9 +25,8 @@
     <ClCompile Include="Systems\SoundsSystem.cpp">
       <Filter>Systems</Filter>
     </ClCompile>
-    <ClCompile Include="Model.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
+    <ClCompile Include="Model.cpp" />
+    <ClCompile Include="AABB.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component.h" />
@@ -62,9 +61,48 @@
     <ClInclude Include="Components\Transform.h">
       <Filter>Components</Filter>
     </ClInclude>
-    <ClInclude Include="Model.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Model.h" />
+    <ClInclude Include="Components\Bounds.h">
+      <Filter>Components</Filter>
     </ClInclude>
+    <ClInclude Include="Components\Camera.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\Collision.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\DirectionalLight.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\Input.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\Model.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\ParticleEmitter.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\PointLight.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\PowerUp.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\Sprite.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\Stat.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\Template.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\SoundEmitter.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="AABB.h" />
+    <ClInclude Include="Color.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Shaders\Fragment.glsl">
