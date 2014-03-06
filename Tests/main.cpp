@@ -1,5 +1,5 @@
 #include "World.h"
-#include "Components/Transform.h"
+#include "Components/TransformComponent.h"
 
 #define BOOST_TEST_MODULE World
 #define BOOST_TEST_DYN_LINK

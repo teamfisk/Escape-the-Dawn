@@ -26,6 +26,7 @@
       <Filter>Systems</Filter>
     </ClCompile>
     <ClCompile Include="Model.cpp" />
+    <ClCompile Include="Engine.h" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component.h" />
