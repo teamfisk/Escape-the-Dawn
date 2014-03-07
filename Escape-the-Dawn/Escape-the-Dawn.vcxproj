@@ -99,7 +99,8 @@
   <ItemGroup>
     <ClCompile Include="Engine.h" />
     <ClCompile Include="Model.cpp" />
-    <ClCompile Include="Renderer\Renderer.cpp" />
+    <ClCompile Include="Renderer.cpp" />
+    <ClCompile Include="ShaderProgram.cpp" />
     <ClCompile Include="Systems\CollisionSystem.cpp" />
     <ClCompile Include="World.cpp" />
     <ClCompile Include="Systems\InputSystem.cpp" />

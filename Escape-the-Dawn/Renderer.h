@@ -20,23 +20,22 @@
 
 #include "glerror.h"
 #include "ShaderProgram.h"
+#include "Model.h"
 
 class Renderer
 {
 public:
 	std::shared_ptr<ShaderProgram> m_ShaderProgram;
-	GLuint VAO;
 
-	std::vector<std::vector<float>> Vertices;
-	std::vector<std::vector<float>> Normals;
-	std::vector<std::vector<float>> TextureCoords;
+	std::vector<Model*> ModelsToRender;
 
 	Renderer();
 
-	void Draw();
+	void Initialize();
+	void Draw(double dt);
 	void DrawText();
 
-	void AddObjectToDraw();
+	void AddModelToDraw(Model*);
 	void AddTextToDraw();
 
 	void LoadContent();
@@ -45,6 +44,8 @@ public:
 
 private:
 	GLFWwindow* m_Window;
+	GLint m_glVersion[2];
+	GLchar* m_glVendor;
 };
 
 #endif // Renderer_h__
