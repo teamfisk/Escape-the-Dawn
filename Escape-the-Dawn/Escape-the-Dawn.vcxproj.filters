@@ -1,7 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="Renderer\Renderer.cpp" />
     <ClCompile Include="World.cpp" />
     <ClCompile Include="Systems\CollisionSystem.cpp">
       <Filter>Systems</Filter>
@@ -27,6 +26,23 @@
     <ClCompile Include="Model.cpp" />
     <ClCompile Include="Engine.h" />
     <ClCompile Include="Texture.cpp" />
+    <ClCompile Include="GUIManager.cpp">
+      <Filter>Gui</Filter>
+    <ClCompile Include="Renderer.cpp" />
+    <ClCompile Include="ShaderProgram.cpp" />
+    </ClCompile>
+    <ClCompile Include="Frame.cpp">
+      <Filter>Gui</Filter>
+    </ClCompile>
+    <ClCompile Include="TextFrame.cpp">
+      <Filter>Gui</Filter>
+    </ClCompile>
+    <ClCompile Include="MenuFrame.cpp">
+      <Filter>Gui</Filter>
+    </ClCompile>
+    <ClCompile Include="GameFrame.cpp">
+      <Filter>Gui</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component.h" />
@@ -86,7 +102,6 @@
     <ClInclude Include="Components\SoundEmitter.h">
       <Filter>Components</Filter>
     </ClInclude>
-    <ClInclude Include="AABB.h" />
     <ClInclude Include="Color.h" />
     <ClInclude Include="Factory.h" />
     <ClInclude Include="Components\DirectionalLight.h">
@@ -109,6 +124,21 @@
     </ClInclude>
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="Texture.h" />
+    <ClInclude Include="GUIManager.h">
+      <Filter>Gui</Filter>
+    </ClInclude>
+    <ClInclude Include="Frame.h">
+      <Filter>Gui</Filter>
+    </ClInclude>
+    <ClInclude Include="TextFrame.h">
+      <Filter>Gui</Filter>
+    </ClInclude>
+    <ClInclude Include="MenuFrame.h">
+      <Filter>Gui</Filter>
+    </ClInclude>
+    <ClInclude Include="GameFrame.h">
+      <Filter>Gui</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Shaders\Fragment.glsl">
@@ -130,6 +160,9 @@
     </Filter>
     <Filter Include="Util">
       <UniqueIdentifier>{d985d7a7-c041-46fe-ae03-aa40295a7aad}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Gui">
+      <UniqueIdentifier>{7bdb0f69-049e-4f16-b271-2495e02e4b28}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

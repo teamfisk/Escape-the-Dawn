@@ -2,6 +2,7 @@
 #define System_h__
 
 #include "Entity.h"
+#include "Component.h"
 
 class World;
 
@@ -15,6 +16,9 @@ public:
 	virtual void Update(double dt) { }
 	// Called once for every entity in the world every tick
 	virtual void Update(double dt, EntityID entity, EntityID parent) { }
+
+	// Called when a component is created
+	virtual void OnComponentCreated(std::string type, std::	shared_ptr<Component> component);
 
 protected:
 	World* m_World;
