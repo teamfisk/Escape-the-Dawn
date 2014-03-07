@@ -1,8 +1,12 @@
+#ifndef Model_h__
+#define Model_h__
+
 #include <string>
 #include <fstream>
 #include <iostream>
 #include <sstream>
 #include <vector>
+#include <memory>
 
 #define _CRT_SECURE_NO_WARNINGS
 #include <GL/glew.h>
@@ -50,3 +54,4 @@ public:
 		);
 
 };
+#endif // Model_h__
