@@ -1,5 +1,5 @@
-#ifndef DirectionalLight_h__
-#define DirectionalLight_h__
+#ifndef Components_DirectionalLight_h__
+#define Components_DirectionalLight_h__
 
 #include "Component.h"
 #include "Color.h"
@@ -7,14 +7,13 @@
 namespace Components
 {
 
-	struct DirectionalLight : Component
-	{
-		float Intensity;
-		float MaxRange;
-		float SpecularIntensity;
-		Color color;
-	};
-	REGISTER_COMPONENT("DirectionalLight", DirectionalLight);
+struct DirectionalLight : Component
+{
+	float Intensity;
+	float MaxRange;
+	float SpecularIntensity;
+	Color Color;
+};
 
 }
-#endif // !DirectionalLight_h__
+#endif // !Components_DirectionalLight_h__

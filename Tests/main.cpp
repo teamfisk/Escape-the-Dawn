@@ -1,5 +1,7 @@
+#include "logging.h"
+
 #include "World.h"
-#include "Components/TransformComponent.h"
+#include "Components/Transform.h"
 
 #define BOOST_TEST_MODULE World
 #define BOOST_TEST_DYN_LINK
@@ -50,4 +52,13 @@ BOOST_AUTO_TEST_CASE(Recycling)
 	world.RemoveEntity(ent11);
 	EntityID ent12 = world.CreateEntity(); // 1
 	BOOST_REQUIRE(ent11 == ent12);
+}
+
+BOOST_AUTO_TEST_CASE(ComponentCreation)
+{
+	World world;
+
+	EntityID ent = world.CreateEntity();
+	BOOST_CHECK(world.AddComponent(ent, "Transform") != nullptr);
+	BOOST_CHECK(world.AddComponent(ent, "Input") != nullptr);
 }

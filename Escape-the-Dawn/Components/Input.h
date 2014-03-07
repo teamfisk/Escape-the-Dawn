@@ -1,19 +1,24 @@
-#ifndef Input_h__
-#define Input_h__
+#ifndef Components_Input_h__
+#define Components_Input_h__
+
+#include <array>
+
+#include <GLFW/glfw3.h>
 
 #include "Component.h"
-#include <GLFW/glfw3.h>
 
 namespace Components
 {
 
-	struct Input : Component
-	{
-		int KeyState[GLFW_KEY_LAST];
-		float MouseState[2];
-		float dX, dY;
-	};
-	REGISTER_COMPONENT("Input", Input);
+struct Input : Component
+{
+	std::array<int, GLFW_KEY_LAST> KeyState;
+	std::array<int, GLFW_KEY_LAST> LastKeyState;
+	std::array<int, GLFW_MOUSE_BUTTON_LAST> MouseState;
+	std::array<int, GLFW_MOUSE_BUTTON_LAST> LastMouseState;
+	float dX, dY;
+};
 
 }
-#endif // !Input_h__
+
+#endif // !Components_Input_h__

@@ -1,5 +1,5 @@
-#ifndef PointLight_h__
-#define PointLight_h__
+#ifndef Components_PointLight_h__
+#define Components_PointLight_h__
 
 #include "Component.h"
 #include "Color.h"
@@ -7,14 +7,13 @@
 namespace Components
 {
 
-	struct PointLight : Component
-	{
-		float Intensity;
-		float MaxRange;
-		float SpecularIntensity;
-		Color color;
-	};
-	REGISTER_COMPONENT("PointLight", PointLight);
+struct PointLight : Component
+{
+	float Intensity;
+	float MaxRange;
+	float SpecularIntensity;
+	Color Color;
+};
 
 }
-#endif // !PointLight_h__
+#endif // !Components_PointLight_h__

@@ -1,5 +1,7 @@
-#ifndef Sprite_h__
-#define Sprite_h__
+#ifndef Components_Sprite_h__
+#define Components_Sprite_h__
+
+#include <string>
 
 #include "Component.h"
 #include "Color.h"
@@ -7,12 +9,11 @@
 namespace Components
 {
 
-	struct Sprite : Component
-	{
-		std::string SpriteFile;
-		Color color;
-	};
-	REGISTER_COMPONENT("Sprite", Sprite);
+struct Sprite : Component
+{
+	std::string SpriteFile;
+	Color Color;
+};
 
 }
-#endif // !Sprite_h__
+#endif // !Components_Sprite_h__

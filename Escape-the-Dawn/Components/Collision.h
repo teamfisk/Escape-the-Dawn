@@ -1,18 +1,18 @@
-#ifndef Collision_h__
-#define Collision_h__
+#ifndef Components_Collision_h__
+#define Components_Collision_h__
 
+#include "Entity.h"
 #include "Component.h"
 #include <vector>
 
 namespace Components
 {
 
-	struct Collision : Component
-	{
-		bool Phantom;
-		std::vector<int> CollidingEntities;
-	};
-	REGISTER_COMPONENT("Collision", Collision);
+struct Collision : Component
+{
+	bool Phantom;
+	std::vector<EntityID> CollidingEntities;
+};
 
 }
-#endif // !Collision_h__
+#endif // !Components_Collision_h__

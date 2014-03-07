@@ -105,7 +105,9 @@ ShaderProgram::~ShaderProgram()
 void ShaderProgram::AddShader(std::unique_ptr<Shader> shader)
 {
 	if (!shader->IsCompiled()) {
-		shader->Compile();
+		if (shader->Compile() == 0) {
+			return;
+		}
 	}
 
 	m_Shaders.push_back(std::move(shader));

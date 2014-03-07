@@ -1,17 +1,16 @@
-#ifndef Stat_h__
-#define Stat_h__
+#ifndef Components_Stat_h__
+#define Components_Stat_h__
 
 #include "Component.h"
 
 namespace Components
 {
 
-	struct Stat : Component
-	{
-		int Health;
-		bool Destroyable;
-	};
-	REGISTER_COMPONENT("Stat", Stat);
+struct Stat : Component
+{
+	float Health;
+	bool Destroyable;
+};
 
 }
-#endif // !Stat_h__
+#endif // !Components_Stat_h__

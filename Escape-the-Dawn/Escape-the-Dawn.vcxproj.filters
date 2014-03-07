@@ -1,8 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="main.cpp" />
-    <ClCompile Include="Renderer\Renderer.cpp" />
     <ClCompile Include="World.cpp" />
     <ClCompile Include="Systems\CollisionSystem.cpp">
       <Filter>Systems</Filter>
@@ -27,14 +25,12 @@
     </ClCompile>
     <ClCompile Include="Model.cpp" />
     <ClCompile Include="Engine.h" />
+    <ClCompile Include="Renderer.cpp" />
+    <ClCompile Include="ShaderProgram.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component.h" />
-    <ClInclude Include="ComponentFactory.h" />
     <ClInclude Include="Entity.h" />
-    <ClInclude Include="logging.h" />
-    <ClInclude Include="glerror.h" />
-    <ClInclude Include="Renderer\Renderer.h" />
     <ClInclude Include="System.h" />
     <ClInclude Include="World.h" />
     <ClInclude Include="Systems\CollisionSystem.h">
@@ -63,18 +59,6 @@
       <Filter>Components</Filter>
     </ClInclude>
     <ClInclude Include="ShaderProgram.h" />
-    <ClInclude Include="Components\Bounds.h">
-      <Filter>Components</Filter>
-    </ClInclude>
-    <ClInclude Include="Components\Camera.h">
-      <Filter>Components</Filter>
-    </ClInclude>
-    <ClInclude Include="Components\Collision.h">
-      <Filter>Components</Filter>
-    </ClInclude>
-    <ClInclude Include="Components\DirectionalLight.h">
-      <Filter>Components</Filter>
-    </ClInclude>
     <ClInclude Include="Components\Input.h">
       <Filter>Components</Filter>
     </ClInclude>
@@ -103,6 +87,26 @@
       <Filter>Components</Filter>
     </ClInclude>
     <ClInclude Include="Color.h" />
+    <ClInclude Include="Factory.h" />
+    <ClInclude Include="Components\DirectionalLight.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\Collision.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\Camera.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\Bounds.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="glerror.h">
+      <Filter>Util</Filter>
+    </ClInclude>
+    <ClInclude Include="logging.h">
+      <Filter>Util</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderer.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Shaders\Fragment.glsl">
@@ -121,6 +125,9 @@
     </Filter>
     <Filter Include="Shaders">
       <UniqueIdentifier>{54f1eb6f-dc00-4e97-a3ef-ac255d755e2e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Util">
+      <UniqueIdentifier>{d985d7a7-c041-46fe-ae03-aa40295a7aad}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
