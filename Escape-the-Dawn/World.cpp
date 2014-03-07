@@ -32,6 +32,7 @@ void World::RecursiveUpdate(std::shared_ptr<System> system, double dt, EntityID 
 void World::Update(double dt)
 {
 	for (auto system : m_Systems) {
+		system->Update(dt);
 		RecursiveUpdate(system, dt, 0);
 	}
 }

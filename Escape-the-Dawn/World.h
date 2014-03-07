@@ -64,8 +64,8 @@ public:
 
 	void AddSystem(System* system);
 
-	// Recursively update through the scene graph 
 	void Update(double dt);
+	// Recursively update through the scene graph 
 	void RecursiveUpdate(std::shared_ptr<System> system, double dt, EntityID parentEntity);
 
 private:
