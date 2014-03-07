@@ -5,7 +5,7 @@ uniform sampler2D texture0;
 
 in VertexData {
 	vec3 Position;
-	vec3 Color;
+	vec3 Normal;
 	vec2 TextureCoord;
 } Input;
 
@@ -14,5 +14,5 @@ out vec4 FragmentColor;
 void main()
 {
 	vec4 texel = texture2D(texture0, Input.TextureCoord);
-	FragmentColor = texel * vec4(Input.Color, 0);
+	FragmentColor = texel;
 }

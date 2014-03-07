@@ -26,6 +26,7 @@
     </ClCompile>
     <ClCompile Include="Model.cpp" />
     <ClCompile Include="Engine.h" />
+    <ClCompile Include="Texture.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component.h" />
@@ -107,6 +108,7 @@
       <Filter>Util</Filter>
     </ClInclude>
     <ClInclude Include="Renderer.h" />
+    <ClInclude Include="Texture.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Shaders\Fragment.glsl">
