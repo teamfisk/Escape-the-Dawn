@@ -7,6 +7,12 @@ void Systems::InputSystem::Update(double dt, EntityID entity, EntityID parent)
 	if (input == nullptr)
 		return;
 
+	for (int i = 0; i <= GLFW_KEY_LAST; ++i) {
+		input->KeyState[i] = glfwGetKey(m_Renderer->GetWindow(), i);
+	}
 
+	for (int i = 0; i <= GLFW_MOUSE_BUTTON_LAST; ++i) {
+		input->MouseState[i] = glfwGetMouseButton(m_Renderer->GetWindow(), i);
+	}
 }
 

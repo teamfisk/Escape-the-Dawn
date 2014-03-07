@@ -6,6 +6,8 @@
 #include <vector>
 #include <string>
 
+#include "Renderer.h"
+
 #include "Entity.h"
 #include "Component.h"
 #include "Factory.h"
@@ -64,7 +66,6 @@ public:
 
 	// Recursively update through the scene graph 
 	void Update(double dt);
-
 	void RecursiveUpdate(std::shared_ptr<System> system, double dt, EntityID parentEntity);
 
 private:

@@ -1,3 +1,6 @@
+#ifndef Renderer_h__
+#define Renderer_h__
+
 #include <string>
 #include <fstream>
 #include <iostream>
@@ -16,19 +19,32 @@
 #include <glm/gtc/type_ptr.hpp>
 
 #include "glerror.h"
-
+#include "ShaderProgram.h"
 
 class Renderer
 {
 public:
-	GLuint shaderProgram;
+	std::shared_ptr<ShaderProgram> m_ShaderProgram;
 	GLuint VAO;
 
+	std::vector<std::vector<float>> Vertices;
+	std::vector<std::vector<float>> Normals;
+	std::vector<std::vector<float>> TextureCoords;
+
 	Renderer();
-	
+
 	void Draw();
 	void DrawText();
 
-	GLuint CompileShader(GLenum, std::string);
+	void AddObjectToDraw();
+	void AddTextToDraw();
 
+	void LoadContent();
+
+	GLFWwindow* GetWindow() const { return m_Window; }
+
+private:
+	GLFWwindow* m_Window;
 };
+
+#endif // Renderer_h__

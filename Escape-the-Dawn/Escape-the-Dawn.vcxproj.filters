@@ -30,7 +30,6 @@
   <ItemGroup>
     <ClInclude Include="Component.h" />
     <ClInclude Include="Entity.h" />
-    <ClInclude Include="Renderer\Renderer.h" />
     <ClInclude Include="System.h" />
     <ClInclude Include="World.h" />
     <ClInclude Include="Systems\CollisionSystem.h">
@@ -107,6 +106,7 @@
     <ClInclude Include="logging.h">
       <Filter>Util</Filter>
     </ClInclude>
+    <ClInclude Include="Renderer.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Shaders\Fragment.glsl">

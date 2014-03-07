@@ -10,7 +10,7 @@ namespace Components
 struct Input : Component
 {
 	int KeyState[GLFW_KEY_LAST];
-	float MouseState[2];
+	int MouseState[GLFW_MOUSE_BUTTON_LAST];
 	float dX, dY;
 };
 
