@@ -27,9 +27,9 @@
     <ClCompile Include="Engine.h" />
     <ClCompile Include="GUIManager.cpp">
       <Filter>Gui</Filter>
+    </ClCompile>
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="ShaderProgram.cpp" />
-    </ClCompile>
     <ClCompile Include="Frame.cpp">
       <Filter>Gui</Filter>
     </ClCompile>
