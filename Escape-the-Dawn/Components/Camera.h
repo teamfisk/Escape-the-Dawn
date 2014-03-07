@@ -1,18 +1,17 @@
-#ifndef Camera_h__
-#define Camera_h__
+#ifndef Components_Camera_h__
+#define Components_Camera_h__
 
 #include "Component.h"
 
 namespace Components
 {
 
-	struct Camera : Component
-	{
-		int FOV;
-		int NearClip;
-		int FarClip;
-	};
-	REGISTER_COMPONENT("Camera", Camera);
+struct Camera : Component
+{
+	int FOV;
+	int NearClip;
+	int FarClip;
+};
 
 }
-#endif // !Camera_h__
+#endif // !Components_Camera_h__

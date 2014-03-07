@@ -1,13 +1,12 @@
-#ifndef Template_h__
-#define Template_h__
+#ifndef Components_Template_h__
+#define Components_Template_h__
 
 #include "Component.h"
 
 namespace Components
 {
 
-	struct Template : Component { };
-	REGISTER_COMPONENT("Template", Template);
+struct Template : Component { };
 
 }
-#endif // !Template_h__
+#endif // !Components_Template_h__

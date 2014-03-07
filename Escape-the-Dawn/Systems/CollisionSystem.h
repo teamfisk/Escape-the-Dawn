@@ -4,8 +4,7 @@
 #include "System.h"
 #include "logging.h"
 
-#include "Components/TransformComponent.h"
-
+#include "Components/Transform.h"
 
 namespace Systems
 {

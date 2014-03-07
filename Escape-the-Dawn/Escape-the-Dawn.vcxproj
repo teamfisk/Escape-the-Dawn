@@ -98,8 +98,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Engine.h" />
-    <ClCompile Include="AABB.cpp" />
-    <ClCompile Include="main.cpp" />
     <ClCompile Include="Model.cpp" />
     <ClCompile Include="Renderer\Renderer.cpp" />
     <ClCompile Include="Systems\CollisionSystem.cpp" />
@@ -115,9 +113,9 @@
     <ClInclude Include="AABB.h" />
     <ClInclude Include="Color.h" />
     <ClInclude Include="Component.h" />
-    <ClInclude Include="ComponentFactory.h" />
-    <ClInclude Include="Components\Bounds.h" />
     <ClInclude Include="Components\Camera.h" />
+    <ClInclude Include="Factory.h" />
+    <ClInclude Include="Components\Bounds.h" />
     <ClInclude Include="Components\Collision.h" />
     <ClInclude Include="Components\DirectionalLight.h" />
     <ClInclude Include="Components\Input.h" />

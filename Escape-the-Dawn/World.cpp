@@ -84,4 +84,19 @@ World::World()
 	m_LastEntityID = 0;
 
 	m_Systems.push_back(std::make_shared<Systems::Collision>(this));
+
+	RegisterComponents();
+	RegisterSystems();
+}
+
+void World::RegisterComponents()
+{
+	m_ComponentFactory.Register("Transform", []() { return new Components::Transform(); });
+	m_ComponentFactory.Register("Input", []() { return new Components::Input(); });
+	m_ComponentFactory.Register("DirectionalLight", []() { return new Components::DirectionalLight(); });
+}
+
+void World::RegisterSystems()
+{
+
 }

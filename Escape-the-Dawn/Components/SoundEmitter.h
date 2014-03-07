@@ -1,18 +1,19 @@
-#ifndef SoundEmitter_h__
-#define SoundEmitter_h__
+#ifndef Components_SoundEmitter_h__
+#define Components_SoundEmitter_h__
+
+#include <string>
 
 #include "Component.h"
 
 namespace Components
 {
 
-	struct SoundEmitter : Component
-	{
-		std::string SoundFile;
-		float Volume;
-		float MaxRange;
-	};
-	REGISTER_COMPONENT("SoundEmitter", SoundEmitter);
+struct SoundEmitter : Component
+{
+	std::string SoundFile;
+	float Volume;
+	float MaxRange;
+};
 
 }
-#endif // !SoundEmitter_h__
+#endif // !Components_SoundEmitter_h__

@@ -1,16 +1,15 @@
-#ifndef PowerUp_h__
-#define PowerUp_h__
+#ifndef Components_PowerUp_h__
+#define Components_PowerUp_h__
 
 #include "Component.h"
 
 namespace Components
 {
 
-	struct PowerUp : Component
-	{
-		int Speed;
-	};
-	REGISTER_COMPONENT("PowerUp", PowerUp);
+struct PowerUp : Component
+{
+	float Speed;
+};
 
 }
-#endif // !PowerUp_h__
+#endif // !Components_PowerUp_h__

@@ -1,5 +1,5 @@
-#ifndef Bounds_h__
-#define Bounds_h__
+#ifndef Components_Bounds_h__
+#define Components_Bounds_h__
 
 #include "Component.h"
 #include "AABB.h"
@@ -7,11 +7,10 @@
 namespace Components
 {
 
-	struct Bounds : Component
-	{
-		AABB BB; //Axis Aligned Bounding Box
-	};
-	REGISTER_COMPONENT("Bounds", Bounds);
+struct Bounds : Component
+{
+	AABB BoundingBox; //Axis Aligned Bounding Box
+};
 
 }
-#endif // !Bounds_h__
+#endif // !Components_Bounds_h__
