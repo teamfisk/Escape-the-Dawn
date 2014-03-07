@@ -2,14 +2,17 @@
 #define Components_Bounds_h__
 
 #include "Component.h"
-#include "AABB.h"
+#include <glm/common.hpp>
+
 
 namespace Components
 {
 
 struct Bounds : Component
 {
-	AABB BoundingBox; //Axis Aligned Bounding Box
+		//Axis Aligned Bounding Box
+		glm::vec3 origin;
+		glm::vec3 volumeVector; //The vector that defines the volume of the BB, it goes from one corner to the opposite one
 };
 
 }

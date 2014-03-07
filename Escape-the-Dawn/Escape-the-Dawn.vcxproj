@@ -103,7 +103,8 @@
     <ClCompile Include="GUIManager.cpp" />
     <ClCompile Include="MenuFrame.cpp" />
     <ClCompile Include="Model.cpp" />
-    <ClCompile Include="Renderer\Renderer.cpp" />
+    <ClCompile Include="Renderer.cpp" />
+    <ClCompile Include="ShaderProgram.cpp" />
     <ClCompile Include="Systems\CollisionSystem.cpp" />
     <ClCompile Include="TextFrame.cpp" />
     <ClCompile Include="World.cpp" />
@@ -115,7 +116,6 @@
     <ClCompile Include="Systems\SoundsSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="AABB.h" />
     <ClInclude Include="Color.h" />
     <ClInclude Include="Component.h" />
     <ClInclude Include="Components\Camera.h" />
