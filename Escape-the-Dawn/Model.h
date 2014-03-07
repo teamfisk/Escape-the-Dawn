@@ -18,24 +18,35 @@
 #include "glerror.h"
 #include <cstdlib>
 
+#include "Texture.h"
+
 class Model
 {
 public:
-	glm::vec3 Position;
-	std::vector<float> Colors;
-	std::vector<float> Vertices;
-	std::vector<float> Normals;
-	std::vector<float> TextureCoords;
+	std::vector<glm::vec3> Vertices;
+	std::vector<glm::vec3> Normals;
+	std::vector<glm::vec2> TextureCoords;
 
-	GLuint Colorbuffer;
-	GLuint VertBuffer;
+	GLuint VertexBuffer;
 	GLuint NormalBuffer;
 	GLuint TextureCoordBuffer;
 	GLuint VAO;
 
-	Model();
+	std::vector<std::shared_ptr<Texture>> texture;
 
-	void temp_CreateModelShit();
-	void CreateBuffers(std::vector<float>, std::vector<float>, std::vector<float>);
+	Model(const char* path);
+
+	bool Loadobj(
+		const char* path, 
+		std::vector <glm::vec3> & out_vertices, 
+		std::vector <glm::vec3> &out_normals, 
+		std::vector <glm::vec2> & out_TextureCoords
+		);
+	
+	void CreateBuffers(
+		std::vector<glm::vec3> _Vertices, 
+		std::vector<glm::vec3> _Normals, 
+		std::vector<glm::vec2>_TextureCoords
+		);
 
 };

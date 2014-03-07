@@ -25,6 +25,7 @@
     </ClCompile>
     <ClCompile Include="Model.cpp" />
     <ClCompile Include="Engine.h" />
+    <ClCompile Include="Texture.cpp" />
     <ClCompile Include="GUIManager.cpp">
       <Filter>Gui</Filter>
     </ClCompile>
@@ -122,6 +123,7 @@
       <Filter>Util</Filter>
     </ClInclude>
     <ClInclude Include="Renderer.h" />
+    <ClInclude Include="Texture.h" />
     <ClInclude Include="GUIManager.h">
       <Filter>Gui</Filter>
     </ClInclude>

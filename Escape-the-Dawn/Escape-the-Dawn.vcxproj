@@ -40,17 +40,17 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <LibraryPath>$(SolutionDir)\Libraries\glew-1.10.0\lib\Debug\Win32;$(SolutionDir)\Libraries\glfw-3.0.4\lib\Debug;$(LibraryPath)</LibraryPath>
+    <LibraryPath>H:\Högskolan\Design projekt\Escape the Dawn\Escape-the-Dawn\Libraries\SOIL\lib\Debug;$(SolutionDir)\Libraries\glew-1.10.0\lib\Debug\Win32;$(SolutionDir)\Libraries\glfw-3.0.4\lib\Debug;$(LibraryPath)</LibraryPath>
     <OutDir>$(SolutionDir)bin\</OutDir>
     <IntDir>$(SolutionDir)obj\$(ProjectName)\</IntDir>
     <TargetName>$(ProjectName)-$(Configuration)</TargetName>
-    <IncludePath>$(ProjectDir);$(SolutionDir)\Libraries;$(SolutionDir)\Libraries\glew-1.10.0\include;$(SolutionDir)\Libraries\glfw-3.0.4\include;$(SolutionDir)\Libraries\glm-0.9.5.2;$(IncludePath)</IncludePath>
+    <IncludePath>H:\Högskolan\Design projekt\Escape the Dawn\Escape-the-Dawn\Libraries\SOIL\src;$(ProjectDir);$(SolutionDir)\Libraries;$(SolutionDir)\Libraries\glew-1.10.0\include;$(SolutionDir)\Libraries\glfw-3.0.4\include;$(SolutionDir)\Libraries\glm-0.9.5.2;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>$(ProjectDir);$(SolutionDir)\Libraries;$(SolutionDir)\Libraries\glew-1.10.0\include;$(SolutionDir)\Libraries\glfw-3.0.4\include;$(SolutionDir)\Libraries\glm-0.9.5.2;$(IncludePath)</IncludePath>
+    <IncludePath>H:\Högskolan\Design projekt\Escape the Dawn\Escape-the-Dawn\Libraries\SOIL\src;$(ProjectDir);$(SolutionDir)\Libraries;$(SolutionDir)\Libraries\glew-1.10.0\include;$(SolutionDir)\Libraries\glfw-3.0.4\include;$(SolutionDir)\Libraries\glm-0.9.5.2;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <LibraryPath>$(SolutionDir)\Libraries\glew-1.10.0\lib\Release\Win32;$(SolutionDir)\Libraries\glfw-3.0.4\lib\Release;$(LibraryPath)</LibraryPath>
+    <LibraryPath>H:\Högskolan\Design projekt\Escape the Dawn\Escape-the-Dawn\Libraries\SOIL\lib\Release;$(SolutionDir)\Libraries\glew-1.10.0\lib\Release\Win32;$(SolutionDir)\Libraries\glfw-3.0.4\lib\Release;$(LibraryPath)</LibraryPath>
     <OutDir>$(SolutionDir)bin\</OutDir>
     <IntDir>$(SolutionDir)obj\$(ProjectName)\</IntDir>
     <TargetName>$(ProjectName)-$(Configuration)</TargetName>
@@ -70,7 +70,7 @@
     <PostBuildEvent />
     <PostBuildEvent />
     <Lib>
-      <AdditionalDependencies>opengl32.lib;glu32.lib;glew32sd.lib;glfw3.lib</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;glu32.lib;soil.lib;glew32sd.lib;glfw3.lib</AdditionalDependencies>
       <ForceSymbolReferences>
       </ForceSymbolReferences>
     </Lib>
@@ -93,7 +93,7 @@
       <AdditionalDependencies>opengl32.lib;glu32.lib;glew32s.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <Lib>
-      <AdditionalDependencies>opengl32.lib;glu32.lib;glew32s.lib;glfw3.lib;</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;glu32.lib;soil.lib;glew32s.lib;glfw3.lib;</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -106,6 +106,7 @@
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="ShaderProgram.cpp" />
     <ClCompile Include="Systems\CollisionSystem.cpp" />
+    <ClCompile Include="Texture.cpp" />
     <ClCompile Include="TextFrame.cpp" />
     <ClCompile Include="World.cpp" />
     <ClCompile Include="Systems\InputSystem.cpp" />
@@ -151,6 +152,7 @@
     <ClInclude Include="Systems\PlayerSystem.h" />
     <ClInclude Include="Systems\RenderSystem.h" />
     <ClInclude Include="Systems\SoundSystem.h" />
+    <ClInclude Include="Texture.h" />
     <ClInclude Include="TextFrame.h" />
     <ClInclude Include="World.h" />
   </ItemGroup>
