@@ -44,8 +44,12 @@ public:
 			return nullptr;
 		}
 
+		component->Entity = entity;
 		m_ComponentsOfType[componentType].push_back(component);
 		m_EntityComponents[entity][componentType] = component;
+		for (auto system : m_Systems) {
+			system->OnComponentCreated(componentType, component);
+		}
 		return component;
 	}
 
