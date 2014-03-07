@@ -25,7 +25,7 @@
 class Renderer
 {
 public:
-	std::shared_ptr<ShaderProgram> m_ShaderProgram;
+	ShaderProgram m_ShaderProgram;
 
 	std::vector<Model*> ModelsToRender;
 

@@ -6,8 +6,7 @@ GLuint Shader::CompileShader(GLenum shaderType, std::string fileName)
 
 	std::string shaderFile;
 	std::ifstream in(fileName, std::ios::in);
-	if(!in)
-	{
+	if (!in)	{
 		LOG_ERROR("Error: Failed to open shader file \"%s\"", fileName.c_str());
 		return 0;
 	}
@@ -31,8 +30,7 @@ GLuint Shader::CompileShader(GLenum shaderType, std::string fileName)
 
 	GLint compileStatus;
 	glGetShaderiv(shader, GL_COMPILE_STATUS, &compileStatus);
-	if(compileStatus != GL_TRUE)
-	{
+	if(compileStatus != GL_TRUE) {
 		LOG_ERROR("Shader compilation failed");
 		GLsizei infoLogLength;
 		glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &infoLogLength);
@@ -55,7 +53,9 @@ Shader::Shader(GLenum shaderType, std::string fileName) : m_ShaderType(shaderTyp
 
 Shader::~Shader()
 {
-	glDeleteShader(m_ShaderHandle);
+	if (m_ShaderHandle != 0) {
+		glDeleteShader(m_ShaderHandle);
+	}
 }
 
 GLuint Shader::Compile()
@@ -89,13 +89,6 @@ ShaderProgram::ShaderProgram()
 	Initialize();
 }
 
-ShaderProgram::ShaderProgram(std::string vertexShaderFile, std::string fragmentShaderFile)
-{
-	AddShader(std::unique_ptr<Shader>(new VertexShader(vertexShaderFile)));
-	AddShader(std::unique_ptr<Shader>(new VertexShader(fragmentShaderFile)));
-	Initialize();
-}
-
 ShaderProgram::~ShaderProgram()
 {
 	Unbind();
@@ -104,13 +97,16 @@ ShaderProgram::~ShaderProgram()
 
 void ShaderProgram::AddShader(std::unique_ptr<Shader> shader)
 {
-	if (!shader->IsCompiled()) {
-		if (shader->Compile() == 0) {
-			return;
+	m_Shaders.push_back(std::move(shader));
+}
+
+void ShaderProgram::Compile()
+{
+	for (auto &shader : m_Shaders) {
+		if (!shader->IsCompiled()) {
+			shader->Compile();
 		}
 	}
-
-	m_Shaders.push_back(std::move(shader));
 }
 
 GLuint ShaderProgram::Link()

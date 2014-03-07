@@ -7,8 +7,6 @@
 #include <glext.h>
 #include <SOIL.h>
 
-//#include "Renderer.h"
-
 class Texture
 {
 public:

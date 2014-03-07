@@ -71,10 +71,9 @@ public:
 	ShaderProgram();
 	~ShaderProgram();
 	
-	ShaderProgram(std::string vertexShaderFile, std::string fragmentShaderFile);
-
 	void AddShader(std::unique_ptr<Shader> shader);
 
+	void Compile();
 	GLuint Link();
 
 	void Bind();

@@ -71,7 +71,8 @@ void Renderer::AddModelToDraw(Model* _model)
 
 void Renderer::LoadContent()
 {
-	m_ShaderProgram->AddShader(std::unique_ptr<Shader>(new VertexShader("Shaders/Vertex.glsl")));
-	m_ShaderProgram->AddShader(std::unique_ptr<Shader>(new FragmentShader("Shaders/Fragment.glsl")));
-	m_ShaderProgram->Link();
+	m_ShaderProgram.AddShader(std::unique_ptr<Shader>(new VertexShader("Shaders/Vertex.glsl")));
+	m_ShaderProgram.AddShader(std::unique_ptr<Shader>(new FragmentShader("Shaders/Fragment.glsl")));
+	m_ShaderProgram.Compile();
+	m_ShaderProgram.Link();
 }
