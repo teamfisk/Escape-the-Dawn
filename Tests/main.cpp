@@ -1,6 +1,7 @@
 #include "logging.h"
 
 #include "World.h"
+#include "GameWorld.h"
 #include "Components/Transform.h"
 
 #define BOOST_TEST_MODULE World
@@ -24,15 +25,19 @@ BOOST_AUTO_TEST_CASE(Parenting)
 
 BOOST_AUTO_TEST_CASE(SceneGraphTraversal)
 {
-	World world;
+	std::shared_ptr<Renderer> renderer(new Renderer());
+	renderer->Initialize();
+	GameWorld world(renderer);
 
 	EntityID ent1 = world.CreateEntity();
 	auto t1 = world.AddComponent<Components::Transform>(ent1, "Transform");
+	BOOST_REQUIRE(t1 != nullptr);
 	t1->Position[0] = 1.0f;
 	t1->Position[1] = 1.0f;
 	t1->Position[2] = 1.0f;
 	EntityID ent2 = world.CreateEntity(ent1);
 	auto t2 = world.AddComponent<Components::Transform>(ent2, "Transform");
+	BOOST_REQUIRE(t2 != nullptr);
 	t2->Position[0] = 1.0f;
 	t2->Position[1] = 1.0f;
 	t2->Position[2] = 1.0f;
@@ -61,4 +66,19 @@ BOOST_AUTO_TEST_CASE(ComponentCreation)
 	EntityID ent = world.CreateEntity();
 	BOOST_CHECK(world.AddComponent(ent, "Transform") != nullptr);
 	BOOST_CHECK(world.AddComponent(ent, "Input") != nullptr);
+}
+
+BOOST_AUTO_TEST_CASE(Properties)
+{
+	World world;
+
+	EntityID ent = world.CreateEntity();
+
+	world.SetProperty(ent, "String", std::string("derpfish"));
+	world.SetProperty(ent, "Integer", 123);
+	world.SetProperty(ent, "Float", 0.04f);
+
+	BOOST_CHECK(world.GetProperty<std::string>(ent, "String") == "derpfish");
+	BOOST_CHECK(world.GetProperty<int>(ent, "Integer") == 123);
+	BOOST_CHECK(world.GetProperty<float>(ent, "Float") == 0.04f);
 }

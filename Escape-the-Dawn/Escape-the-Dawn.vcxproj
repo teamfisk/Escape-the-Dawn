@@ -44,10 +44,10 @@
     <OutDir>$(SolutionDir)bin\</OutDir>
     <IntDir>$(SolutionDir)obj\$(ProjectName)\</IntDir>
     <TargetName>$(ProjectName)-$(Configuration)</TargetName>
-    <IncludePath>$(SolutionDir)\Libraries\SOIL\src;\Libraries\SOIL\src;$(ProjectDir);$(SolutionDir)\Libraries;$(SolutionDir)\Libraries\glew-1.10.0\include;$(SolutionDir)\Libraries\glfw-3.0.4\include;$(SolutionDir)\Libraries\glm-0.9.5.2;$(IncludePath)</IncludePath>
+    <IncludePath>$(BOOST_ROOT);$(SolutionDir)\Libraries\SOIL\src;$(ProjectDir);$(SolutionDir)\Libraries;$(SolutionDir)\Libraries\glew-1.10.0\include;$(SolutionDir)\Libraries\glfw-3.0.4\include;$(SolutionDir)\Libraries\glm-0.9.5.2;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>$(SolutionDir)\Libraries\SOIL\src;\Libraries\SOIL\src;$(ProjectDir);$(SolutionDir)\Libraries;$(SolutionDir)\Libraries\glew-1.10.0\include;$(SolutionDir)\Libraries\glfw-3.0.4\include;$(SolutionDir)\Libraries\glm-0.9.5.2;$(IncludePath)</IncludePath>
+    <IncludePath>$(BOOST_ROOT);$(SolutionDir)\Libraries\SOIL\src;$(ProjectDir);$(SolutionDir)\Libraries;$(SolutionDir)\Libraries\glew-1.10.0\include;$(SolutionDir)\Libraries\glfw-3.0.4\include;$(SolutionDir)\Libraries\glm-0.9.5.2;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LibraryPath>$(SolutionDir)\Libraries\SOIL\lib\Release;$(SolutionDir)\Libraries\glew-1.10.0\lib\Release\Win32;$(SolutionDir)\Libraries\glfw-3.0.4\lib\Release;$(LibraryPath)</LibraryPath>
