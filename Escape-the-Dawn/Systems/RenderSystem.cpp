@@ -29,13 +29,7 @@ void Systems::RenderSystem::UpdateEntity( double dt, EntityID entity, EntityID p
 
 
 
-
 	m_Renderer->AddModelToDraw(model, transformComponent->Position, transformComponent->Orientation);
-}
-
-void Systems::RenderSystem::Update( double dt )
-{
-	
 }
 
 

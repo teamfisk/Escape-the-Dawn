@@ -170,16 +170,20 @@ void Model::CreateBuffers( std::vector<glm::vec3> _Vertices, std::vector<glm::ve
 	GLERROR("GLEW: BufferFail4");
 
 	glBindBuffer(GL_ARRAY_BUFFER, VertexBuffer);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+	glVertexAttribPointer(0, 1, GL_FLOAT, GL_FALSE, 0, 0);
 	GLERROR("GLEW: BufferFail5");
 
+	glBindBuffer(GL_ARRAY_BUFFER, NormalBuffer);
+	glVertexAttribPointer(1, 1, GL_FLOAT, GL_FALSE, 0, 0);
+	GLERROR("GLEW: BufferFail5");
 
-// 	glBindBuffer(GL_ARRAY_BUFFER, TextureCoordBuffer);
-// 	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 0, 0);
+	glBindBuffer(GL_ARRAY_BUFFER, TextureCoordBuffer);
+	glVertexAttribPointer(2, 1, GL_FLOAT, GL_FALSE, 0, 0);
+	GLERROR("GLEW: BufferFail5");
 
 	glEnableVertexAttribArray(0);
 	glEnableVertexAttribArray(1);
-/*	glEnableVertexAttribArray(2);*/
+	glEnableVertexAttribArray(2);
 	GLERROR("GLEW: BufferFail5");
 }
 
