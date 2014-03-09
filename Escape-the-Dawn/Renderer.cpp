@@ -60,18 +60,13 @@ void Renderer::Draw(double _dt)
 	for(int i = 0; i < ModelsToRender.size(); i++)
 	{
 		glActiveTexture(GL_TEXTURE0);
-		//FIXA MED FLERA TEXTURER
 		glBindTexture(GL_TEXTURE_2D, ModelsToRender[i]->model->texture[0]->texture); 
-		MVP = cameraMatrix; // * ModelMatrix;
+		MVP = cameraMatrix * ModelsToRender[i]->ModelMatrix;
 		glUniformMatrix4fv(glGetUniformLocation(m_ShaderProgram.GetHandle(), "MVP"), 1, GL_FALSE, glm::value_ptr(MVP));
 		glBindVertexArray(ModelsToRender[i]->model->VAO);
 		glDrawArrays(GL_TRIANGLES, 0, ModelsToRender[i]->model->Vertices.size());
 	}
-
 	ModelsToRender.clear();
-// 	Vertices;
-// 	std::vector<glm::vec3> Normals;
-// 	std::vector<glm::vec2> TextureCoords;
 
 	glfwSwapBuffers(m_Window);
 }
@@ -86,9 +81,12 @@ void Renderer::AddTextToDraw()
 	//Add to draw shit vector
 }
 
-void Renderer::AddModelToDraw(Model* _model, glm::mat4 _modelMatrix)
+void Renderer::AddModelToDraw(Model* _model, glm::vec3 _position, glm::quat _orientation)
 {
-	ModelsToRender.push_back(new ModelData(_model, _modelMatrix));
+	glm::mat4 RotationMatrix = glm::toMat4(_orientation);
+	glm::mat4 ModelMatrix = glm::translate(glm::mat4(), _position) * RotationMatrix ;
+	// You can now use ModelMatrix to build the MVP matrix
+	ModelsToRender.push_back(new ModelData(_model, ModelMatrix));
 }
 
 //Fixa med shaders, lägga in alla verts osv.

@@ -17,6 +17,8 @@
 #include <glm/gtc/constants.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include <glm/gtc/quaternion.hpp>
+#include <glm/gtx/quaternion.hpp>
 
 #include "glerror.h"
 #include "Camera.h"
@@ -35,8 +37,8 @@ public:
 	struct ModelData
 	{
 		Model* model;
-		glm::mat4 modelMatrix;
-		ModelData(Model* _model, glm::mat4 _modelMatrix) : model(_model), modelMatrix(_modelMatrix)
+		glm::mat4 ModelMatrix;
+		ModelData(Model* _model, glm::mat4 _modelMatrix) : model(_model), ModelMatrix(_modelMatrix)
 		{}
 	};
 
@@ -48,7 +50,7 @@ public:
 	void Draw(double dt);
 	void DrawText();
 
-	void AddModelToDraw(Model*, glm::mat4);
+	void AddModelToDraw(Model*, glm::vec3, glm::quat);
 	void AddTextToDraw();
 
 	void LoadContent();
