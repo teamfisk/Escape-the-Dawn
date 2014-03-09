@@ -6,6 +6,8 @@
 #include <glm/gtc/constants.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/rotate_vector.hpp>
+#include <glm/gtc/quaternion.hpp>
+#include <glm/gtx/quaternion.hpp>
 
 class Camera
 {
@@ -14,7 +16,7 @@ public:
 
 	glm::vec3 Forward();
 	glm::vec3 Right();
-	glm::mat4 Orientation();
+	glm::quat Orientation();
 
 	float AspectRatio() const { return m_AspectRatio; }
 	void AspectRatio(float val);
@@ -22,10 +24,13 @@ public:
 	glm::vec3 Position() const { return m_Position; }
 	void Position(glm::vec3 val);
 
-	float Pitch() const { return m_Pitch; }
+	glm::quat Orientation() const { return m_Orientation; }
+	void Orientation(glm::quat val);
+
+	/*float Pitch() const { return m_Pitch; }
 	void Pitch(float val);
 	float Yaw() const { return m_Yaw; }
-	void Yaw(float val);
+	void Yaw(float val);*/
 
 	glm::mat4 ProjectionMatrix() const { return m_ProjectionMatrix; }
 	void ProjectionMatrix(glm::mat4 val) { m_ProjectionMatrix = val; }
@@ -43,8 +48,9 @@ private:
 	float m_FarClip;
 
 	glm::vec3 m_Position;
-	float m_Pitch;
-	float m_Yaw;
+	glm::quat m_Orientation;
+	//float m_Pitch;
+	//float m_Yaw;
 
 	glm::mat4 m_ProjectionMatrix;
 	glm::mat4 m_ViewMatrix;
