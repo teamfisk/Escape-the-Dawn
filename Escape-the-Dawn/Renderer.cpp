@@ -66,7 +66,7 @@ void Renderer::Draw(double _dt)
 		glUniformMatrix4fv(glGetUniformLocation(m_ShaderProgram.GetHandle(), "MVP"), 1, GL_FALSE, glm::value_ptr(MVP));
 		glUniformMatrix4fv(glGetUniformLocation(m_ShaderProgram.GetHandle(), "model"), 1, GL_FALSE, glm::value_ptr(ModelsToRender[i]->ModelMatrix));
 		glUniformMatrix4fv(glGetUniformLocation(m_ShaderProgram.GetHandle(), "view"), 1, GL_FALSE, glm::value_ptr(m_Camera->ViewMatrix()));
-		glUniform3fv(glGetUniformLocation(m_ShaderProgram.GetHandle(), "lightPosition"), 1, glm::value_ptr(glm::vec3(0.0f, 0.0f, 0.0f)));
+		glUniform3fv(glGetUniformLocation(m_ShaderProgram.GetHandle(), "lightPosition"), 1, glm::value_ptr(glm::vec3(2.0f, 4.0f, 1.0f)));
 		glUniform1f(glGetUniformLocation(m_ShaderProgram.GetHandle(), "constantAttenuation"), 1.5f);
 		glUniform1f(glGetUniformLocation(m_ShaderProgram.GetHandle(), "linearAttenuation"), 0.0f);
 		glUniform1f(glGetUniformLocation(m_ShaderProgram.GetHandle(), "quadraticAttenuation"), 0.0f);
