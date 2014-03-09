@@ -26,23 +26,8 @@
     <ClCompile Include="Model.cpp" />
     <ClCompile Include="Engine.h" />
     <ClCompile Include="Texture.cpp" />
-    <ClCompile Include="GUIManager.cpp">
-      <Filter>GUI</Filter>
-    </ClCompile>
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="ShaderProgram.cpp" />
-    <ClCompile Include="Frame.cpp">
-      <Filter>GUI</Filter>
-    </ClCompile>
-    <ClCompile Include="TextFrame.cpp">
-      <Filter>GUI</Filter>
-    </ClCompile>
-    <ClCompile Include="MenuFrame.cpp">
-      <Filter>GUI</Filter>
-    </ClCompile>
-    <ClCompile Include="GameFrame.cpp">
-      <Filter>GUI</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component.h" />
@@ -124,21 +109,6 @@
     </ClInclude>
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="Texture.h" />
-    <ClInclude Include="GUIManager.h">
-      <Filter>GUI</Filter>
-    </ClInclude>
-    <ClInclude Include="Frame.h">
-      <Filter>GUI</Filter>
-    </ClInclude>
-    <ClInclude Include="TextFrame.h">
-      <Filter>GUI</Filter>
-    </ClInclude>
-    <ClInclude Include="MenuFrame.h">
-      <Filter>GUI</Filter>
-    </ClInclude>
-    <ClInclude Include="GameFrame.h">
-      <Filter>GUI</Filter>
-    </ClInclude>
     <ClInclude Include="GameWorld.h" />
   </ItemGroup>
   <ItemGroup>

@@ -3,6 +3,9 @@
 
 #include "System.h"
 #include "Components/SoundEmitter.h"
+#include <AL/al.h>
+#include <AL/alc.h>
+#include <windows.h>
 
 namespace System
 {
@@ -18,9 +21,17 @@ public:
 	void Update(double dt, EntityID entity, EntityID parent) override;
 	void OnComponentCreated(std::string type, std::shared_ptr<Component> component) override;
 	void PlaySound(std::shared_ptr<Components::SoundEmitter> emitter, std::string fileName);
-	void LoadFile(std::string fileName);
+	void LoadFile(const char* fileName);
+	void CreateListener(int ID);
+	void CreateSource(int ID);
 private:
 	ALCcontext* context;
+	char type[4];
+	DWORD size, chunkSize;
+	short formatType, channels;
+	DWORD sampleRate, avgBytesPerSec;
+	short bytesPerSample, bitsPerSample;
+	DWORD dataSize;
 
 };
 
