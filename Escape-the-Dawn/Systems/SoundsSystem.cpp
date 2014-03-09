@@ -109,7 +109,7 @@ void Systems::SoundSystem::CreateSource(int ID, float pos[3], ALboolean looping)
 	ALfloat SourceVel[] = { 0.0, 0.0, 0.0 };
 	ALfloat ListenerPos[] = { 0.0, 0.0, 0.0 }; // Playerpos? Camerapos?
 	ALfloat ListenerVel[] = { 0.0, 0.0, 0.0 };
-	ALfloat ListenerOri[] = { 0.0, 0.0, -1.0 , 0.0, 1.0, 0.0 }; //two vectors defining where the listener points, and an "up" vector
+	ALfloat ListenerOri[] = { 0.0, 0.0, -1.0 , 0.0, 1.0, 0.0 }; //two vectors, one defining where the listener points, and one "up" vector
 	
 	//Listener
 	alListenerfv(AL_POSITION, ListenerPos);
