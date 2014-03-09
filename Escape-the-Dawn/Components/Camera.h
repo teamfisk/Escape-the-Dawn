@@ -8,9 +8,9 @@ namespace Components
 
 struct Camera : Component
 {
-	int FOV;
-	int NearClip;
-	int FarClip;
+	float FOV;
+	float NearClip;
+	float FarClip;
 };
 
 }

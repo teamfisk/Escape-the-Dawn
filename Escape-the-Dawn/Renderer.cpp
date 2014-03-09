@@ -42,6 +42,7 @@ void Renderer::Initialize()
 	glEnable(GL_DEPTH_TEST);
 
 	// Create Camera
+
 	m_Camera = std::make_shared<Camera>(45.f, (float)WIDTH / HEIGHT, 0.01f, 1000.f);
 	m_Camera->Position(glm::vec3(0.0f, 0.0f, 2.f));
 

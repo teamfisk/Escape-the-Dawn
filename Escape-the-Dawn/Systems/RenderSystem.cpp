@@ -30,6 +30,10 @@ void Systems::RenderSystem::UpdateEntity( double dt, EntityID entity, EntityID p
 	{
 		m_Renderer->GetCamera()->Position(transformComponent->Position);
 		m_Renderer->GetCamera()->Orientation(transformComponent->Orientation);
+
+		m_Renderer->GetCamera()->FOV(cameraComponent->FOV);
+		m_Renderer->GetCamera()->NearClip(cameraComponent->NearClip);
+		m_Renderer->GetCamera()->FarClip(cameraComponent->FarClip);
 	}
 		
 	

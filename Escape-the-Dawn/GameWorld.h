@@ -60,11 +60,26 @@ void GameWorld::Initialize()
 	//AddSystem("SoundSystem");
 	AddSystem("RenderSystem");
 
-	EntityID ent = CreateEntity();
-	auto transform = AddComponent<Components::Transform>(ent, "Transform");
+	std::shared_ptr<Components::Transform> transform;
+	std::shared_ptr<Components::Model> model;
+	std::shared_ptr<Components::Camera> camera;
+	EntityID ent;
+
+	ent = CreateEntity();
+	transform = AddComponent<Components::Transform>(ent, "Transform");
 	transform->Position = glm::vec3(0.f, 0.f, 0.f);
-	auto model = AddComponent<Components::Model>(ent, "Model");
+	model = AddComponent<Components::Model>(ent, "Model");
 	model->ModelFile = "ship.obj";
+
+	ent = CreateEntity();
+	SetProperty(ent, "Name", "Camera");
+	transform = AddComponent<Components::Transform>(ent, "Transform");
+	transform->Position = glm::vec3(0.f, 0.f, 10.f);
+	camera = AddComponent<Components::Camera>(ent, "Camera");
+	camera->FOV		= 45.f;
+	camera->FarClip	= 1000.f;
+	camera->NearClip	= 0.01f;
+
 }
 
 void GameWorld::RegisterSystems()
