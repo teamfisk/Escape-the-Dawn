@@ -3,7 +3,8 @@
 //#include <fstream>
 
 
-System::SoundSystem::SoundSystem(World* world)
+Systems::SoundSystem::SoundSystem(World* world)
+	 : System(world)
 {
 
 	//initialize OpenAL
@@ -18,12 +19,12 @@ System::SoundSystem::SoundSystem(World* world)
 
 }
 
-void System::SoundSystem::Update(double dt)
+void Systems::SoundSystem::Update(double dt)
 {
 
 }
 
-void System::SoundSystem::Update(double dt, EntityID entity, EntityID parent)
+void Systems::SoundSystem::UpdateEntity(double dt, EntityID entity, EntityID parent)
 {
 	auto soundEmitter = m_World->GetComponent<Components::SoundEmitter>(entity, "SoundEmitter");
 	if(soundEmitter == nullptr)
@@ -32,7 +33,7 @@ void System::SoundSystem::Update(double dt, EntityID entity, EntityID parent)
 	
 }
 
-void System::SoundSystem::PlaySound(std::shared_ptr<Components::SoundEmitter> emitter, std::string fileName)
+void Systems::SoundSystem::PlaySound(std::shared_ptr<Components::SoundEmitter> emitter, std::string fileName)
 {
 	//LoadFile(fileName);
 }
