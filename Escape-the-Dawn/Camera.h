@@ -37,6 +37,15 @@ public:
 
 	glm::mat4 ViewMatrix() const { return m_ViewMatrix; }
 	void ViewMatrix(glm::mat4 val) { m_ViewMatrix = val; }
+	
+	float FOV() const { return m_FOV; }
+	void FOV(float val) { m_FOV = val; }
+
+	float NearClip() const { return m_NearClip; }
+	void NearClip(float val) { m_NearClip = val; }
+
+	float FarClip() const { return m_FarClip; }
+	void FarClip(float val) { m_FarClip = val; }
 
 private:
 	void UpdateProjectionMatrix();
@@ -46,6 +55,7 @@ private:
 	float m_AspectRatio;
 	float m_NearClip;
 	float m_FarClip;
+	
 
 	glm::vec3 m_Position;
 	glm::quat m_Orientation;

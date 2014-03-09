@@ -6,6 +6,7 @@
 #include "Texture.h"
 #include "Components/Model.h"
 #include "Components/Transform.h"
+#include "Components/Camera.h"
 #include "Renderer.h"
 #include <unordered_map>
 
