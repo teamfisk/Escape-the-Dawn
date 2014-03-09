@@ -43,6 +43,7 @@
     <ClCompile Include="GameFrame.cpp">
       <Filter>GUI</Filter>
     </ClCompile>
+    <ClCompile Include="Camera.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component.h" />
@@ -140,6 +141,7 @@
       <Filter>GUI</Filter>
     </ClInclude>
     <ClInclude Include="GameWorld.h" />
+    <ClInclude Include="Camera.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Shaders\Fragment.glsl">

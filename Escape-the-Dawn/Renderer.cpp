@@ -4,47 +4,6 @@ Renderer::Renderer()
 {
 }
 
-// ------------ TEMPCAMERA --------------------
-struct Camera
-{
-	glm::vec3 Position;
-	float Pitch;
-	float Yaw;
-	float Roll;
-
-	glm::mat4 getViewMatrix()
-	{
-		glm::mat4 view;
-		view = glm::rotate(view, Pitch, glm::vec3(1,0,0));
-		view = glm::rotate(view, Yaw, glm::vec3(0,1,0));
-		view = glm::rotate(view, Roll, glm::vec3(0,0,1));
-		view = glm::translate(view, -Position);
-
-		return view;
-	}
-
-	glm::vec3 Forward()
-	{
-		glm::mat4 Orientation;
-		Orientation = glm::rotate(Orientation, Pitch, glm::vec3(1,0,0));
-		Orientation = glm::rotate(Orientation, Yaw, glm::vec3(0,1,0));
-
-		return glm::vec3(glm::vec4(0,0,-1,0) * Orientation);
-	}
-
-	glm::vec3 Right()
-	{
-		glm::mat4 Orientation;
-		Orientation = glm::rotate(Orientation, Pitch, glm::vec3(1,0,0));
-		Orientation = glm::rotate(Orientation, Yaw, glm::vec3(0,1,0));
-
-		return glm::vec3(glm::vec4(1,0,0,0) * Orientation);
-	}
-
-	Camera() : Position(0.0f, 2.0f, 0.0f), Pitch(1.0f), Yaw(4.5f), Roll(0.f) { }
-} MyCamera;
-//-----------------TempCamera-.---------------------
-
 void Renderer::Initialize()
 {
 	// Initialize GLFW
@@ -82,6 +41,9 @@ void Renderer::Initialize()
 	}
 	glEnable(GL_DEPTH_TEST);
 
+	// Create Camera
+	m_Camera = std::make_shared<Camera>(90.f, WIDTH / HEIGHT, 0.01f, 1000.f);
+
 	LoadContent();
 }
 
@@ -92,18 +54,15 @@ void Renderer::Draw(double _dt)
 
 	m_ShaderProgram.Bind();
 
-	viewMatrix = glm::mat4();
-
-	viewMatrix = MyCamera.getViewMatrix(); //TEMP
+	glm::mat4 cameraMatrix = m_Camera->ProjectionMatrix() * m_Camera->ViewMatrix();
 
 	glm::mat4 MVP;
-
 	for(int i = 0; i < ModelsToRender.size(); i++)
 	{
 		glActiveTexture(GL_TEXTURE0);
 		//FIXA MED FLERA TEXTURER
 		glBindTexture(GL_TEXTURE_2D, ModelsToRender[i]->model->texture[0]->texture); 
-		MVP = projectionMatrix * viewMatrix * ModelsToRender[i]->modelMatrix;
+		MVP = cameraMatrix; // * ModelMatrix;
 		glUniformMatrix4fv(glGetUniformLocation(m_ShaderProgram.GetHandle(), "MVP"), 1, GL_FALSE, glm::value_ptr(MVP));
 		glBindVertexArray(ModelsToRender[i]->model->VAO);
 		glDrawArrays(GL_TRIANGLES, 0, ModelsToRender[i]->model->Vertices.size());
