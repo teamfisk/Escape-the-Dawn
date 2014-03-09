@@ -101,7 +101,7 @@ bool Model::Loadobj(const char* path, std::vector <glm::vec3> & out_vertices, st
 		else if ( strcmp( lineHeader, "mtllib" ) == 0 ) 
 		{
 
-			const char* fileName;
+			char fileName[512];
 			fscanf(file, "%s\n", &fileName);
 
 
@@ -127,7 +127,7 @@ bool Model::Loadobj(const char* path, std::vector <glm::vec3> & out_vertices, st
 				}
 				else if ( strcmp( mtllineHeader, "map_Kd" ) == 0 ) 
 				{
-					const char* textureFileName;
+					char textureFileName[512];
 					fscanf(mtlfile, "%s", textureFileName);
 					texture.push_back(std::make_shared<Texture>(textureFileName));
 					LOG_INFO("Texture Loaded\n");
@@ -170,15 +170,15 @@ void Model::CreateBuffers( std::vector<glm::vec3> _Vertices, std::vector<glm::ve
 	GLERROR("GLEW: BufferFail4");
 
 	glBindBuffer(GL_ARRAY_BUFFER, VertexBuffer);
-	glVertexAttribPointer(0, 1, GL_FLOAT, GL_FALSE, 0, 0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
 	GLERROR("GLEW: BufferFail5");
 
 	glBindBuffer(GL_ARRAY_BUFFER, NormalBuffer);
-	glVertexAttribPointer(1, 1, GL_FLOAT, GL_FALSE, 0, 0);
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, 0);
 	GLERROR("GLEW: BufferFail5");
 
 	glBindBuffer(GL_ARRAY_BUFFER, TextureCoordBuffer);
-	glVertexAttribPointer(2, 1, GL_FLOAT, GL_FALSE, 0, 0);
+	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 0, 0);
 	GLERROR("GLEW: BufferFail5");
 
 	glEnableVertexAttribArray(0);

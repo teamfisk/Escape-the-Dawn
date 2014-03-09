@@ -52,7 +52,19 @@ void GameWorld::Initialize()
 {
 	World::Initialize();
 
+	//AddSystem("LevelGenerationSystem");
 	AddSystem("InputSystem");
+	//AddSystem("CollisionSystem");
+	//AddSystem("ParticleSystem");
+	//AddSystem("PlayerSystem");
+	//AddSystem("SoundSystem");
+	AddSystem("RenderSystem");
+
+	EntityID ent = CreateEntity();
+	auto transform = AddComponent<Components::Transform>(ent, "Transform");
+	transform->Position = glm::vec3(0.f, 0.f, 0.f);
+	auto model = AddComponent<Components::Model>(ent, "Model");
+	model->ModelFile = "ship.obj";
 }
 
 void GameWorld::RegisterSystems()
@@ -63,7 +75,7 @@ void GameWorld::RegisterSystems()
 	//m_SystemFactory.Register("ParticleSystem", [this]() { return new Systems::ParticleSystem(this); });
 	//m_SystemFactory.Register("PlayerSystem", [this]() { return new Systems::PlayerSystem(this); });
 	//m_SystemFactory.Register("SoundSystem", [this]() { return new Systems::SoundSystem(this); });
-	//m_SystemFactory.Register("RenderSystem", [this]() { return new Systems::RenderSystem(this, m_Renderer); });
+	m_SystemFactory.Register("RenderSystem", [this]() { return new Systems::RenderSystem(this, m_Renderer); });
 }
 
 void GameWorld::RegisterComponents()
