@@ -1,4 +1,4 @@
-#version 440
+#version 430
 
 uniform mat4 MVP;
 uniform sampler2D texture0;

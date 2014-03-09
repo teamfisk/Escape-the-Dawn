@@ -39,13 +39,13 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(BOOST_ROOT);$(SolutionDir)\Escape-the-Dawn;$(SolutionDir)\Libraries\SOIL\src;\Libraries\SOIL\src;$(ProjectDir);$(SolutionDir)\Libraries;$(SolutionDir)\Libraries\glew-1.10.0\include;$(SolutionDir)\Libraries\glfw-3.0.4\include;$(SolutionDir)\Libraries\glm-0.9.5.2;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)\Escape-the-Dawn;$(BOOST_ROOT);$(SolutionDir)\Libraries\openal-soft-1.15.1-bin\include;$(SolutionDir)\Libraries\SOIL\src;$(ProjectDir);$(SolutionDir)\Libraries;$(SolutionDir)\Libraries\glew-1.10.0\include;$(SolutionDir)\Libraries\glfw-3.0.4\include;$(SolutionDir)\Libraries\glm-0.9.5.2;$(IncludePath)</IncludePath>
     <LibraryPath>$(BOOST_ROOT)\lib32-msvc-11.0;$(LibraryPath)</LibraryPath>
     <OutDir>$(ProjectDir)$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)obj\$(ProjectName)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>$(BOOST_ROOT);$(SolutionDir)\Escape-the-Dawn;$(SolutionDir)\Libraries\SOIL\src;\Libraries\SOIL\src;$(ProjectDir);$(SolutionDir)\Libraries;$(SolutionDir)\Libraries\glew-1.10.0\include;$(SolutionDir)\Libraries\glfw-3.0.4\include;$(SolutionDir)\Libraries\glm-0.9.5.2;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)\Escape-the-Dawn;$(BOOST_ROOT);$(SolutionDir)\Libraries\openal-soft-1.15.1-bin\include;$(SolutionDir)\Libraries\SOIL\src;$(ProjectDir);$(SolutionDir)\Libraries;$(SolutionDir)\Libraries\glew-1.10.0\include;$(SolutionDir)\Libraries\glfw-3.0.4\include;$(SolutionDir)\Libraries\glm-0.9.5.2;$(IncludePath)</IncludePath>
     <LibraryPath>$(BOOST_ROOT)\lib32-msvc-11.0;$(LibraryPath)</LibraryPath>
     <OutDir>$(ProjectDir)$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)obj\$(ProjectName)\</IntDir>
@@ -65,7 +65,7 @@
     <PostBuildEvent />
     <PreBuildEvent />
     <PostBuildEvent>
-      <Command>$(OutDir)$(TargetName)$(TargetExt) --log_level=test_suite</Command>
+      <Command>"$(OutDir)$(TargetName)$(TargetExt)" --log_level=test_suite</Command>
     </PostBuildEvent>
     <PostBuildEvent>
       <Message>Running tests</Message>
@@ -87,7 +87,7 @@
     </Link>
     <PreBuildEvent />
     <PostBuildEvent>
-      <Command>$(OutDir)$(TargetName)$(TargetExt) --log_level=test_suite</Command>
+      <Command>"$(OutDir)$(TargetName)$(TargetExt)" --log_level=test_suite</Command>
     </PostBuildEvent>
     <PostBuildEvent>
       <Message>Running tests</Message>

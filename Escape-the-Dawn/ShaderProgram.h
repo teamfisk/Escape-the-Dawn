@@ -76,6 +76,8 @@ public:
 	void Compile();
 	GLuint Link();
 
+	GLuint GetHandle();
+
 	void Bind();
 
 	void Unbind();
