@@ -142,6 +142,7 @@ bool Model::Loadobj(const char* path, std::vector <glm::vec3> & out_vertices, st
 
 }
 
+
 void Model::CreateBuffers( std::vector<glm::vec3> _Vertices, std::vector<glm::vec3> _Normals, std::vector<glm::vec2>_TextureCoords)
 {
 

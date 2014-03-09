@@ -128,6 +128,11 @@ GLuint ShaderProgram::Link()
 	return m_ShaderProgramHandle;
 }
 
+GLuint ShaderProgram::GetHandle()
+{
+	return m_ShaderProgramHandle;
+}
+
 void ShaderProgram::Bind()
 {
 	if (m_ShaderProgramHandle == 0)

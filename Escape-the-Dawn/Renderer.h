@@ -26,8 +26,13 @@ class Renderer
 {
 public:
 	ShaderProgram m_ShaderProgram;
+	glm::mat4 viewMatrix;
+	glm::mat4 projectionMatrix;
+
+	int HEIGHT, WIDTH;
 
 	std::vector<Model*> ModelsToRender;
+
 
 	Renderer();
 

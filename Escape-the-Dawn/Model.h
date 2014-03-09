@@ -46,6 +46,8 @@ public:
 		std::vector <glm::vec3> &out_normals, 
 		std::vector <glm::vec2> & out_TextureCoords
 		);
+
+	glm::mat4 GetMatrix();
 	
 	void CreateBuffers(
 		std::vector<glm::vec3> _Vertices, 
