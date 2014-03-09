@@ -12,18 +12,27 @@ void Systems::RenderSystem::OnComponentCreated( std::string type, std:: shared_p
 
 void Systems::RenderSystem::UpdateEntity( double dt, EntityID entity, EntityID parent )
 {
-	auto modelComponent = m_World->GetComponent<Components::Model>(entity, "Model");
-	if (modelComponent == nullptr)
-		return;
 	auto transformComponent = m_World->GetComponent<Components::Transform>(entity, "Transform");
 	if (transformComponent == nullptr)
 		return;
+	auto modelComponent = m_World->GetComponent<Components::Model>(entity, "Model");
+	if (modelComponent != nullptr)
+	{
+		if (m_CachedModels.find(modelComponent->ModelFile) == m_CachedModels.end()){
+			m_CachedModels[modelComponent->ModelFile] = new Model(modelComponent->ModelFile);
+			}
 
-	if (m_CachedModels.find(modelComponent->ModelFile) == m_CachedModels.end()) {
-		m_CachedModels[modelComponent->ModelFile] = new Model(modelComponent->ModelFile);
+		Model* model = m_CachedModels[modelComponent->ModelFile];
+		m_Renderer->AddModelToDraw(model, transformComponent->Position, transformComponent->Orientation);
 	}
-	Model* model = m_CachedModels[modelComponent->ModelFile];
-	m_Renderer->AddModelToDraw(model, transformComponent->Position, transformComponent->Orientation);
+	auto cameraComponent = m_World->GetComponent<Components::Camera>(entity, "Camera");
+	if (cameraComponent != nullptr)
+	{
+		m_Renderer->GetCamera()->Position(transformComponent->Position);
+		m_Renderer->GetCamera()->Orientation(transformComponent->Orientation);
+	}
+		
+	
 }
 
 
