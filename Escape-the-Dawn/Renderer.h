@@ -31,7 +31,15 @@ public:
 
 	int HEIGHT, WIDTH;
 
-	std::vector<Model*> ModelsToRender;
+	struct ModelData
+	{
+		Model* model;
+		glm::mat4 modelMatrix;
+		ModelData(Model* _model, glm::mat4 _modelMatrix) : model(_model), modelMatrix(_modelMatrix)
+		{}
+	};
+
+	std::vector<ModelData*> ModelsToRender;
 
 
 	Renderer();
@@ -40,7 +48,7 @@ public:
 	void Draw(double dt);
 	void DrawText();
 
-	void AddModelToDraw(Model*);
+	void AddModelToDraw(Model*, glm::mat4);
 	void AddTextToDraw();
 
 	void LoadContent();

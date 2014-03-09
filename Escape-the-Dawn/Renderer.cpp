@@ -102,13 +102,14 @@ void Renderer::Draw(double _dt)
 	{
 		glActiveTexture(GL_TEXTURE0);
 		//FIXA MED FLERA TEXTURER
-		glBindTexture(GL_TEXTURE_2D, ModelsToRender[i]->texture[0]->texture); 
-		//MVP = projectionMatrix * viewMatrix * /* ModelMatrix */;
+		glBindTexture(GL_TEXTURE_2D, ModelsToRender[i]->model->texture[0]->texture); 
+		MVP = projectionMatrix * viewMatrix * ModelsToRender[i]->modelMatrix;
 		glUniformMatrix4fv(glGetUniformLocation(m_ShaderProgram.GetHandle(), "MVP"), 1, GL_FALSE, glm::value_ptr(MVP));
-		glBindVertexArray(ModelsToRender[i]->VAO);
-		glDrawArrays(GL_TRIANGLES, 0, ModelsToRender[i]->Vertices.size());
+		glBindVertexArray(ModelsToRender[i]->model->VAO);
+		glDrawArrays(GL_TRIANGLES, 0, ModelsToRender[i]->model->Vertices.size());
 	}
 
+	ModelsToRender.clear();
 // 	Vertices;
 // 	std::vector<glm::vec3> Normals;
 // 	std::vector<glm::vec2> TextureCoords;
@@ -126,9 +127,9 @@ void Renderer::AddTextToDraw()
 	//Add to draw shit vector
 }
 
-void Renderer::AddModelToDraw(Model* _model)
+void Renderer::AddModelToDraw(Model* _model, glm::mat4 _modelMatrix)
 {
-	ModelsToRender.push_back(_model);
+	ModelsToRender.push_back(new ModelData(_model, _modelMatrix));
 }
 
 //Fixa med shaders, lägga in alla verts osv.
