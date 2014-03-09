@@ -9,6 +9,7 @@
 #include <AL/al.h>
 #include <AL/alc.h>
 #include <windows.h>
+#include <vector>
 
 namespace Systems
 {
@@ -23,8 +24,7 @@ public:
 	void OnComponentCreated(std::string type, std::shared_ptr<Component> component) override;
 	void PlaySound(std::shared_ptr<Components::SoundEmitter> emitter, std::string fileName);
 	void LoadFile(const char* fileName);
-	void CreateListener(int ID);
-	void CreateSource(int ID);
+	void CreateSource(int ID, float pos[3], ALboolean looping);
 private:
 	ALCcontext* context;
 	char type[4];
@@ -33,6 +33,10 @@ private:
 	DWORD sampleRate, avgBytesPerSec;
 	short bytesPerSample, bitsPerSample;
 	DWORD dataSize;
+
+	unsigned char* buf;
+
+	std::vector<ALuint> source;
 
 };
 

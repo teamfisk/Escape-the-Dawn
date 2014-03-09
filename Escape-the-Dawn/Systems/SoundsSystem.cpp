@@ -16,7 +16,6 @@ Systems::SoundSystem::SoundSystem(World* world)
 		alcMakeContextCurrent(context);
 	}
 
-
 }
 
 void Systems::SoundSystem::Update(double dt)
@@ -35,14 +34,13 @@ void Systems::SoundSystem::UpdateEntity(double dt, EntityID entity, EntityID par
 
 void Systems::SoundSystem::PlaySound(std::shared_ptr<Components::SoundEmitter> emitter, std::string fileName)
 {
-	//LoadFile(fileName);
+	//alSourcePlay(source);
 }
 
-void System::SoundSystem::LoadFile(const char* fileName)
+void Systems::SoundSystem::LoadFile(const char* fileName)
 {
 	FILE *fp = NULL;
-	fp = fopen("Sounds/" + fileName, "rb");
-
+	fp = fopen(strcat("Sounds/", fileName), "rb");
 
 	//CHECK FOR VALID WAVE-FILE
 	fread(type, sizeof(char), 4, fp);
@@ -73,16 +71,17 @@ void System::SoundSystem::LoadFile(const char* fileName)
 
 	fread(&dataSize, sizeof(DWORD), 1, fp);
 
-	unsigned char* buf = new unsigned char[dataSize];
+	buf = new unsigned char[dataSize];
 	fread(buf, sizeof(BYTE), dataSize, fp);
 
+	fclose(fp);
 }
 
-void System::SoundSystem::CreateSource(int ID)
+void Systems::SoundSystem::CreateSource(int ID, float pos[3], ALboolean looping)
 {
 	ALuint source;
 	ALuint buffer;
-	ALuint frequnzy = sampleRate;
+	ALuint frequency = sampleRate;
 	ALuint format = 0;
 
 	alGenBuffers(1, &buffer);
@@ -104,4 +103,24 @@ void System::SoundSystem::CreateSource(int ID)
 			format = AL_FORMAT_STEREO16;
 	}
 
+	alBufferData(buffer, format, buf, dataSize, frequency);
+	
+	ALfloat SourcePos[] = { pos[0], pos[1], pos[2] };
+	ALfloat SourceVel[] = { 0.0, 0.0, 0.0 };
+	ALfloat ListenerPos[] = { 0.0, 0.0, 0.0 }; // Playerpos? Camerapos?
+	ALfloat ListenerVel[] = { 0.0, 0.0, 0.0 };
+	ALfloat ListenerOri[] = { 0.0, 0.0, -1.0 , 0.0, 1.0, 0.0 }; //two vectors defining where the listener points, and an "up" vector
+	
+	//Listener
+	alListenerfv(AL_POSITION, ListenerPos);
+	alListenerfv(AL_VELOCITY, ListenerVel);
+	alListenerfv(AL_ORIENTATION, ListenerOri);
+
+	//Source
+	alSourcei(source, AL_BUFFER, buffer);
+	alSourcef(source, AL_PITCH, 1.0f);
+	alSourcef(source, AL_GAIN, 1.0f); //Volume
+	alSourcefv(source, AL_POSITION, SourcePos);
+	alSourcefv(source, AL_VELOCITY, SourceVel);
+	alSourcei(source, AL_LOOPING, looping);
 }
