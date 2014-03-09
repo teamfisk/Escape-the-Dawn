@@ -64,6 +64,8 @@ private:
 	GLchar* m_glVendor;
 
 	std::shared_ptr<Camera> m_Camera;
+
+	GLuint vertexArrayObject;
 };
 
 #endif // Renderer_h__

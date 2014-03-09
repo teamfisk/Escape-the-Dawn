@@ -42,7 +42,8 @@ void Renderer::Initialize()
 	glEnable(GL_DEPTH_TEST);
 
 	// Create Camera
-	m_Camera = std::make_shared<Camera>(90.f, WIDTH / HEIGHT, 0.01f, 1000.f);
+	m_Camera = std::make_shared<Camera>(45.f, (float)WIDTH / HEIGHT, 0.01f, 1000.f);
+	m_Camera->Position(glm::vec3(0.0f, 0.0f, 2.f));
 
 	LoadContent();
 }
@@ -65,6 +66,7 @@ void Renderer::Draw(double _dt)
 		glUniformMatrix4fv(glGetUniformLocation(m_ShaderProgram.GetHandle(), "MVP"), 1, GL_FALSE, glm::value_ptr(MVP));
 		glBindVertexArray(ModelsToRender[i]->model->VAO);
 		glDrawArrays(GL_TRIANGLES, 0, ModelsToRender[i]->model->Vertices.size());
+		GLERROR("DRAW");
 	}
 	ModelsToRender.clear();
 
@@ -97,6 +99,4 @@ void Renderer::LoadContent()
 	m_ShaderProgram.AddShader(std::unique_ptr<Shader>(new FragmentShader("Shaders/Fragment.glsl")));
 	m_ShaderProgram.Compile();
 	m_ShaderProgram.Link();
-
-	projectionMatrix = glm::perspective(45.0f, (float)WIDTH / HEIGHT, 0.01f, 100.0f);
 }
