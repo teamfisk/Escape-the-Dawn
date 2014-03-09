@@ -64,9 +64,15 @@ void Renderer::Draw(double _dt)
 		glBindTexture(GL_TEXTURE_2D, ModelsToRender[i]->model->texture[0]->texture); 
 		MVP = cameraMatrix * ModelsToRender[i]->ModelMatrix;
 		glUniformMatrix4fv(glGetUniformLocation(m_ShaderProgram.GetHandle(), "MVP"), 1, GL_FALSE, glm::value_ptr(MVP));
+		glUniformMatrix4fv(glGetUniformLocation(m_ShaderProgram.GetHandle(), "model"), 1, GL_FALSE, glm::value_ptr(ModelsToRender[i]->ModelMatrix));
+		glUniformMatrix4fv(glGetUniformLocation(m_ShaderProgram.GetHandle(), "view"), 1, GL_FALSE, glm::value_ptr(m_Camera->ViewMatrix()));
+		glUniform3fv(glGetUniformLocation(m_ShaderProgram.GetHandle(), "lightPosition"), 1, glm::value_ptr(glm::vec3(0.0f, 0.0f, 0.0f)));
+		glUniform1f(glGetUniformLocation(m_ShaderProgram.GetHandle(), "constantAttenuation"), 1.5f);
+		glUniform1f(glGetUniformLocation(m_ShaderProgram.GetHandle(), "linearAttenuation"), 0.0f);
+		glUniform1f(glGetUniformLocation(m_ShaderProgram.GetHandle(), "quadraticAttenuation"), 0.0f);
 		glBindVertexArray(ModelsToRender[i]->model->VAO);
 		glDrawArrays(GL_TRIANGLES, 0, ModelsToRender[i]->model->Vertices.size());
-		GLERROR("DRAW");
+
 	}
 	ModelsToRender.clear();
 
