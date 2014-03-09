@@ -2,9 +2,12 @@
 #define World_h__
 
 #include <stack>
+#include <map>
 #include <unordered_map>
 #include <vector>
 #include <string>
+
+#include <boost/any.hpp>
 
 #include "logging.h"
 
@@ -37,6 +40,17 @@ public:
 	EntityID GetEntityParent(EntityID entity);
 
 	template <class T>
+	T GetProperty(EntityID entity, std::string property)
+	{
+		return boost::any_cast<T>(m_EntityProperties[entity][property]);
+	}
+
+	void SetProperty(EntityID entity, std::string property, boost::any value)
+	{
+		m_EntityProperties[entity][property] = value;
+	}
+
+	template <class T>
 	std::shared_ptr<T> AddComponent(EntityID entity, std::string componentType);
 	std::shared_ptr<Component> AddComponent(EntityID entity, std::string componentType);
 	template <class T>
@@ -58,6 +72,8 @@ protected:
 	std::stack<EntityID> m_RecycledEntityIDs;
 	// A bottom to top tree. A map of child entities to parent entities.
 	std::unordered_map<EntityID, EntityID> m_EntityParents;
+
+	std::unordered_map<EntityID, std::unordered_map<std::string, boost::any>> m_EntityProperties;
 
 	std::unordered_map<std::string, std::vector<std::shared_ptr<Component>>> m_ComponentsOfType;
 	std::unordered_map<EntityID, std::map<std::string, std::shared_ptr<Component>>> m_EntityComponents;
