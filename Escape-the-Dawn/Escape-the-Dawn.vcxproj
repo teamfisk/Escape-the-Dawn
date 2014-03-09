@@ -40,14 +40,17 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LibraryPath>$(SolutionDir)\Libraries\openal-soft-1.15.1-bin\lib\Win32;$(SolutionDir)\Libraries\glew-1.10.0\lib\Debug\Win32;$(SolutionDir)\Libraries\glfw-3.0.4\lib\Debug;$(LibraryPath)</LibraryPath>
     <LibraryPath>$(SolutionDir)\Libraries\SOIL\lib\Debug;$(SolutionDir)\Libraries\glew-1.10.0\lib\Debug\Win32;$(SolutionDir)\Libraries\glfw-3.0.4\lib\Debug;$(LibraryPath)</LibraryPath>
     <OutDir>$(SolutionDir)bin\</OutDir>
     <IntDir>$(SolutionDir)obj\$(ProjectName)\</IntDir>
     <TargetName>$(ProjectName)-$(Configuration)</TargetName>
+    <IncludePath>$(SolutionDir)\Libraries\openal-soft-1.15.1-bin\include;$(ProjectDir);$(SolutionDir)\Libraries;$(SolutionDir)\Libraries\glew-1.10.0\include;$(SolutionDir)\Libraries\glfw-3.0.4\include;$(SolutionDir)\Libraries\glm-0.9.5.2;$(IncludePath)</IncludePath>
     <IncludePath>$(SolutionDir)\Libraries\SOIL\src;\Libraries\SOIL\src;$(ProjectDir);$(SolutionDir)\Libraries;$(SolutionDir)\Libraries\glew-1.10.0\include;$(SolutionDir)\Libraries\glfw-3.0.4\include;$(SolutionDir)\Libraries\glm-0.9.5.2;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <IncludePath>$(SolutionDir)\Libraries\SOIL\src;\Libraries\SOIL\src;$(ProjectDir);$(SolutionDir)\Libraries;$(SolutionDir)\Libraries\glew-1.10.0\include;$(SolutionDir)\Libraries\glfw-3.0.4\include;$(SolutionDir)\Libraries\glm-0.9.5.2;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir);$(SolutionDir)\Libraries;$(SolutionDir)\Libraries\glew-1.10.0\include;$(SolutionDir)\Libraries\glfw-3.0.4\include;$(SolutionDir)\Libraries\glm-0.9.5.2;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LibraryPath>$(SolutionDir)\Libraries\SOIL\lib\Release;$(SolutionDir)\Libraries\glew-1.10.0\lib\Release\Win32;$(SolutionDir)\Libraries\glfw-3.0.4\lib\Release;$(LibraryPath)</LibraryPath>
@@ -98,16 +101,11 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Engine.h" />
-    <ClCompile Include="Frame.cpp" />
-    <ClCompile Include="GameFrame.cpp" />
-    <ClCompile Include="GUIManager.cpp" />
-    <ClCompile Include="MenuFrame.cpp" />
     <ClCompile Include="Model.cpp" />
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="ShaderProgram.cpp" />
     <ClCompile Include="Systems\CollisionSystem.cpp" />
     <ClCompile Include="Texture.cpp" />
-    <ClCompile Include="TextFrame.cpp" />
     <ClCompile Include="World.cpp" />
     <ClCompile Include="Systems\InputSystem.cpp" />
     <ClCompile Include="Systems\LevelGenerationSystem.cpp" />
@@ -135,13 +133,9 @@
     <ClInclude Include="Components\Template.h" />
     <ClInclude Include="Components\Transform.h" />
     <ClInclude Include="Entity.h" />
-    <ClInclude Include="Frame.h" />
-    <ClInclude Include="GameFrame.h" />
     <ClInclude Include="GameWorld.h" />
-    <ClInclude Include="GUIManager.h" />
     <ClInclude Include="logging.h" />
     <ClInclude Include="glerror.h" />
-    <ClInclude Include="MenuFrame.h" />
     <ClInclude Include="Model.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="ShaderProgram.h" />
@@ -154,7 +148,6 @@
     <ClInclude Include="Systems\RenderSystem.h" />
     <ClInclude Include="Systems\SoundSystem.h" />
     <ClInclude Include="Texture.h" />
-    <ClInclude Include="TextFrame.h" />
     <ClInclude Include="World.h" />
   </ItemGroup>
   <ItemGroup>
