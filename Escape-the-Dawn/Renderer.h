@@ -19,6 +19,7 @@
 #include <glm/gtc/type_ptr.hpp>
 
 #include "glerror.h"
+#include "Camera.h"
 #include "ShaderProgram.h"
 #include "Model.h"
 
@@ -33,7 +34,6 @@ public:
 
 	std::vector<Model*> ModelsToRender;
 
-
 	Renderer();
 
 	void Initialize();
@@ -46,11 +46,14 @@ public:
 	void LoadContent();
 
 	GLFWwindow* GetWindow() const { return m_Window; }
+	std::shared_ptr<Camera> GetCamera() const { return m_Camera; }
 
 private:
 	GLFWwindow* m_Window;
 	GLint m_glVersion[2];
 	GLchar* m_glVendor;
+
+	std::shared_ptr<Camera> m_Camera;
 };
 
 #endif // Renderer_h__

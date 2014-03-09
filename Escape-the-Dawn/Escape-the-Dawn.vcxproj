@@ -97,6 +97,7 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Engine.h" />
     <ClCompile Include="Frame.cpp" />
     <ClCompile Include="GameFrame.cpp" />
@@ -117,6 +118,7 @@
     <ClCompile Include="Systems\SoundsSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Camera.h" />
     <ClInclude Include="Color.h" />
     <ClInclude Include="Component.h" />
     <ClInclude Include="Components\Camera.h" />
