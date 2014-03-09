@@ -12,7 +12,6 @@ void Systems::RenderSystem::OnComponentCreated( std::string type, std:: shared_p
 		if (m_CachedModels.find(modelComponent->ModelFile) != m_CachedModels.end()) {
 			m_CachedModels[modelComponent->ModelFile] = new Model(modelComponent->ModelFile);
 		}
-
 	}
 }
 
@@ -26,9 +25,6 @@ void Systems::RenderSystem::UpdateEntity( double dt, EntityID entity, EntityID p
 		return;
 
 	Model* model = m_CachedModels[modelComponent->ModelFile];
-
-
-
 	m_Renderer->AddModelToDraw(model, transformComponent->Position, transformComponent->Orientation);
 }
 
