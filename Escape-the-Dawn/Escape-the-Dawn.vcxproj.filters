@@ -27,21 +27,21 @@
     <ClCompile Include="Engine.h" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="GUIManager.cpp">
-      <Filter>Gui</Filter>
+      <Filter>GUI</Filter>
     </ClCompile>
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="ShaderProgram.cpp" />
     <ClCompile Include="Frame.cpp">
-      <Filter>Gui</Filter>
+      <Filter>GUI</Filter>
     </ClCompile>
     <ClCompile Include="TextFrame.cpp">
-      <Filter>Gui</Filter>
+      <Filter>GUI</Filter>
     </ClCompile>
     <ClCompile Include="MenuFrame.cpp">
-      <Filter>Gui</Filter>
+      <Filter>GUI</Filter>
     </ClCompile>
     <ClCompile Include="GameFrame.cpp">
-      <Filter>Gui</Filter>
+      <Filter>GUI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -125,20 +125,21 @@
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="GUIManager.h">
-      <Filter>Gui</Filter>
+      <Filter>GUI</Filter>
     </ClInclude>
     <ClInclude Include="Frame.h">
-      <Filter>Gui</Filter>
+      <Filter>GUI</Filter>
     </ClInclude>
     <ClInclude Include="TextFrame.h">
-      <Filter>Gui</Filter>
+      <Filter>GUI</Filter>
     </ClInclude>
     <ClInclude Include="MenuFrame.h">
-      <Filter>Gui</Filter>
+      <Filter>GUI</Filter>
     </ClInclude>
     <ClInclude Include="GameFrame.h">
-      <Filter>Gui</Filter>
+      <Filter>GUI</Filter>
     </ClInclude>
+    <ClInclude Include="GameWorld.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Shaders\Fragment.glsl">
@@ -161,7 +162,7 @@
     <Filter Include="Util">
       <UniqueIdentifier>{d985d7a7-c041-46fe-ae03-aa40295a7aad}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Gui">
+    <Filter Include="GUI">
       <UniqueIdentifier>{7bdb0f69-049e-4f16-b271-2495e02e4b28}</UniqueIdentifier>
     </Filter>
   </ItemGroup>

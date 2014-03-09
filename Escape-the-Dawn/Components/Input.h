@@ -12,10 +12,10 @@ namespace Components
 
 struct Input : Component
 {
-	std::array<int, GLFW_KEY_LAST> KeyState;
-	std::array<int, GLFW_KEY_LAST> LastKeyState;
-	std::array<int, GLFW_MOUSE_BUTTON_LAST> MouseState;
-	std::array<int, GLFW_MOUSE_BUTTON_LAST> LastMouseState;
+	std::array<int, GLFW_KEY_LAST+1> KeyState;
+	std::array<int, GLFW_KEY_LAST+1> LastKeyState;
+	std::array<int, GLFW_MOUSE_BUTTON_LAST+1> MouseState;
+	std::array<int, GLFW_MOUSE_BUTTON_LAST+1> LastMouseState;
 	float dX, dY;
 };
 

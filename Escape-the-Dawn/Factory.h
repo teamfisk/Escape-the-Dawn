@@ -29,7 +29,4 @@ private:
 	std::map<std::string, std::function<T(void)>> m_FactoryFunctions;
 };
 
-struct Component;
-class ComponentFactory : public Factory<Component*> { };
-
 #endif // ComponentFactory_h__

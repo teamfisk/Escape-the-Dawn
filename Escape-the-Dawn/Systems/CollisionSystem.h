@@ -9,12 +9,13 @@
 namespace Systems
 {
 
-class Collision : public System
+class CollisionSystem : public System
 {
 public:
-	Collision(World* world) : System(world) { }
+	CollisionSystem(World* world) 
+		: System(world) { }
 
-	void Update(double dt, EntityID entity, EntityID parent) override;
+	void UpdateEntity(double dt, EntityID entity, EntityID parent) override;
 };
 
 }

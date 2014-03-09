@@ -13,7 +13,7 @@ void Systems::InputSystem::Update(double dt)
 
 	// Mouse buttons
 	for (int i = 0; i <= GLFW_MOUSE_BUTTON_LAST; ++i) {
-		m_CurrentKeyState[i] = glfwGetMouseButton(m_Renderer->GetWindow(), i);
+		m_CurrentMouseState[i] = glfwGetMouseButton(m_Renderer->GetWindow(), i);
 	}
 
 	// Cursor position
@@ -25,7 +25,7 @@ void Systems::InputSystem::Update(double dt)
 	m_LastMouseY = ypos;
 }
 
-void Systems::InputSystem::Update(double dt, EntityID entity, EntityID parent)
+void Systems::InputSystem::UpdateEntity(double dt, EntityID entity, EntityID parent)
 {
 	auto input = m_World->GetComponent<Components::Input>(entity, "Input");
 	if (input == nullptr)

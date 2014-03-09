@@ -23,7 +23,7 @@ void World::RecursiveUpdate(std::shared_ptr<System> system, double dt, EntityID 
 		EntityID parent = pair.second;
 
 		if (parent == parentEntity)	{
-			system->Update(dt, child, parent);
+			system->UpdateEntity(dt, child, parent);
 			RecursiveUpdate(system, dt, child);
 		}
 	}
@@ -31,15 +31,11 @@ void World::RecursiveUpdate(std::shared_ptr<System> system, double dt, EntityID 
 
 void World::Update(double dt)
 {
-	for (auto system : m_Systems) {
+	for (auto pair : m_Systems) {
+		auto system = pair.second;
 		system->Update(dt);
 		RecursiveUpdate(system, dt, 0);
 	}
-}
-
-void World::AddSystem(System* system)
-{
-
 }
 
 //std::vector<EntityID> GetEntityChildren(EntityID entity);
@@ -83,21 +79,30 @@ World::~World()
 World::World()
 {
 	m_LastEntityID = 0;
-
-	m_Systems.push_back(std::make_shared<Systems::Collision>(this));
-
-	RegisterComponents();
-	RegisterSystems();
 }
 
-void World::RegisterComponents()
+void World::Initialize()
 {
-	m_ComponentFactory.Register("Transform", []() { return new Components::Transform(); });
-	m_ComponentFactory.Register("Input", []() { return new Components::Input(); });
-	m_ComponentFactory.Register("DirectionalLight", []() { return new Components::DirectionalLight(); });
+	RegisterSystems();
+	RegisterComponents();
 }
 
 void World::RegisterSystems()
 {
 
+}
+
+void World::RegisterComponents()
+{
+	
+}
+
+std::shared_ptr<Component> World::AddComponent(EntityID entity, std::string componentType)
+{
+	return AddComponent<Component>(entity, componentType);
+}
+
+void World::AddSystem(std::string systemType)
+{
+	m_Systems[systemType] = std::shared_ptr<System>(m_SystemFactory.Create(systemType));
 }

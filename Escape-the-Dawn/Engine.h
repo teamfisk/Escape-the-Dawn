@@ -9,20 +9,24 @@
 #include "logging.h"
 #include "glerror.h"
 
-#include "World.h"
-
-
+#include "Renderer.h"
+#include "GameWorld.h"
 
 class Engine
 {
 public:
 	Engine(int argc, char* argv[])
 	{
-		renderer.Initialize();
+		m_Renderer = std::make_shared<Renderer>();
+		m_Renderer->Initialize();
+
+		m_World = std::make_shared<GameWorld>(m_Renderer);
+		m_World->Initialize();
+
 		m_LastTime = glfwGetTime();
 	}
 
-	bool Running() const { return !glfwWindowShouldClose(renderer.GetWindow()); }
+	bool Running() const { return !glfwWindowShouldClose(m_Renderer->GetWindow()); }
 
 	void Tick()
 	{
@@ -30,13 +34,16 @@ public:
 		double dt =  currentTime - m_LastTime;
 		m_LastTime = currentTime;
 
-		//World.Update(dt);
-		renderer.Draw(dt);
+		m_World->Update(dt);
+		m_Renderer->Draw(dt);
 
 		glfwPollEvents();
 	}
 
 private:
-	Renderer renderer;
+	std::shared_ptr<Renderer> m_Renderer;
+	// TODO: This should ultimately live in GameFrame
+	std::shared_ptr<GameWorld> m_World;
+
 	double m_LastTime;
 };

@@ -9,6 +9,6 @@ struct Component
 	EntityID Entity;
 };
 
-//&static ComponentFactory componentFactory;
+class ComponentFactory : public Factory<Component*> { };
 
 #endif // Component_h__

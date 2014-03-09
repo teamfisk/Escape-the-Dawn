@@ -1,7 +1,7 @@
 #include "CollisionSystem.h"
 #include "World.h"
 
-void Systems::Collision::Update(double dt, EntityID entity, EntityID parent)
+void Systems::CollisionSystem::UpdateEntity(double dt, EntityID entity, EntityID parent)
 {
 	if (parent != 0)
 	{

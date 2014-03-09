@@ -13,19 +13,19 @@ namespace Systems
 class InputSystem : public System
 {
 public:
-	InputSystem(World* world, Renderer* renderer) 
+	InputSystem(World* world, std::shared_ptr<Renderer> renderer) 
 		: System(world), m_Renderer(renderer) {	}
 
 	void Update(double dt) override;
-	void Update(double dt, EntityID entity, EntityID parent) override;
+	void UpdateEntity(double dt, EntityID entity, EntityID parent) override;
 
 private:
-	Renderer* m_Renderer;
+	std::shared_ptr<Renderer> m_Renderer;
 
-	std::array<int, GLFW_KEY_LAST> m_CurrentKeyState;
-	std::array<int, GLFW_KEY_LAST> m_LastKeyState;
-	std::array<int, GLFW_MOUSE_BUTTON_LAST> m_CurrentMouseState;
-	std::array<int, GLFW_MOUSE_BUTTON_LAST> m_LastMouseState;
+	std::array<int, GLFW_KEY_LAST+1> m_CurrentKeyState;
+	std::array<int, GLFW_KEY_LAST+1> m_LastKeyState;
+	std::array<int, GLFW_MOUSE_BUTTON_LAST+1> m_CurrentMouseState;
+	std::array<int, GLFW_MOUSE_BUTTON_LAST+1> m_LastMouseState;
 	float m_CurrentMouseDeltaX, m_CurrentMouseDeltaY;
 	float m_LastMouseX, m_LastMouseY;
 };
