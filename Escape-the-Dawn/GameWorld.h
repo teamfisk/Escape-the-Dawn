@@ -57,7 +57,7 @@ void GameWorld::Initialize()
 	//AddSystem("CollisionSystem");
 	//AddSystem("ParticleSystem");
 	AddSystem("PlayerSystem");
-	//AddSystem("SoundSystem");
+	AddSystem("SoundSystem");
 	AddSystem("RenderSystem");
 
 	std::shared_ptr<Components::Transform> transform;
@@ -70,6 +70,14 @@ void GameWorld::Initialize()
 	transform->Position = glm::vec3(0.f, 0.f, 0.f);
 	model = AddComponent<Components::Model>(ent, "Model");
 	model->ModelFile = "ship.obj";
+	auto soundEmitter = AddComponent<Components::SoundEmitter>(ent, "SoundEmitter");
+	soundEmitter->Gain = 1;
+	soundEmitter->MaxDistance = 10;
+	soundEmitter->Loop = true;
+	soundEmitter->ReferenceDistance = 0.1;
+	soundEmitter->Pitch = 1;
+	GetSystem<Systems::SoundSystem>("SoundSystem")->PlaySound(soundEmitter, "Sounds/hallelujah.wav");
+	
 
 	ent = CreateEntity();
 	SetProperty(ent, "Name", std::string("Camera"));
@@ -90,7 +98,7 @@ void GameWorld::RegisterSystems()
 	//m_SystemFactory.Register("CollisionSystem", [this]() { return new Systems::CollisionSystem(this); });
 	//m_SystemFactory.Register("ParticleSystem", [this]() { return new Systems::ParticleSystem(this); });
 	m_SystemFactory.Register("PlayerSystem", [this]() { return new Systems::PlayerSystem(this); });
-	//m_SystemFactory.Register("SoundSystem", [this]() { return new Systems::SoundSystem(this); });
+	m_SystemFactory.Register("SoundSystem", [this]() { return new Systems::SoundSystem(this); });
 	m_SystemFactory.Register("RenderSystem", [this]() { return new Systems::RenderSystem(this, m_Renderer); });
 }
 

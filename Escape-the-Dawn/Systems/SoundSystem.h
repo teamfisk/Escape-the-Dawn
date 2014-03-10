@@ -1,11 +1,15 @@
 #ifndef SoundEmitter_h__
 #define SoundEmitter_h__
 
-#include "AL/al.h"
-#include "AL/alc.h"
-
 #include "System.h"
+#include "Components/Transform.h"
 #include "Components/SoundEmitter.h"
+#include <AL/al.h>
+#include <AL/alc.h>
+#include <windows.h>
+#include <vector>
+#include <glm/gtc/quaternion.hpp>
+#include <glm/gtx/quaternion.hpp>
 
 namespace Systems
 {
@@ -19,10 +23,23 @@ public:
 	void UpdateEntity(double dt, EntityID entity, EntityID parent) override;
 	void OnComponentCreated(std::string type, std::shared_ptr<Component> component) override;
 	void PlaySound(std::shared_ptr<Components::SoundEmitter> emitter, std::string fileName);
-	void LoadFile(std::string fileName);
+	ALuint LoadFile(std::string fileName);
+	ALuint CreateSource();
+
 private:
 	ALCcontext* context;
 
+	//File-info
+	char type[4];
+	DWORD size, chunkSize;
+	short formatType, channels;
+	DWORD sampleRate, avgBytesPerSec;
+	short bytesPerSample, bitsPerSample;
+	DWORD dataSize;
+	
+
+	std::map<Component*, ALuint> m_Source; 
+	std::map<std::string, ALuint> m_BufferCache; // string = fileName
 };
 
 }
