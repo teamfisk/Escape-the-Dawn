@@ -8,30 +8,30 @@ Camera::Camera(float yFOV, float aspectRatio, float nearClip, float farClip)
 	m_FarClip = farClip;
 
 	m_Position = glm::vec3(0.0);
-	m_Pitch = 0.f;
-	m_Yaw = 0.f;
+	/*m_Pitch = 0.f;
+	m_Yaw = 0.f;*/
 
 	UpdateProjectionMatrix();
 	UpdateViewMatrix();
 }
 
-glm::vec3 Camera::Forward()
-{
-	return glm::rotate(glm::vec3(0.f, 0.f, -1.f), -m_Yaw, glm::vec3(0.f, 1.f, 0.f));
-}
+//glm::vec3 Camera::Forward()
+//{
+//	return glm::rotate(glm::vec3(0.f, 0.f, -1.f), -m_Yaw, glm::vec3(0.f, 1.f, 0.f));
+//}
+//
+//glm::vec3 Camera::Right()
+//{
+//	return glm::rotate(glm::vec3(1.f, 0.f, 0.f), -m_Yaw, glm::vec3(0.f, 1.f, 0.f));
+//}
 
-glm::vec3 Camera::Right()
-{
-	return glm::rotate(glm::vec3(1.f, 0.f, 0.f), -m_Yaw, glm::vec3(0.f, 1.f, 0.f));
-}
-
-glm::mat4 Camera::Orientation()
-{
-	glm::mat4 orientation(1.f);
-	orientation = glm::rotate(orientation, m_Pitch, glm::vec3(1.f, 0.f, 0.f));
-	orientation = glm::rotate(orientation, m_Yaw, glm::vec3(0.f, 1.f, 0.f));
-	return orientation;
-}
+//glm::mat4 Camera::Orientation()
+//{
+//	glm::mat4 orientation(1.f);
+//	orientation = glm::rotate(orientation, m_Pitch, glm::vec3(1.f, 0.f, 0.f));
+//	orientation = glm::rotate(orientation, m_Yaw, glm::vec3(0.f, 1.f, 0.f));
+//	return orientation;
+//}
 
 void Camera::AspectRatio(float val)
 {
@@ -46,17 +46,23 @@ void Camera::Position(glm::vec3 val)
 }
 
 
-void Camera::Pitch(float val)
+void Camera::Orientation(glm::quat val)
 {
-	m_Pitch = val;
+	m_Orientation = val;
 	UpdateViewMatrix();
 }
 
-void Camera::Yaw(float val)
-{
-	m_Yaw = val;
-	UpdateViewMatrix();
-}
+//void Camera::Pitch(float val)
+//{
+//	m_Pitch = val;
+//	UpdateViewMatrix();
+//}
+//
+//void Camera::Yaw(float val)
+//{
+//	m_Yaw = val;
+//	UpdateViewMatrix();
+//}
 
 void Camera::UpdateProjectionMatrix()
 {
@@ -70,5 +76,5 @@ void Camera::UpdateProjectionMatrix()
 
 void Camera::UpdateViewMatrix()
 {
-	m_ViewMatrix = glm::translate(Orientation(), -m_Position);
+	m_ViewMatrix = glm::translate(glm::toMat4(m_Orientation), -m_Position);
 }

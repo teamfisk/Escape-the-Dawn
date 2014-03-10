@@ -21,8 +21,9 @@ void Systems::InputSystem::Update(double dt)
 	glfwGetCursorPos(m_Renderer->GetWindow(), &xpos, &ypos);
 	m_CurrentMouseDeltaX = xpos - m_LastMouseX;
 	m_CurrentMouseDeltaY = ypos - m_LastMouseY;
-	m_LastMouseX = xpos;
-	m_LastMouseY = ypos;
+	m_LastMouseX = m_Renderer->WIDTH / 2.f; // xpos;
+	m_LastMouseY = m_Renderer->HEIGHT / 2.f; // ypos;
+	glfwSetCursorPos(m_Renderer->GetWindow(), m_LastMouseX, m_LastMouseY);
 }
 
 void Systems::InputSystem::UpdateEntity(double dt, EntityID entity, EntityID parent)
