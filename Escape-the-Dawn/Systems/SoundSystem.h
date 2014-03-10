@@ -1,9 +1,6 @@
 #ifndef SoundEmitter_h__
 #define SoundEmitter_h__
 
-#include "AL/al.h"
-#include "AL/alc.h"
-
 #include "System.h"
 #include "Components/Transform.h"
 #include "Components/SoundEmitter.h"
@@ -41,7 +38,7 @@ private:
 	DWORD dataSize;
 	
 
-	std::map<Component*, ALuint> source; 
+	std::map<Component*, ALuint> m_Source; 
 	std::map<std::string, ALuint> m_BufferCache; // string = fileName
 };
 

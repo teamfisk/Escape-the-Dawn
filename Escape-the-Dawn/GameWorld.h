@@ -76,7 +76,7 @@ void GameWorld::Initialize()
 	soundEmitter->Loop = true;
 	soundEmitter->ReferenceDistance = 0.1;
 	soundEmitter->Pitch = 1;
-	GetSystem<Systems::SoundSystem>("SoundSystem")->PlaySound(soundEmitter, "hallelujah.wav");
+	GetSystem<Systems::SoundSystem>("SoundSystem")->PlaySound(soundEmitter, "Sounds/hallelujah.wav");
 	
 
 	ent = CreateEntity();
