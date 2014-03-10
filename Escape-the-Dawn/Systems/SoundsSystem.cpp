@@ -25,16 +25,59 @@ void Systems::SoundSystem::Update(double dt)
 
 void Systems::SoundSystem::UpdateEntity(double dt, EntityID entity, EntityID parent)
 {
-	auto soundEmitter = m_World->GetComponent<Components::SoundEmitter>(entity, "SoundEmitter");
-	if(soundEmitter == nullptr)
+	auto transformComponent = m_World->GetComponent<Components::Transform>(entity, "Transform");
+	if (transformComponent == nullptr)
 		return;
 
-	
+	auto entityName = m_World->GetProperty<std::string>(entity, "Name");
+	if (entityName == "Player")
+	{
+		glm::vec3 playerPos = transformComponent->Position;
+		ALfloat listenerPos[3] = { playerPos.x, playerPos.y, playerPos.z };
+
+		glm::vec3 playerVel = transformComponent->Velocity;
+		ALfloat listenerVel[3] = { playerVel.x, playerVel.y, playerVel.z };
+
+		glm::fquat playerQuatOri = transformComponent->Orientation;
+		glm::vec3 playerOriFW = glm::rotate(playerQuatOri, glm::vec3(0, 0, -1));
+		glm::vec3 playerOriUP = glm::rotate(playerQuatOri, glm::vec3(0, 1, 0));
+		ALfloat listenerOri[6] = { playerOriFW.x, playerOriFW.y, playerOriFW.z, playerOriUP.x, playerOriUP.y, playerOriUP.z };
+
+		//Listener
+		alListenerfv(AL_POSITION, listenerPos);
+		alListenerfv(AL_VELOCITY, listenerVel);
+		alListenerfv(AL_ORIENTATION, listenerOri);
+	}
+
+	auto soundEmitter = m_World->GetComponent<Components::SoundEmitter>(entity, "SoundEmitter");
+	if(soundEmitter != nullptr)
+	{
+		alSourcef(source[soundEmitter.get()], AL_GAIN, soundEmitter->Gain); //Volume
+		alSourcei(source[soundEmitter.get()], AL_MAX_DISTANCE, soundEmitter->MaxDistance);
+		alSourcei(source[soundEmitter.get()], AL_REFERENCE_DISTANCE, soundEmitter->ReferenceDistance);
+		alSourcef(source[soundEmitter.get()], AL_PITCH, soundEmitter->Pitch); 
+		alSourcei(source[soundEmitter.get()], AL_LOOPING, soundEmitter->Loop);
+
+		glm::vec3 emitterPos = transformComponent->Position;
+		ALfloat sourcePos[3] = { emitterPos.x, emitterPos.y, emitterPos.z };
+
+		glm::vec3 emitterVel= transformComponent->Position;
+		ALfloat sourceVel[3] = { emitterVel.x, emitterVel.y, emitterVel.z };
+
+		alSourcefv(source[soundEmitter.get()], AL_POSITION, sourcePos);
+		alSourcefv(source[soundEmitter.get()], AL_VELOCITY, sourceVel);
+	}
 }
 
 void Systems::SoundSystem::PlaySound(std::shared_ptr<Components::SoundEmitter> emitter, std::string fileName)
 {
-	//alSourcePlay(source);
+	alSourcePlay(source[emitter.get()]);
+}
+
+void Systems::SoundSystem::OnComponentCreated(std::string type, std::shared_ptr<Component> component)
+{
+	if(type == "SoundEmitter")
+		source[component.get()] = CreateSource();
 }
 
 void Systems::SoundSystem::LoadFile(const char* fileName)
@@ -77,7 +120,7 @@ void Systems::SoundSystem::LoadFile(const char* fileName)
 	fclose(fp);
 }
 
-void Systems::SoundSystem::CreateSource(int ID, float pos[3], ALboolean looping)
+ALuint Systems::SoundSystem::CreateSource()
 {
 	ALuint source;
 	ALuint buffer;
@@ -104,23 +147,6 @@ void Systems::SoundSystem::CreateSource(int ID, float pos[3], ALboolean looping)
 	}
 
 	alBufferData(buffer, format, buf, dataSize, frequency);
-	
-	ALfloat SourcePos[] = { pos[0], pos[1], pos[2] };
-	ALfloat SourceVel[] = { 0.0, 0.0, 0.0 };
-	ALfloat ListenerPos[] = { 0.0, 0.0, 0.0 }; // Playerpos? Camerapos?
-	ALfloat ListenerVel[] = { 0.0, 0.0, 0.0 };
-	ALfloat ListenerOri[] = { 0.0, 0.0, -1.0 , 0.0, 1.0, 0.0 }; //two vectors, one defining where the listener points, and one "up" vector
-	
-	//Listener
-	alListenerfv(AL_POSITION, ListenerPos);
-	alListenerfv(AL_VELOCITY, ListenerVel);
-	alListenerfv(AL_ORIENTATION, ListenerOri);
 
-	//Source
-	alSourcei(source, AL_BUFFER, buffer);
-	alSourcef(source, AL_PITCH, 1.0f);
-	alSourcef(source, AL_GAIN, 1.0f); //Volume
-	alSourcefv(source, AL_POSITION, SourcePos);
-	alSourcefv(source, AL_VELOCITY, SourceVel);
-	alSourcei(source, AL_LOOPING, looping);
+	return source;
 }
