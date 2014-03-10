@@ -71,6 +71,8 @@ void Systems::SoundSystem::UpdateEntity(double dt, EntityID entity, EntityID par
 
 void Systems::SoundSystem::PlaySound(std::shared_ptr<Components::SoundEmitter> emitter, std::string fileName)
 {
+	ALuint buffer = LoadFile(fileName);
+	alSourcei(source[emitter.get()], AL_BUFFER, buffer);
 	alSourcePlay(source[emitter.get()]);
 }
 
@@ -80,24 +82,33 @@ void Systems::SoundSystem::OnComponentCreated(std::string type, std::shared_ptr<
 		source[component.get()] = CreateSource();
 }
 
-void Systems::SoundSystem::LoadFile(const char* fileName)
+ALuint Systems::SoundSystem::LoadFile(std::string fileName)
 {
+	if (m_BufferCache.find(fileName) != m_BufferCache.end())
+		return m_BufferCache[fileName];
+
 	FILE *fp = NULL;
-	fp = fopen(strcat("Sounds/", fileName), "rb");
+	fp = fopen(strcat("Sounds/", fileName.c_str()), "rb");
 
 	//CHECK FOR VALID WAVE-FILE
 	fread(type, sizeof(char), 4, fp);
-	if(type[0]!='R' || type[1]!='I' || type[2]!='F' || type[3]!='F')
-		return LOG_ERROR("ERROR: No RIFF in WAVE-file");
+	if(type[0]!='R' || type[1]!='I' || type[2]!='F' || type[3]!='F') {
+		LOG_ERROR("ERROR: No RIFF in WAVE-file");
+		return 0;
+	}
 
 	fread(&size, sizeof(DWORD), 1, fp);
 	fread(type, sizeof(char), 4, fp);
-	if(type[0]!='W' || type[1]!='A' || type[2]!='V' || type[3]!='E')
-		return LOG_ERROR("ERROR: Not WAVE-file");
+	if(type[0]!='W' || type[1]!='A' || type[2]!='V' || type[3]!='E') {
+		LOG_ERROR("ERROR: Not WAVE-file");
+		return 0;
+	}
 
 	fread(type, sizeof(char), 4, fp);
-	if(type[0]!='f' || type[1]!='m' || type[2]!='t' || type[3]!=' ')
-		return LOG_ERROR("ERROR: No fmt in WAVE-file");
+	if(type[0]!='f' || type[1]!='m' || type[2]!='t' || type[3]!=' ') {
+		LOG_ERROR("ERROR: No fmt in WAVE-file");
+		return 0;
+	}
 
 	//READ THE DATA FROM WAVE-FILE
 	fread(&chunkSize, sizeof(DWORD), 1, fp);
@@ -110,26 +121,19 @@ void Systems::SoundSystem::LoadFile(const char* fileName)
 
 	fread(type, sizeof(char), 4, fp);
 	if(type[0]!='d' || type[1]!='a' || type[2]!='t' || type[3]!='a')
-		return LOG_ERROR("ERROR: WAVE-file Missing data");
+	{
+		LOG_ERROR("ERROR: WAVE-file Missing data");
+		return 0;
+	}
 
 	fread(&dataSize, sizeof(DWORD), 1, fp);
 
-	buf = new unsigned char[dataSize];
+	unsigned char* buf = new unsigned char[dataSize];
 	fread(buf, sizeof(BYTE), dataSize, fp);
-
 	fclose(fp);
-}
 
-ALuint Systems::SoundSystem::CreateSource()
-{
-	ALuint source;
-	ALuint buffer;
-	ALuint frequency = sampleRate;
+	// Create buffer
 	ALuint format = 0;
-
-	alGenBuffers(1, &buffer);
-	alGenBuffers(1, &source);
-
 	if(bitsPerSample == 8)
 	{
 		if(channels == 1)
@@ -137,7 +141,6 @@ ALuint Systems::SoundSystem::CreateSource()
 		else if(channels == 2)
 			format = AL_FORMAT_STEREO8;
 	}
-
 	if(bitsPerSample == 16)
 	{
 		if (channels == 1)
@@ -145,8 +148,18 @@ ALuint Systems::SoundSystem::CreateSource()
 		else if (channels == 2)
 			format = AL_FORMAT_STEREO16;
 	}
+	ALuint buffer;
+	alGenBuffers(1, &buffer);
+	alBufferData(buffer, format, buf, dataSize, sampleRate);
 
-	alBufferData(buffer, format, buf, dataSize, frequency);
+	m_BufferCache[fileName] = buffer;
+	return buffer;
+}
+
+ALuint Systems::SoundSystem::CreateSource()
+{
+	ALuint source;
+	alGenBuffers(1, &source);
 
 	return source;
 }

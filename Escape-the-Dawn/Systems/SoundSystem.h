@@ -26,7 +26,7 @@ public:
 	void UpdateEntity(double dt, EntityID entity, EntityID parent) override;
 	void OnComponentCreated(std::string type, std::shared_ptr<Component> component) override;
 	void PlaySound(std::shared_ptr<Components::SoundEmitter> emitter, std::string fileName);
-	void LoadFile(const char* fileName);
+	ALuint LoadFile(std::string fileName);
 	ALuint CreateSource();
 
 private:
@@ -39,10 +39,10 @@ private:
 	DWORD sampleRate, avgBytesPerSec;
 	short bytesPerSample, bitsPerSample;
 	DWORD dataSize;
-	unsigned char* buf;
+	
 
 	std::map<Component*, ALuint> source; 
-	std::map<std::string, ALuint> buffer; // string = fileName
+	std::map<std::string, ALuint> m_BufferCache; // string = fileName
 };
 
 }
