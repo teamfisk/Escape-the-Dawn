@@ -42,6 +42,11 @@ public:
 	template <class T>
 	T GetProperty(EntityID entity, std::string property)
 	{
+		if(m_EntityProperties.find(entity) == m_EntityProperties.end())
+			return T();
+		if(m_EntityProperties[entity].find(property) == m_EntityProperties[entity].end())
+			return T();
+
 		return boost::any_cast<T>(m_EntityProperties[entity][property]);
 	}
 

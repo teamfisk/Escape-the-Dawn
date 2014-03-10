@@ -56,7 +56,7 @@ void GameWorld::Initialize()
 	AddSystem("InputSystem");
 	//AddSystem("CollisionSystem");
 	//AddSystem("ParticleSystem");
-	//AddSystem("PlayerSystem");
+	AddSystem("PlayerSystem");
 	//AddSystem("SoundSystem");
 	AddSystem("RenderSystem");
 
@@ -72,14 +72,15 @@ void GameWorld::Initialize()
 	model->ModelFile = "ship.obj";
 
 	ent = CreateEntity();
-	SetProperty(ent, "Name", "Camera");
+	SetProperty(ent, "Name", std::string("Camera"));
 	transform = AddComponent<Components::Transform>(ent, "Transform");
-	transform->Position = glm::vec3(0.f, 0.f, 10.f);
+	AddComponent<Components::Input>(ent, "Input");
+	transform->Position = glm::vec3(0.f, 2.f, 10.f);
 	camera = AddComponent<Components::Camera>(ent, "Camera");
 	camera->FOV		= 45.f;
 	camera->FarClip	= 1000.f;
 	camera->NearClip	= 0.01f;
-
+	transform->Orientation = glm::angleAxis<float>(glm::radians(25.0f),glm::vec3(1,0,0));
 }
 
 void GameWorld::RegisterSystems()
@@ -88,7 +89,7 @@ void GameWorld::RegisterSystems()
 	m_SystemFactory.Register("InputSystem", [this]() { return new Systems::InputSystem(this, m_Renderer); });
 	//m_SystemFactory.Register("CollisionSystem", [this]() { return new Systems::CollisionSystem(this); });
 	//m_SystemFactory.Register("ParticleSystem", [this]() { return new Systems::ParticleSystem(this); });
-	//m_SystemFactory.Register("PlayerSystem", [this]() { return new Systems::PlayerSystem(this); });
+	m_SystemFactory.Register("PlayerSystem", [this]() { return new Systems::PlayerSystem(this); });
 	//m_SystemFactory.Register("SoundSystem", [this]() { return new Systems::SoundSystem(this); });
 	m_SystemFactory.Register("RenderSystem", [this]() { return new Systems::RenderSystem(this, m_Renderer); });
 }

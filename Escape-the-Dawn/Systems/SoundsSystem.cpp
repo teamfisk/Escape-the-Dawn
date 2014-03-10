@@ -28,7 +28,6 @@ void Systems::SoundSystem::UpdateEntity(double dt, EntityID entity, EntityID par
 	if(soundEmitter == nullptr)
 		return;
 
-	
 }
 
 void Systems::SoundSystem::PlaySound(std::shared_ptr<Components::SoundEmitter> emitter, std::string fileName)
