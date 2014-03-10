@@ -20,8 +20,8 @@ void Systems::PlayerSystem::UpdateEntity(double dt, EntityID entity, EntityID pa
 	auto name = m_World->GetProperty<std::string>(entity, "Name");
 	if (name == "Camera") {
 
-		glm::vec3 Camera_Right = glm::rotate(transform->Orientation, glm::vec3(1, 0, 0));
-		glm::vec3 Camera_Forward = glm::rotate(transform->Orientation, glm::vec3(0, 0, 1));
+		glm::vec3 Camera_Right = glm::vec3(glm::vec4(1, 0, 0, 0) * transform->Orientation);
+		glm::vec3 Camera_Forward = glm::vec3(glm::vec4(0, 0, 1, 0) * transform->Orientation);
 
 
 		float speed = 4.0f;
@@ -45,8 +45,15 @@ void Systems::PlayerSystem::UpdateEntity(double dt, EntityID entity, EntityID pa
 		{
 			transform->Position += Camera_Forward * (float)dt*2.f * speed;
 		}
+		
+		// TOUCHING THIS CODE MIGHT COUSE THE UNIVERSE TO IMPLODE, ALSO DRAGONS
+		//---------------------------------------------------------------------
+		transform->Orientation = glm::angleAxis<float>(input->dY/300.f,glm::vec3(1,0,0)) * transform->Orientation;
 
-		transform->Orientation = transform->Orientation * glm::angleAxis<float>(-(input->dX/300.f),glm::vec3(0,1,0));
-		transform->Orientation = transform->Orientation * glm::angleAxis<float>(-(input->dY/300.f),glm::vec3(1,0,0));
+		transform->Orientation = transform->Orientation * glm::angleAxis<float>(input->dX/300.f,glm::vec3(0,1,0));
+		//---------------------------------------------------------------------
+		// TOUCHING THIS CODE MIGHT COUSE THE UNIVERSE TO IMPLODE, ALSO DRAGONS
+		
+		
 	}
 }
