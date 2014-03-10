@@ -37,10 +37,10 @@ void Systems::SoundSystem::UpdateEntity(double dt, EntityID entity, EntityID par
 	if (entityName == "Camera")
 	{
 		glm::vec3 playerPos = transformComponent->Position;
-		ALfloat listenerPos[3] = { playerPos.x, playerPos.y, playerPos.z };
+		ALfloat listenerPos[3] = { playerPos.x, playerPos.y, -playerPos.z };
 
 		glm::vec3 playerVel = transformComponent->Velocity;
-		ALfloat listenerVel[3] = { playerVel.x, playerVel.y, playerVel.z };
+		ALfloat listenerVel[3] = { playerVel.x, playerVel.y, -playerVel.z };
 
 		glm::fquat playerQuatOri = transformComponent->Orientation;
 		glm::vec3 playerOriFW = glm::rotate(playerQuatOri, glm::vec3(0, 0, -1));
@@ -63,10 +63,10 @@ void Systems::SoundSystem::UpdateEntity(double dt, EntityID entity, EntityID par
 		alSourcei(source, AL_LOOPING, soundEmitter->Loop);
 
 		glm::vec3 emitterPos = transformComponent->Position;
-		ALfloat sourcePos[3] = { emitterPos.x, emitterPos.y, emitterPos.z };
+		ALfloat sourcePos[3] = { emitterPos.x, emitterPos.y, -emitterPos.z };
 
 		glm::vec3 emitterVel= transformComponent->Position;
-		ALfloat sourceVel[3] = { emitterVel.x, emitterVel.y, emitterVel.z };
+		ALfloat sourceVel[3] = { emitterVel.x, emitterVel.y, -emitterVel.z };
 
 		alSourcefv(source, AL_POSITION, sourcePos);
 		alSourcefv(source, AL_VELOCITY, sourceVel);
@@ -169,12 +169,6 @@ ALuint Systems::SoundSystem::CreateSource()
 {
 	ALuint source;
 	alGenSources((ALuint)1, &source);
-
-	alSourcef(source, AL_GAIN, 1); //Volume
-	alSourcef(source, AL_PITCH, 1); 
-	alSourcei(source, AL_LOOPING, AL_FALSE);
-	alSource3f(source, AL_POSITION, 0, 0, 0);
-	alSource3f(source, AL_VELOCITY, 0, 0, 0);
 
 	return source;
 }
