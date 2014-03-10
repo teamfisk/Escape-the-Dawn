@@ -6,7 +6,6 @@
 Systems::SoundSystem::SoundSystem(World* world)
 	 : System(world)
 {
-
 	//initialize OpenAL
 	ALCdevice* Device = alcOpenDevice(NULL);
 
@@ -21,7 +20,6 @@ Systems::SoundSystem::SoundSystem(World* world)
 	}
 
 	alGetError();
-
 }
 
 void Systems::SoundSystem::Update(double dt)
@@ -51,54 +49,18 @@ void Systems::SoundSystem::UpdateEntity(double dt, EntityID entity, EntityID par
 
 		//Listener
 		alListenerfv(AL_POSITION, listenerPos);
-		ALenum error;
-		if ((error = alGetError()) != AL_NO_ERROR)
-		{
-			LOG_ERROR("AL Error: %d", error);
-		}
 		alListenerfv(AL_VELOCITY, listenerVel);
-		if ((error = alGetError()) != AL_NO_ERROR)
-		{
-			LOG_ERROR("AL Error: %d", error);
-		}
 		alListenerfv(AL_ORIENTATION, listenerOri);
-		if ((error = alGetError()) != AL_NO_ERROR)
-		{
-			LOG_ERROR("AL Error: %d", error);
-		}
 	}
 
 	auto soundEmitter = m_World->GetComponent<Components::SoundEmitter>(entity, "SoundEmitter");
 	if(soundEmitter != nullptr)
 	{
 		ALuint source = m_Source[soundEmitter.get()];
-
-		ALenum error;
-		alSourcef(source, AL_GAIN, soundEmitter->Gain); //Volume
-		if ((error = alGetError()) != AL_NO_ERROR)
-		{
-			LOG_ERROR("AL Error: %d", error);
-		}
 		alSourcei(source, AL_MAX_DISTANCE, soundEmitter->MaxDistance);
-		if ((error = alGetError()) != AL_NO_ERROR)
-		{
-			LOG_ERROR("AL Error: %d", error);
-		}
 		alSourcei(source, AL_REFERENCE_DISTANCE, soundEmitter->ReferenceDistance);
-		if ((error = alGetError()) != AL_NO_ERROR)
-		{
-			LOG_ERROR("AL Error: %d", error);
-		}
 		alSourcef(source, AL_PITCH, soundEmitter->Pitch); 
-		if ((error = alGetError()) != AL_NO_ERROR)
-		{
-			LOG_ERROR("AL Error: %d", error);
-		}
 		alSourcei(source, AL_LOOPING, soundEmitter->Loop);
-		if ((error = alGetError()) != AL_NO_ERROR)
-		{
-			LOG_ERROR("AL Error: %d", error);
-		}
 
 		glm::vec3 emitterPos = transformComponent->Position;
 		ALfloat sourcePos[3] = { emitterPos.x, emitterPos.y, emitterPos.z };
@@ -107,17 +69,7 @@ void Systems::SoundSystem::UpdateEntity(double dt, EntityID entity, EntityID par
 		ALfloat sourceVel[3] = { emitterVel.x, emitterVel.y, emitterVel.z };
 
 		alSourcefv(source, AL_POSITION, sourcePos);
-		if ((error = alGetError()) != AL_NO_ERROR)
-		{
-			LOG_ERROR("AL Error: %d", error);
-		}
 		alSourcefv(source, AL_VELOCITY, sourceVel);
-		if ((error = alGetError()) != AL_NO_ERROR)
-		{
-			LOG_ERROR("AL Error: %d", error);
-		}
-
-		
 	}
 }
 
@@ -126,19 +78,7 @@ void Systems::SoundSystem::PlaySound(std::shared_ptr<Components::SoundEmitter> e
 	ALuint buffer = LoadFile(fileName);
 	ALuint source = m_Source[emitter.get()];
 	alSourcei(source, AL_BUFFER, buffer);
-	ALenum error;
-	if ((error = alGetError()) != AL_NO_ERROR)
-	{
-		LOG_ERROR("AL Error: %d", error);
-		exit(EXIT_FAILURE);
-	}
 	alSourcePlay(m_Source[emitter.get()]);
-	if ((error = alGetError()) != AL_NO_ERROR)
-	{
-		LOG_ERROR("AL Error: %d", error);
-		exit(EXIT_FAILURE);
-
-	}
 }
 
 void Systems::SoundSystem::OnComponentCreated(std::string type, std::shared_ptr<Component> component)
@@ -215,21 +155,10 @@ ALuint Systems::SoundSystem::LoadFile(std::string fileName)
 		else if (channels == 2)
 			format = AL_FORMAT_STEREO16;
 	}
+
 	ALuint buffer;
 	alGenBuffers(1, &buffer);
-	ALenum error;
-	if ((error = alGetError()) != AL_NO_ERROR)
-	{
-		LOG_ERROR("AL Error: %d", error);
-		exit(EXIT_FAILURE);
-	}
 	alBufferData(buffer, format, buf, dataSize, sampleRate);
-	if ((error = alGetError()) != AL_NO_ERROR)
-	{
-		LOG_ERROR("AL Error: %d", error);
-		exit(EXIT_FAILURE);
-
-	}
 	//delete[] buf;
 
 	m_BufferCache[fileName] = buffer;
@@ -239,41 +168,13 @@ ALuint Systems::SoundSystem::LoadFile(std::string fileName)
 ALuint Systems::SoundSystem::CreateSource()
 {
 	ALuint source;
-	alGenBuffers((ALuint)1, &source);
-
-	ALenum error;
-	if ((error = alGetError()) != AL_NO_ERROR)
-	{
-		LOG_ERROR("AL Error: %d", error);
-		exit(EXIT_FAILURE);
-
-	}
+	alGenSources((ALuint)1, &source);
 
 	alSourcef(source, AL_GAIN, 1); //Volume
-	if ((error = alGetError()) != AL_NO_ERROR)
-	{
-		LOG_ERROR("AL Error: %d", error);
-	}
 	alSourcef(source, AL_PITCH, 1); 
-	if ((error = alGetError()) != AL_NO_ERROR)
-	{
-		LOG_ERROR("AL Error: %d", error);
-	}
 	alSourcei(source, AL_LOOPING, AL_FALSE);
-	if ((error = alGetError()) != AL_NO_ERROR)
-	{
-		LOG_ERROR("AL Error: %d", error);
-	}
 	alSource3f(source, AL_POSITION, 0, 0, 0);
-	if ((error = alGetError()) != AL_NO_ERROR)
-	{
-		LOG_ERROR("AL Error: %d", error);
-	}
 	alSource3f(source, AL_VELOCITY, 0, 0, 0);
-	if ((error = alGetError()) != AL_NO_ERROR)
-	{
-		LOG_ERROR("AL Error: %d", error);
-	}
 
 	return source;
 }
