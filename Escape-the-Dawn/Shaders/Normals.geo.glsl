@@ -23,7 +23,7 @@ void main()
 	{
 		gl_Position = MVP * vec4(Input[i].Position, 1.0);
 		EmitVertex();
-		gl_Position = MVP * vec4(Input[i].Position, 1.0) + MVP * vec4(Input[i].Normal, 0.0);
+		gl_Position = MVP * vec4(Input[i].Position + Input[i].Normal, 1.0);
 		EmitVertex();
 		EndPrimitive();
 

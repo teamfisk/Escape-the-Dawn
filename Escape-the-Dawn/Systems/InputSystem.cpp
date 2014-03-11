@@ -21,9 +21,22 @@ void Systems::InputSystem::Update(double dt)
 	glfwGetCursorPos(m_Renderer->GetWindow(), &xpos, &ypos);
 	m_CurrentMouseDeltaX = xpos - m_LastMouseX;
 	m_CurrentMouseDeltaY = ypos - m_LastMouseY;
-	m_LastMouseX = m_Renderer->WIDTH / 2.f; // xpos;
-	m_LastMouseY = m_Renderer->HEIGHT / 2.f; // ypos;
-	glfwSetCursorPos(m_Renderer->GetWindow(), m_LastMouseX, m_LastMouseY);
+	m_LastMouseX = xpos;
+	m_LastMouseY = ypos;
+
+	// Lock mouse while holding LMB
+	if (m_CurrentMouseState[GLFW_MOUSE_BUTTON_LEFT]) {
+		m_LastMouseX = m_Renderer->WIDTH / 2.f; // xpos;
+		m_LastMouseY = m_Renderer->HEIGHT / 2.f; // ypos;
+		glfwSetCursorPos(m_Renderer->GetWindow(), m_LastMouseX, m_LastMouseY);
+	}
+	// Hide/show cursor with LMB
+	if (m_CurrentMouseState[GLFW_MOUSE_BUTTON_LEFT] && !m_LastMouseState[GLFW_MOUSE_BUTTON_LEFT]) {
+		glfwSetInputMode(m_Renderer->GetWindow(), GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+	}
+	if (!m_CurrentMouseState[GLFW_MOUSE_BUTTON_LEFT] && m_LastMouseState[GLFW_MOUSE_BUTTON_LEFT]) {
+		glfwSetInputMode(m_Renderer->GetWindow(), GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+	}
 
 #ifdef DEBUG
 	// Wireframe
