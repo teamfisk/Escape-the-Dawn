@@ -46,10 +46,10 @@ static void _LOG(_LOG_LEVEL logLevel, char* file, char* func, unsigned int line,
 	if (logLevel > LOG_LEVEL)
 		return;
 
-	char message[512];
+	char message[2048];
 	va_list args;
 	va_start(args, format);
-	vsnprintf_s(message, 512, format, args);
+	vsnprintf_s(message, 2048, format, args);
 	va_end(args);
 
 	if (logLevel == LOG_LEVEL_ERROR)
