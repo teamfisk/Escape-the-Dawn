@@ -13,7 +13,7 @@ namespace Systems
 class InputSystem : public System
 {
 public:
-	InputSystem(World* world, std::shared_ptr<Renderer> renderer) 
+	InputSystem(World* world, std::shared_ptr<Renderer> renderer)
 		: System(world), m_Renderer(renderer) {	}
 
 	void Update(double dt) override;
@@ -21,13 +21,13 @@ public:
 
 private:
 	std::shared_ptr<Renderer> m_Renderer;
-
-	std::array<int, GLFW_KEY_LAST+1> m_CurrentKeyState;
-	std::array<int, GLFW_KEY_LAST+1> m_LastKeyState;
+	static std::array<int, GLFW_KEY_LAST+1> m_CurrentKeyState;
+	static std::array<int, GLFW_KEY_LAST+1> m_LastKeyState;
 	std::array<int, GLFW_MOUSE_BUTTON_LAST+1> m_CurrentMouseState;
 	std::array<int, GLFW_MOUSE_BUTTON_LAST+1> m_LastMouseState;
 	float m_CurrentMouseDeltaX, m_CurrentMouseDeltaY;
 	float m_LastMouseX, m_LastMouseY;
+
 };
 
 }

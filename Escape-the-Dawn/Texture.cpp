@@ -1,14 +1,14 @@
 #include "Texture.h"
 
-Texture::Texture( const char* path )
+Texture::Texture(std::string path)
 {
 	Load(path);
 }
 
 
-void Texture::Load( const char* path )
+void Texture::Load(std::string path)
 {
-	texture = SOIL_load_OGL_texture(path, 0, 0, SOIL_FLAG_INVERT_Y);
+	texture = SOIL_load_OGL_texture(path.c_str(), 0, 0, SOIL_FLAG_INVERT_Y);
 }
 
 void Texture::Bind()

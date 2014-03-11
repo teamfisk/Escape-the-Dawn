@@ -5,13 +5,18 @@ OBJ::OBJ()
 	m_CurrentMaterial = nullptr;
 }
 
-void OBJ::LoadFromFile(std::string filename)
+bool OBJ::LoadFromFile(std::string filename)
 {
 	m_Path = boost::filesystem::path(filename);
-	LOG_INFO("Parsing .obj \"%s\"", m_Path.c_str());
 
 	// http://paulbourke.net/dataformats/obj/
 	std::ifstream file(m_Path.string());
+	if (!file.is_open()) {
+		LOG_ERROR("Failed to open .obj \"%s\"", m_Path.string().c_str());
+		return false;
+	}
+
+	LOG_INFO("Parsing .obj \"%s\"", m_Path.string().c_str());
 	
 	std::string line;
 	while (std::getline(file, line)) {
@@ -74,7 +79,7 @@ void OBJ::LoadFromFile(std::string filename)
 			std::string faceDefString;
 			while (ss >> faceDefString) {
 				std::stringstream ss2(faceDefString);
-				FaceDefinition faceDef = { -1, -1, -1 };
+				FaceDefinition faceDef = { 0, 0, 0 };
 
 				ss2 >> faceDef.VertexIndex;
 				ss2.ignore(); // Ignore first delimiter
@@ -94,13 +99,21 @@ void OBJ::LoadFromFile(std::string filename)
 			Faces.push_back(face);
 		}
 	}
+
+	return true;
 }
 
 void OBJ::ParseMaterial()
 {
 	// http://paulbourke.net/dataformats/mtl/
 	std::ifstream file(m_MaterialPath.string());
-	
+	if (!file.is_open()) {
+		LOG_ERROR("Failed to open .mtl \"%s\"", m_MaterialPath.string().c_str());
+		return;
+	}
+
+	LOG_INFO("Parsing .mtl \"%s\"", m_MaterialPath.string().c_str());
+
 	std::string currentMaterialName;
 	MaterialInfo* currentMaterial = nullptr;
 
@@ -130,7 +143,7 @@ void OBJ::ParseMaterial()
 			};
 
 			ss >> currentMaterialName;
-			LOG_INFO("Parsing material %s", currentMaterialName);
+			LOG_INFO("Parsing material %s", currentMaterialName.c_str());
 			Materials[currentMaterialName] = mat;
 			currentMaterial = &Materials[currentMaterialName];
 			continue;

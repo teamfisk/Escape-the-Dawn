@@ -155,13 +155,14 @@
     <None Include="Shaders\Vertex.glsl">
       <Filter>Shaders</Filter>
     </None>
+<<<<<<< HEAD
+    <None Include="Fragment2.glsl">
+=======
     <None Include="Shaders\Normals.geo.glsl">
       <Filter>Shaders</Filter>
     </None>
     <None Include="Shaders\Normals.frag.glsl">
-      <Filter>Shaders</Filter>
-    </None>
-    <None Include="Fragment2.glsl">
+>>>>>>> origin/master
       <Filter>Shaders</Filter>
     </None>
   </ItemGroup>

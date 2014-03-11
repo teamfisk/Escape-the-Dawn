@@ -3,9 +3,52 @@
 
 Model::Model(const char* path)
 {
-	
-
 	Loadobj(path, Vertices, Normals, TextureCoords);
+	CreateBuffers(Vertices, Normals, TextureCoords);
+}
+
+Model::Model(OBJ &obj)
+{
+	OBJ::MaterialInfo* currentMaterial = nullptr;
+	TextureGroup* currentTexGroup = nullptr;
+	int index = 0;
+	for (auto face : obj.Faces) {
+		// New material
+		if (face.Material != currentMaterial) {
+			currentMaterial = face.Material;
+			// Load texture
+			std::shared_ptr<Texture> texture = std::make_shared<Texture>(currentMaterial->TextureFile);
+			// TODO: Load material parameters
+			// Create new texture group (start index of new group is upcoming index)
+			TextureGroup texGroup = { texture, index, index };
+			TextureGroups.push_back(texGroup);
+			currentTexGroup = &TextureGroups.back();
+		}
+
+		// Face definitions
+		for (auto faceDef : face.Definitions) {
+			glm::vec3 vertex;
+			std::tie(vertex.x, vertex.y, vertex.z) = obj.Vertices.at(faceDef.VertexIndex - 1);
+			Vertices.push_back(vertex);
+
+			if (faceDef.NormalIndex != 0) {
+				glm::vec3 normal;
+				std::tie(normal.x, normal.y, normal.z) = obj.Normals.at(faceDef.NormalIndex - 1);
+				Normals.push_back(normal);
+			}
+
+			if (faceDef.TextureCoordIndex != 0) {
+				glm::vec2 texCoord;
+				// TODO: W-coord?
+				std::tie(texCoord.x, texCoord.y, std::ignore) = obj.TextureCoords.at(faceDef.TextureCoordIndex - 1);
+				TextureCoords.push_back(texCoord);
+			}
+
+			currentTexGroup->EndIndex = index;
+			index++;
+		}
+	}
+
 	CreateBuffers(Vertices, Normals, TextureCoords);
 }
 

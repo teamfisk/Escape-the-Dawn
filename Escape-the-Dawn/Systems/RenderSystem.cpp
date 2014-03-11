@@ -15,14 +15,16 @@ void Systems::RenderSystem::UpdateEntity( double dt, EntityID entity, EntityID p
 	auto transformComponent = m_World->GetComponent<Components::Transform>(entity, "Transform");
 	if (transformComponent == nullptr)
 		return;
+
+	// Draw models
 	auto modelComponent = m_World->GetComponent<Components::Model>(entity, "Model");
 	if (modelComponent != nullptr)
 	{
 		if (m_CachedModels.find(modelComponent->ModelFile) == m_CachedModels.end()){
-			m_CachedModels[modelComponent->ModelFile] = new Model(modelComponent->ModelFile);
-			}
+			m_CachedModels[modelComponent->ModelFile] = std::make_shared<Model>(OBJ(modelComponent->ModelFile));
+		}
 
-		Model* model = m_CachedModels[modelComponent->ModelFile];
+		auto model = m_CachedModels[modelComponent->ModelFile];
 		m_Renderer->AddModelToDraw(model, transformComponent->Position, transformComponent->Orientation);
 	}
 	auto pointLightComponent = m_World->GetComponent<Components::PointLight>(entity, "PointLight");
@@ -48,8 +50,6 @@ void Systems::RenderSystem::UpdateEntity( double dt, EntityID entity, EntityID p
 		m_Renderer->GetCamera()->NearClip(cameraComponent->NearClip);
 		m_Renderer->GetCamera()->FarClip(cameraComponent->FarClip);
 	}
-		
-	
 }
 
 

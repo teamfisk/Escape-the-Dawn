@@ -1,16 +1,11 @@
 #include <string>
 #include <sstream>
 
-#include <GL/glew.h>
-#define GLFW_INCLUDE_GLU
-#include <GLFW/glfw3.h>
-#include <glext.h>
+#include "Renderer.h"
+#include "GameWorld.h"
 
 #include "logging.h"
 #include "glerror.h"
-
-#include "Renderer.h"
-#include "GameWorld.h"
 
 class Engine
 {

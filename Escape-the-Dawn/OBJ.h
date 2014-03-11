@@ -51,7 +51,7 @@ public:
 	std::vector<Face> Faces;
 	std::map<std::string, MaterialInfo> Materials;
 
-	void LoadFromFile(std::string filename);
+	bool LoadFromFile(std::string filename);
 
 private:
 	boost::filesystem::path m_Path;

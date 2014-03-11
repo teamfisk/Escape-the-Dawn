@@ -16,13 +16,13 @@
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <CharacterSet>MultiByte</CharacterSet>
     <PlatformToolset>v110</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
@@ -40,7 +40,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <LibraryPath>$(SolutionDir)\Libraries\openal-soft-1.15.1-bin\lib\Win32\Debug;$(SolutionDir)\Libraries\SOIL\lib\Debug;$(SolutionDir)\Libraries\glew-1.10.0\lib\Debug\Win32;$(SolutionDir)\Libraries\glfw-3.0.4\lib\Debug;$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(BOOST_ROOT)\lib32-msvc-11.0;$(SolutionDir)\Libraries\openal-soft-1.15.1-bin\lib\Win32\Debug;$(SolutionDir)\Libraries\SOIL\lib\Debug;$(SolutionDir)\Libraries\glew-1.10.0\lib\Debug\Win32;$(SolutionDir)\Libraries\glfw-3.0.4\lib\Debug;$(LibraryPath)</LibraryPath>
     <OutDir>$(SolutionDir)bin\</OutDir>
     <IntDir>$(SolutionDir)obj\$(ProjectName)\</IntDir>
     <TargetName>$(ProjectName)-$(Configuration)</TargetName>
@@ -50,7 +50,7 @@
     <IncludePath>$(BOOST_ROOT);$(SolutionDir)\Libraries\openal-soft-1.15.1-bin\include;$(SolutionDir)\Libraries\SOIL\src;$(ProjectDir);$(SolutionDir)\Libraries;$(SolutionDir)\Libraries\glew-1.10.0\include;$(SolutionDir)\Libraries\glfw-3.0.4\include;$(SolutionDir)\Libraries\glm-0.9.5.2;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <LibraryPath>$(SolutionDir)\Libraries\openal-soft-1.15.1-bin\lib\Win32\Release;$(SolutionDir)\Libraries\SOIL\lib\Release;$(SolutionDir)\Libraries\glew-1.10.0\lib\Release\Win32;$(SolutionDir)\Libraries\glfw-3.0.4\lib\Release;$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(BOOST_ROOT)\lib32-msvc-11.0;$(SolutionDir)\Libraries\openal-soft-1.15.1-bin\lib\Win32\Release;$(SolutionDir)\Libraries\SOIL\lib\Release;$(SolutionDir)\Libraries\glew-1.10.0\lib\Release\Win32;$(SolutionDir)\Libraries\glfw-3.0.4\lib\Release;$(LibraryPath)</LibraryPath>
     <OutDir>$(SolutionDir)bin\</OutDir>
     <IntDir>$(SolutionDir)obj\$(ProjectName)\</IntDir>
     <TargetName>$(ProjectName)-$(Configuration)</TargetName>
@@ -65,7 +65,7 @@
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Console</SubSystem>
-      <AdditionalDependencies>opengl32.lib;glu32.lib;glew32sd.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>OpenAL32.lib;opengl32.lib;glu32.lib;SOIL.lib;glew32sd.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent />
     <PostBuildEvent />
@@ -90,7 +90,7 @@
       <GenerateDebugInformation>false</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>opengl32.lib;glu32.lib;glew32s.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>OpenAL32.lib;opengl32.lib;glu32.lib;SOIL.lib;glew32s.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <Lib>
       <AdditionalDependencies>OpenAL32.lib;opengl32.lib;glu32.lib;SOIL.lib;glew32s.lib;glfw3.lib;</AdditionalDependencies>
@@ -101,7 +101,9 @@
     <ClCompile Include="Engine.h" />
     <ClCompile Include="Frame.cpp" />
     <ClCompile Include="GameFrame.cpp" />
+    <ClCompile Include="GameWorld.cpp" />
     <ClCompile Include="GUIManager.cpp" />
+    <ClCompile Include="main.cpp" />
     <ClCompile Include="MenuFrame.cpp" />
     <ClCompile Include="Model.cpp" />
     <ClCompile Include="OBJ.cpp" />
@@ -147,6 +149,7 @@
     <ClInclude Include="MenuFrame.h" />
     <ClInclude Include="Model.h" />
     <ClInclude Include="OBJ.h" />
+    <ClInclude Include="OpenGL.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="ShaderProgram.h" />
     <ClInclude Include="Systems\InputSystem.h" />
@@ -164,6 +167,8 @@
   <ItemGroup>
     <None Include="Fragment2.glsl" />
     <None Include="Shaders\Fragment.glsl" />
+    <None Include="Shaders\Normals.frag.glsl" />
+    <None Include="Shaders\Normals.geo.glsl" />
     <None Include="Shaders\Vertex.glsl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
