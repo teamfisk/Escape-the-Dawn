@@ -67,13 +67,13 @@ void Renderer::Draw(double _dt)
 		glUniformMatrix4fv(glGetUniformLocation(m_ShaderProgram.GetHandle(), "MVP"), 1, GL_FALSE, glm::value_ptr(MVP));
 		glUniformMatrix4fv(glGetUniformLocation(m_ShaderProgram.GetHandle(), "model"), 1, GL_FALSE, glm::value_ptr(ModelsToRender[i]->ModelMatrix));
 		glUniformMatrix4fv(glGetUniformLocation(m_ShaderProgram.GetHandle(), "view"), 1, GL_FALSE, glm::value_ptr(m_Camera->ViewMatrix()));
-		glUniform3fv(glGetUniformLocation(m_ShaderProgram.GetHandle(), "position"), 2, Light_position.data());
-		glUniform3fv(glGetUniformLocation(m_ShaderProgram.GetHandle(), "specular"), 2, Light_specular.data());
-		glUniform3fv(glGetUniformLocation(m_ShaderProgram.GetHandle(), "diffuse"), 2, Light_diffuse.data());
-		glUniform1fv(glGetUniformLocation(m_ShaderProgram.GetHandle(), "constantAttenuation"), 2, Light_constantAttenuation.data());
-		glUniform1fv(glGetUniformLocation(m_ShaderProgram.GetHandle(), "linearAttenuation"), 2, Light_linearAttenuation.data());
-		glUniform1fv(glGetUniformLocation(m_ShaderProgram.GetHandle(), "quadraticAttenuation"), 2, Light_quadraticAttenuation.data());
-		glUniform1fv(glGetUniformLocation(m_ShaderProgram.GetHandle(), "spotExponent"), 2, Light_spotExponent.data());
+		glUniform3fv(glGetUniformLocation(m_ShaderProgram.GetHandle(), "position"), 3, Light_position.data());
+		glUniform3fv(glGetUniformLocation(m_ShaderProgram.GetHandle(), "specular"), 3, Light_specular.data());
+		glUniform3fv(glGetUniformLocation(m_ShaderProgram.GetHandle(), "diffuse"), 3, Light_diffuse.data());
+		glUniform1fv(glGetUniformLocation(m_ShaderProgram.GetHandle(), "constantAttenuation"), 3, Light_constantAttenuation.data());
+		glUniform1fv(glGetUniformLocation(m_ShaderProgram.GetHandle(), "linearAttenuation"), 3, Light_linearAttenuation.data());
+		glUniform1fv(glGetUniformLocation(m_ShaderProgram.GetHandle(), "quadraticAttenuation"), 3, Light_quadraticAttenuation.data());
+		glUniform1fv(glGetUniformLocation(m_ShaderProgram.GetHandle(), "spotExponent"), 3, Light_spotExponent.data());
 		glBindVertexArray(ModelsToRender[i]->model->VAO);
 		glDrawArrays(GL_TRIANGLES, 0, ModelsToRender[i]->model->Vertices.size());
 

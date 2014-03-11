@@ -79,6 +79,17 @@ void GameWorld::Initialize()
 
 	ent = CreateEntity();
 	transform = AddComponent<Components::Transform>(ent, "Transform");
+	transform->Position = glm::vec3(10.f, 4.f, 0.f);
+	pointLight = AddComponent<Components::PointLight>(ent, "PointLight");
+	pointLight->Specular = glm::vec3(1.0,  1.0,  1.0);
+	pointLight->Diffuse = glm::vec3(1.0,  1.0,  1.0);
+	pointLight->constantAttenuation = 0.f;
+	pointLight->linearAttenuation = 1.f;
+	pointLight->quadraticAttenuation = 0.f;
+	pointLight->spotExponent = 0.0f;
+
+	ent = CreateEntity();
+	transform = AddComponent<Components::Transform>(ent, "Transform");
 	transform->Position = glm::vec3(0.f, -4.f, 0.f);
 	pointLight = AddComponent<Components::PointLight>(ent, "PointLight");
 	pointLight->Specular = glm::vec3(1.0,  1.0,  1.0);

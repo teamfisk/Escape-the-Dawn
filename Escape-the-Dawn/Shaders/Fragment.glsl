@@ -5,7 +5,7 @@ uniform mat4 view;
  
 layout(binding=0) uniform sampler2D texture;
 
-const int numberOfLights = 2;
+const int numberOfLights = 3;
 
 uniform vec3 position[numberOfLights];
 uniform vec3 specular[numberOfLights];
