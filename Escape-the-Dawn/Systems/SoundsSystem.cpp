@@ -1,14 +1,12 @@
 #include "SoundSystem.h"
 #include "World.h"
-//#include <fstream>
-
 
 Systems::SoundSystem::SoundSystem(World* world)
 	 : System(world)
 {
 	//initialize OpenAL
 	ALCdevice* Device = alcOpenDevice(NULL);
-
+	ALCcontext* context;
 	if(Device)
 	{
 		context = alcCreateContext(Device, NULL);
@@ -24,7 +22,7 @@ Systems::SoundSystem::SoundSystem(World* world)
 
 void Systems::SoundSystem::Update(double dt)
 {
-
+	
 }
 
 void Systems::SoundSystem::UpdateEntity(double dt, EntityID entity, EntityID parent)
@@ -57,6 +55,7 @@ void Systems::SoundSystem::UpdateEntity(double dt, EntityID entity, EntityID par
 	if(soundEmitter != nullptr)
 	{
 		ALuint source = m_Source[soundEmitter.get()];
+		alSourcei(source, AL_GAIN, soundEmitter->Gain);
 		alSourcei(source, AL_MAX_DISTANCE, soundEmitter->MaxDistance);
 		alSourcei(source, AL_REFERENCE_DISTANCE, soundEmitter->ReferenceDistance);
 		alSourcef(source, AL_PITCH, soundEmitter->Pitch); 
@@ -65,7 +64,7 @@ void Systems::SoundSystem::UpdateEntity(double dt, EntityID entity, EntityID par
 		glm::vec3 emitterPos = transformComponent->Position;
 		ALfloat sourcePos[3] = { emitterPos.x, emitterPos.y, -emitterPos.z };
 
-		glm::vec3 emitterVel= transformComponent->Position;
+		glm::vec3 emitterVel= transformComponent->Velocity;
 		ALfloat sourceVel[3] = { emitterVel.x, emitterVel.y, -emitterVel.z };
 
 		alSourcefv(source, AL_POSITION, sourcePos);
@@ -159,7 +158,7 @@ ALuint Systems::SoundSystem::LoadFile(std::string fileName)
 	ALuint buffer;
 	alGenBuffers(1, &buffer);
 	alBufferData(buffer, format, buf, dataSize, sampleRate);
-	//delete[] buf;
+	delete[] buf;
 
 	m_BufferCache[fileName] = buffer;
 	return buffer;

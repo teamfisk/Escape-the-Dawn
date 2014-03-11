@@ -23,11 +23,10 @@ public:
 	void UpdateEntity(double dt, EntityID entity, EntityID parent) override;
 	void OnComponentCreated(std::string type, std::shared_ptr<Component> component) override;
 	void PlaySound(std::shared_ptr<Components::SoundEmitter> emitter, std::string fileName);
-	ALuint LoadFile(std::string fileName);
-	ALuint CreateSource();
 
 private:
-	ALCcontext* context;
+	ALuint LoadFile(std::string fileName);
+	ALuint CreateSource();
 
 	//File-info
 	char type[4];
@@ -37,7 +36,7 @@ private:
 	short bytesPerSample, bitsPerSample;
 	DWORD dataSize;
 	
-
+	
 	std::map<Component*, ALuint> m_Source; 
 	std::map<std::string, ALuint> m_BufferCache; // string = fileName
 };
