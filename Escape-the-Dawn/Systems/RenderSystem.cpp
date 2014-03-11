@@ -25,6 +25,19 @@ void Systems::RenderSystem::UpdateEntity( double dt, EntityID entity, EntityID p
 		Model* model = m_CachedModels[modelComponent->ModelFile];
 		m_Renderer->AddModelToDraw(model, transformComponent->Position, transformComponent->Orientation);
 	}
+	auto pointLightComponent = m_World->GetComponent<Components::PointLight>(entity, "PointLight");
+	if (pointLightComponent != nullptr)
+	{
+		
+		m_Renderer->AddPointLightToDraw(
+			transformComponent->Position, 
+			pointLightComponent->Specular,
+			pointLightComponent->Diffuse,
+			pointLightComponent->constantAttenuation,
+			pointLightComponent->linearAttenuation,
+			pointLightComponent->quadraticAttenuation,
+			pointLightComponent->spotExponent);
+	}
 	auto cameraComponent = m_World->GetComponent<Components::Camera>(entity, "Camera");
 	if (cameraComponent != nullptr)
 	{

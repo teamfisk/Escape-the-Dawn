@@ -67,10 +67,13 @@ void Renderer::Draw(double _dt)
 		glUniformMatrix4fv(glGetUniformLocation(m_ShaderProgram.GetHandle(), "MVP"), 1, GL_FALSE, glm::value_ptr(MVP));
 		glUniformMatrix4fv(glGetUniformLocation(m_ShaderProgram.GetHandle(), "model"), 1, GL_FALSE, glm::value_ptr(ModelsToRender[i]->ModelMatrix));
 		glUniformMatrix4fv(glGetUniformLocation(m_ShaderProgram.GetHandle(), "view"), 1, GL_FALSE, glm::value_ptr(m_Camera->ViewMatrix()));
-		glUniform3fv(glGetUniformLocation(m_ShaderProgram.GetHandle(), "lightPosition"), 1, glm::value_ptr(glm::vec3(2.0f, 4.0f, 1.0f)));
-		glUniform1f(glGetUniformLocation(m_ShaderProgram.GetHandle(), "constantAttenuation"), 1.5f);
-		glUniform1f(glGetUniformLocation(m_ShaderProgram.GetHandle(), "linearAttenuation"), 0.0f);
-		glUniform1f(glGetUniformLocation(m_ShaderProgram.GetHandle(), "quadraticAttenuation"), 0.0f);
+		glUniform3fv(glGetUniformLocation(m_ShaderProgram.GetHandle(), "position"), 2, Light_position.data());
+		glUniform3fv(glGetUniformLocation(m_ShaderProgram.GetHandle(), "specular"), 2, Light_specular.data());
+		glUniform3fv(glGetUniformLocation(m_ShaderProgram.GetHandle(), "diffuse"), 2, Light_diffuse.data());
+		glUniform1fv(glGetUniformLocation(m_ShaderProgram.GetHandle(), "constantAttenuation"), 2, Light_constantAttenuation.data());
+		glUniform1fv(glGetUniformLocation(m_ShaderProgram.GetHandle(), "linearAttenuation"), 2, Light_linearAttenuation.data());
+		glUniform1fv(glGetUniformLocation(m_ShaderProgram.GetHandle(), "quadraticAttenuation"), 2, Light_quadraticAttenuation.data());
+		glUniform1fv(glGetUniformLocation(m_ShaderProgram.GetHandle(), "spotExponent"), 2, Light_spotExponent.data());
 		glBindVertexArray(ModelsToRender[i]->model->VAO);
 		glDrawArrays(GL_TRIANGLES, 0, ModelsToRender[i]->model->Vertices.size());
 
@@ -98,7 +101,32 @@ void Renderer::AddModelToDraw(Model* _model, glm::vec3 _position, glm::quat _ori
 	ModelsToRender.push_back(new ModelData(_model, ModelMatrix));
 }
 
-//Fixa med shaders, lägga in alla verts osv.
+void Renderer::AddPointLightToDraw(
+	glm::vec3 _position,
+	glm::vec3 _specular, 
+	glm::vec3 _diffuse, 
+	float _constantAttenuation, 
+	float _linearAttenuation, 
+	float _quadraticAttenuation, 
+	float _spotExponent
+	)
+{
+	Light_position.push_back(_position.x);
+	Light_position.push_back(_position.y);
+	Light_position.push_back(_position.z);
+	Light_specular.push_back(_specular.x);
+	Light_specular.push_back(_specular.y);
+	Light_specular.push_back(_specular.z);
+	Light_diffuse.push_back(_diffuse.x);
+	Light_diffuse.push_back(_diffuse.y);
+	Light_diffuse.push_back(_diffuse.z);
+	Light_constantAttenuation.push_back(_constantAttenuation);
+	Light_linearAttenuation.push_back(_linearAttenuation);
+	Light_quadraticAttenuation.push_back(_quadraticAttenuation);
+	Light_spotExponent.push_back(_spotExponent);
+
+}
+
 
 void Renderer::LoadContent()
 {

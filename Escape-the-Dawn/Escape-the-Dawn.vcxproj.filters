@@ -150,6 +150,9 @@
     <None Include="Shaders\Vertex.glsl">
       <Filter>Shaders</Filter>
     </None>
+    <None Include="Fragment2.glsl">
+      <Filter>Shaders</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Systems">
