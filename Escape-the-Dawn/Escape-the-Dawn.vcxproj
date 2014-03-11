@@ -104,6 +104,7 @@
     <ClCompile Include="GUIManager.cpp" />
     <ClCompile Include="MenuFrame.cpp" />
     <ClCompile Include="Model.cpp" />
+    <ClCompile Include="OBJ.cpp" />
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="ShaderProgram.cpp" />
     <ClCompile Include="Systems\CollisionSystem.cpp" />
@@ -145,6 +146,7 @@
     <ClInclude Include="glerror.h" />
     <ClInclude Include="MenuFrame.h" />
     <ClInclude Include="Model.h" />
+    <ClInclude Include="OBJ.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="ShaderProgram.h" />
     <ClInclude Include="Systems\InputSystem.h" />
