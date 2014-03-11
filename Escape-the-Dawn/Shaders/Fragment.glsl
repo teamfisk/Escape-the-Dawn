@@ -7,9 +7,9 @@ layout(binding=0) uniform sampler2D texture;
 
 const int numberOfLights = 2;
 
-uniform vec4 position[numberOfLights];
-uniform vec4 specular[numberOfLights];
-uniform vec4 diffuse[numberOfLights];
+uniform vec3 position[numberOfLights];
+uniform vec3 specular[numberOfLights];
+uniform vec3 diffuse[numberOfLights];
 uniform float constantAttenuation[numberOfLights];
 uniform float linearAttenuation[numberOfLights];
 uniform float quadraticAttenuation[numberOfLights];
@@ -40,6 +40,8 @@ void main() {
 	vec3 Ks = vec3(0.3, 0.3, 0.3);	// Specular reflectance
 	vec3 Kd = vec3(1.0, 1.0, 1.0);	// Diffuse reflectance
 	vec3 Ka = vec3(1.0, 1.0, 1.0);	// Ambient reflectance
+	vec3 Is;
+	vec3 Id;
 
 	vec3 totalLighting = La * Ka;
 
@@ -52,23 +54,20 @@ void main() {
 	vec3 Ls = specular[i];	// Specular light
 	vec3 Ld = diffuse[i];	// Diffuse light
 	
-
-	// Object
 	
-	vec3 lightPosView = vec3(view * vec4(LightPos[i], 1.0));
+	vec3 lightPosView = vec3(view * vec4(position[i], 1.0));
 	vec3 surfacePosition = vec3(model * vec4(Input.Position, 1.0));
 	vec3 surfacePosView = vec3(view * vec4(surfacePosition, 1.0));
 	vec3 surfaceToLight = normalize(lightPosView - surfacePosView);
 	mat3 normalMatrix = transpose(inverse(mat3(view * model)));
 	vec3 surfaceNormal = normalize(normalMatrix * Input.Normal);
 	
-	float dist = length(LightPos[i] - surfacePosition);
+	float dist = length(position[i] - surfacePosition);
 
-	attenuation = 1.0 / (constantAttenuation
-		+ linearAttenuation * dist
-		+ quadraticAttenuation * pow(dist, 2.0));
-
-	attenuation = attenuation * pow(clampedCosine, spotExponent[i]);
+	attenuation = 1.0 / (constantAttenuation[i]
+		+ linearAttenuation[i] * dist
+		+ quadraticAttenuation[i] * pow(dist, 2.0));
+	//attenuation = attenuation * pow(clampedCosine, spotExponent[i]);
 	
 	// Diffuse light
 	float dotProd = dot(surfaceToLight, surfaceNormal);
