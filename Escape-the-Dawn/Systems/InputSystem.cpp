@@ -24,6 +24,17 @@ void Systems::InputSystem::Update(double dt)
 	m_LastMouseX = m_Renderer->WIDTH / 2.f; // xpos;
 	m_LastMouseY = m_Renderer->HEIGHT / 2.f; // ypos;
 	glfwSetCursorPos(m_Renderer->GetWindow(), m_LastMouseX, m_LastMouseY);
+
+#ifdef DEBUG
+	// Wireframe
+	if (m_CurrentKeyState[GLFW_KEY_F1] && !m_LastKeyState[GLFW_KEY_F1]) {
+		m_Renderer->DrawWireframe(!m_Renderer->DrawWireframe());
+	}
+	// Normals
+	if (m_CurrentKeyState[GLFW_KEY_F2] && !m_LastKeyState[GLFW_KEY_F2]) {
+		m_Renderer->DrawNormals(!m_Renderer->DrawNormals());
+	}
+#endif
 }
 
 void Systems::InputSystem::UpdateEntity(double dt, EntityID entity, EntityID parent)
@@ -39,3 +50,6 @@ void Systems::InputSystem::UpdateEntity(double dt, EntityID entity, EntityID par
 	input->dX = m_CurrentMouseDeltaX;
 	input->dY = m_CurrentMouseDeltaY;
 }
+
+std::array<int, GLFW_KEY_LAST+1> Systems::InputSystem::m_CurrentKeyState;
+std::array<int, GLFW_KEY_LAST+1> Systems::InputSystem::m_LastKeyState;

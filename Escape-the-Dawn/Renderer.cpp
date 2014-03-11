@@ -2,6 +2,9 @@
 
 Renderer::Renderer()
 {
+	m_VSync = false;
+	m_DrawNormals = false;
+	m_DrawWireframe = false;
 }
 
 void Renderer::Initialize()
@@ -39,12 +42,15 @@ void Renderer::Initialize()
 		LOG_ERROR("GLEW: Initialization failed");
 		exit(EXIT_FAILURE);
 	}
-	glEnable(GL_DEPTH_TEST);
-
+	
 	// Create Camera
-
 	m_Camera = std::make_shared<Camera>(45.f, (float)WIDTH / HEIGHT, 0.01f, 1000.f);
 	m_Camera->Position(glm::vec3(0.0f, 0.0f, 2.f));
+
+	glfwSwapInterval(m_VSync);
+	glEnable(GL_CULL_FACE);
+	glCullFace(GL_BACK);
+	glEnable(GL_DEPTH_TEST);
 
 	LoadContent();
 }
@@ -54,12 +60,25 @@ void Renderer::Draw(double dt)
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glClearColor(1.0f, 1.0f, 0.0f, 1.0f);
 
+	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_CULL_FACE);
+#ifdef DEBUG
+	glDisable(GL_CULL_FACE);
+	glPolygonMode(GL_BACK, GL_LINE);
+#endif
+
+	// Draw models
 	m_ShaderProgram.Bind();
+	glPolygonMode(GL_FRONT_AND_BACK, m_DrawWireframe ? GL_LINE : GL_FILL);
 	DrawModels();
 	
 #ifdef DEBUG
-	m_ShaderProgramNormals.Bind();
-	DrawModels();
+	// Debug draw normals
+	if (m_DrawNormals) {
+		m_ShaderProgramNormals.Bind();
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+		DrawModels();
+	}
 #endif
 
 	ModelsToRender.clear();

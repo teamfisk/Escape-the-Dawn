@@ -53,10 +53,18 @@ public:
 	GLFWwindow* GetWindow() const { return m_Window; }
 	std::shared_ptr<Camera> GetCamera() const { return m_Camera; }
 
+	bool DrawNormals() const { return m_DrawNormals; }
+	void DrawNormals(bool val) { m_DrawNormals = val; }
+	bool DrawWireframe() const { return m_DrawWireframe; }
+	void DrawWireframe(bool val) { m_DrawWireframe = val; }
+
 private:
 	GLFWwindow* m_Window;
 	GLint m_glVersion[2];
 	GLchar* m_glVendor;
+	bool m_VSync;
+	bool m_DrawNormals;
+	bool m_DrawWireframe;
 
 	std::shared_ptr<Camera> m_Camera;
 
