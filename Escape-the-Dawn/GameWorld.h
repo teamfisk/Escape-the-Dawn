@@ -93,9 +93,6 @@ void GameWorld::Initialize()
 	transform->Position = glm::vec3(10.f, 0.f, 0.f);
 	model = AddComponent<Components::Model>(ent, "Model");
 	model->ModelFile = "ship.obj";
-	soundEmitter->MaxDistance = FLT_MAX;
-	soundEmitter->ReferenceDistance = 10;
-	soundEmitter->ReferenceDistance = 0.1;
 
 	ent = CreateEntity();
 	transform = AddComponent<Components::Transform>(ent, "Transform");
@@ -104,7 +101,8 @@ void GameWorld::Initialize()
 	model->ModelFile = "ship.obj";
 // 	auto soundEmitter = AddComponent<Components::SoundEmitter>(ent, "SoundEmitter");
 // 	soundEmitter->Gain = 1;
-// 	soundEmitter->MaxDistance = 10;
+// 	soundEmitter->MaxDistance = FLT_MAX;
+// 	soundEmitter->ReferenceDistance = 10;
 // 	soundEmitter->Loop = true;
 // 	soundEmitter->ReferenceDistance = 0.1;
 // 	soundEmitter->Pitch = 1;
