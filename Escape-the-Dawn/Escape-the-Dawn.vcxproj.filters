@@ -45,6 +45,8 @@
     </ClCompile>
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="OBJ.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="GameWorld.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component.h" />
