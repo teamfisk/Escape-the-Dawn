@@ -84,18 +84,13 @@ bool Shader::IsCompiled() const
 	return m_ShaderHandle != 0;
 }
 
-ShaderProgram::ShaderProgram()
-{
-	Initialize();
-}
-
 ShaderProgram::~ShaderProgram()
 {
 	Unbind();
 	glDeleteProgram(m_ShaderProgramHandle);
 }
 
-void ShaderProgram::AddShader(std::unique_ptr<Shader> shader)
+void ShaderProgram::AddShader(std::shared_ptr<Shader> shader)
 {
 	m_Shaders.push_back(std::move(shader));
 }
@@ -111,6 +106,10 @@ void ShaderProgram::Compile()
 
 GLuint ShaderProgram::Link()
 {
+	if (m_Shaders.size() == 0) {
+		LOG_ERROR("Failed to link shader program: No shaders bound");
+	}
+
 	LOG_INFO("Linking shader program");
 	m_ShaderProgramHandle = glCreateProgram();
 	for (auto &shader : m_Shaders) {
@@ -119,10 +118,6 @@ GLuint ShaderProgram::Link()
 	glLinkProgram(m_ShaderProgramHandle);
 	if (GLERROR("glLinkProgram"))
 		return 0;
-
-	for (auto &shader : m_Shaders) {
-		shader.release();
-	}
 	m_Shaders.clear();
 
 	return m_ShaderProgramHandle;
@@ -144,9 +139,4 @@ void ShaderProgram::Bind()
 void ShaderProgram::Unbind()
 {
 	glActiveShaderProgram(0, 0);
-}
-
-void ShaderProgram::Initialize()
-{
-	m_ShaderProgramHandle = 0;
 }

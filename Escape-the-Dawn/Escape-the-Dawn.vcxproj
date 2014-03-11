@@ -149,6 +149,7 @@
     <ClInclude Include="MenuFrame.h" />
     <ClInclude Include="Model.h" />
     <ClInclude Include="OBJ.h" />
+    <ClInclude Include="OpenGL.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="ShaderProgram.h" />
     <ClInclude Include="Systems\InputSystem.h" />
@@ -165,6 +166,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Shaders\Fragment.glsl" />
+    <None Include="Shaders\Normals.frag.glsl" />
+    <None Include="Shaders\Normals.geo.glsl" />
     <None Include="Shaders\Vertex.glsl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

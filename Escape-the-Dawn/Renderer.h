@@ -7,11 +7,7 @@
 #include <sstream>
 #include <vector>
 
-#include <GL/glew.h>
-#define GLFW_INCLUDE_GLU
-#include <GLFW/glfw3.h>
-#include <glext.h>
-#define GLM_FORCE_RADIANS
+#include "OpenGL.h"
 #include <glm/glm.hpp>
 #include <glm/gtc/constants.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -27,7 +23,7 @@
 class Renderer
 {
 public:
-	ShaderProgram m_ShaderProgram;
+	
 	glm::mat4 viewMatrix;
 	glm::mat4 projectionMatrix;
 
@@ -64,7 +60,11 @@ private:
 
 	std::shared_ptr<Camera> m_Camera;
 
-	GLuint vertexArrayObject;
+	ShaderProgram m_ShaderProgram;
+	ShaderProgram m_ShaderProgramNormals;
+
+	void DrawModels();
+
 };
 
 #endif // Renderer_h__

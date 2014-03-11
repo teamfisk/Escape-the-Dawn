@@ -55,7 +55,20 @@ void Renderer::Draw(double dt)
 	glClearColor(1.0f, 1.0f, 0.0f, 1.0f);
 
 	m_ShaderProgram.Bind();
+	DrawModels();
+	
+#ifdef DEBUG
+	m_ShaderProgramNormals.Bind();
+	DrawModels();
+#endif
 
+	ModelsToRender.clear();
+
+	glfwSwapBuffers(m_Window);
+}
+
+void Renderer::DrawModels()
+{
 	glm::mat4 cameraMatrix = m_Camera->ProjectionMatrix() * m_Camera->ViewMatrix();
 
 	glm::mat4 MVP;
@@ -73,7 +86,7 @@ void Renderer::Draw(double dt)
 		glUniform1f(glGetUniformLocation(m_ShaderProgram.GetHandle(), "linearAttenuation"), 0.0f);
 		glUniform1f(glGetUniformLocation(m_ShaderProgram.GetHandle(), "quadraticAttenuation"), 0.0f);
 
-		
+
 		glBindVertexArray(model->VAO);
 		for (auto texGroup : model->TextureGroups) {
 			glActiveTexture(GL_TEXTURE0);
@@ -81,9 +94,6 @@ void Renderer::Draw(double dt)
 			glDrawArrays(GL_TRIANGLES, texGroup.StartIndex, (texGroup.EndIndex - texGroup.StartIndex + 1) * abs(sin(glfwGetTime())));
 		}
 	}
-	ModelsToRender.clear();
-
-	glfwSwapBuffers(m_Window);
 }
 
 void Renderer::DrawText()
@@ -108,8 +118,20 @@ void Renderer::AddModelToDraw(std::shared_ptr<Model> _model, glm::vec3 _position
 
 void Renderer::LoadContent()
 {
-	m_ShaderProgram.AddShader(std::unique_ptr<Shader>(new VertexShader("Shaders/Vertex.glsl")));
-	m_ShaderProgram.AddShader(std::unique_ptr<Shader>(new FragmentShader("Shaders/Fragment.glsl")));
+	auto standardVS = std::shared_ptr<Shader>(new VertexShader("Shaders/Vertex.glsl"));
+	auto standardFS = std::shared_ptr<Shader>(new FragmentShader("Shaders/Fragment.glsl"));
+
+	auto normalsGS = std::shared_ptr<Shader>(new GeometryShader("Shaders/Normals.geo.glsl"));
+	auto normalsFS = std::shared_ptr<Shader>(new FragmentShader("Shaders/Normals.frag.glsl"));
+
+	m_ShaderProgram.AddShader(standardVS);
+	m_ShaderProgram.AddShader(standardFS);
 	m_ShaderProgram.Compile();
 	m_ShaderProgram.Link();
+
+	m_ShaderProgramNormals.AddShader(normalsGS);
+	m_ShaderProgramNormals.AddShader(standardVS);
+	m_ShaderProgramNormals.AddShader(normalsFS);
+	m_ShaderProgramNormals.Compile();
+	m_ShaderProgramNormals.Link();
 }

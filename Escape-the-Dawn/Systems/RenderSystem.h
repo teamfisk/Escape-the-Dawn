@@ -1,6 +1,8 @@
 #ifndef RenderSystem_h__
 #define  RenderSystem_h__
 
+#include <unordered_map>
+
 #include "System.h"
 #include "Model.h"
 #include "Texture.h"
@@ -8,7 +10,6 @@
 #include "Components/Transform.h"
 #include "Components/Camera.h"
 #include "Renderer.h"
-#include <unordered_map>
 
 namespace Systems
 {
