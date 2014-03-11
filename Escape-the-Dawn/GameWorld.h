@@ -72,9 +72,10 @@ void GameWorld::Initialize()
 	model->ModelFile = "ship.obj";
 	auto soundEmitter = AddComponent<Components::SoundEmitter>(ent, "SoundEmitter");
 	soundEmitter->Gain = 1;
-	soundEmitter->MaxDistance = 10;
+	soundEmitter->MaxDistance = FLT_MAX;
+	soundEmitter->ReferenceDistance = 10;
 	soundEmitter->Loop = true;
-	soundEmitter->ReferenceDistance = 0.1;
+	
 	soundEmitter->Pitch = 1;
 	GetSystem<Systems::SoundSystem>("SoundSystem")->PlaySound(soundEmitter, "Sounds/hallelujah.wav");
 	
