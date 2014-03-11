@@ -19,7 +19,7 @@ namespace Systems
 		RenderSystem(World* world, std::shared_ptr<Renderer> renderer)
 			: System(world), m_Renderer(renderer) {}
 
-		std::unordered_map<std::string, Model*> m_CachedModels;
+		std::unordered_map<std::string, std::shared_ptr<Model>> m_CachedModels;
 
 		void OnComponentCreated(std::string type, std::	shared_ptr<Component> component) override;
 		void UpdateEntity(double dt, EntityID entity, EntityID parent) override;

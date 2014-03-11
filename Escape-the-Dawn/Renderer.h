@@ -7,7 +7,6 @@
 #include <sstream>
 #include <vector>
 
-#define _CRT_SECURE_NO_WARNINGS
 #include <GL/glew.h>
 #define GLFW_INCLUDE_GLU
 #include <GLFW/glfw3.h>
@@ -36,10 +35,10 @@ public:
 
 	struct ModelData
 	{
-		Model* model;
+		std::shared_ptr<Model> model;
 		glm::mat4 ModelMatrix;
-		ModelData(Model* _model, glm::mat4 _modelMatrix) : model(_model), ModelMatrix(_modelMatrix)
-		{}
+		ModelData(std::shared_ptr<Model> _model, glm::mat4 _modelMatrix) 
+			: model(_model), ModelMatrix(_modelMatrix) {}
 	};
 
 	std::vector<ModelData*> ModelsToRender;
@@ -50,7 +49,7 @@ public:
 	void Draw(double dt);
 	void DrawText();
 
-	void AddModelToDraw(Model*, glm::vec3, glm::quat);
+	void AddModelToDraw(std::shared_ptr<Model> model, glm::vec3 position, glm::quat orientation);
 	void AddTextToDraw();
 
 	void LoadContent();

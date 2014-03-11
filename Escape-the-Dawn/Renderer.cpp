@@ -49,7 +49,7 @@ void Renderer::Initialize()
 	LoadContent();
 }
 
-void Renderer::Draw(double _dt)
+void Renderer::Draw(double dt)
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glClearColor(1.0f, 1.0f, 0.0f, 1.0f);
@@ -59,21 +59,27 @@ void Renderer::Draw(double _dt)
 	glm::mat4 cameraMatrix = m_Camera->ProjectionMatrix() * m_Camera->ViewMatrix();
 
 	glm::mat4 MVP;
-	for(int i = 0; i < ModelsToRender.size(); i++)
+	for (int i = 0; i < ModelsToRender.size(); i++)
 	{
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, ModelsToRender[i]->model->texture[0]->texture); 
-		MVP = cameraMatrix * ModelsToRender[i]->ModelMatrix;
+		ModelData* modelData = ModelsToRender.at(i);
+		auto model = modelData->model;
+
+		MVP = cameraMatrix * modelData->ModelMatrix;
 		glUniformMatrix4fv(glGetUniformLocation(m_ShaderProgram.GetHandle(), "MVP"), 1, GL_FALSE, glm::value_ptr(MVP));
-		glUniformMatrix4fv(glGetUniformLocation(m_ShaderProgram.GetHandle(), "model"), 1, GL_FALSE, glm::value_ptr(ModelsToRender[i]->ModelMatrix));
+		glUniformMatrix4fv(glGetUniformLocation(m_ShaderProgram.GetHandle(), "model"), 1, GL_FALSE, glm::value_ptr(modelData->ModelMatrix));
 		glUniformMatrix4fv(glGetUniformLocation(m_ShaderProgram.GetHandle(), "view"), 1, GL_FALSE, glm::value_ptr(m_Camera->ViewMatrix()));
 		glUniform3fv(glGetUniformLocation(m_ShaderProgram.GetHandle(), "lightPosition"), 1, glm::value_ptr(glm::vec3(2.0f, 4.0f, 1.0f)));
 		glUniform1f(glGetUniformLocation(m_ShaderProgram.GetHandle(), "constantAttenuation"), 1.5f);
 		glUniform1f(glGetUniformLocation(m_ShaderProgram.GetHandle(), "linearAttenuation"), 0.0f);
 		glUniform1f(glGetUniformLocation(m_ShaderProgram.GetHandle(), "quadraticAttenuation"), 0.0f);
-		glBindVertexArray(ModelsToRender[i]->model->VAO);
-		glDrawArrays(GL_TRIANGLES, 0, ModelsToRender[i]->model->Vertices.size());
 
+		
+		glBindVertexArray(model->VAO);
+		for (auto texGroup : model->TextureGroups) {
+			glActiveTexture(GL_TEXTURE0);
+			glBindTexture(GL_TEXTURE_2D, texGroup.Texture->texture); 
+			glDrawArrays(GL_TRIANGLES, texGroup.StartIndex, (texGroup.EndIndex - texGroup.StartIndex + 1) * abs(sin(glfwGetTime())));
+		}
 	}
 	ModelsToRender.clear();
 
@@ -90,7 +96,7 @@ void Renderer::AddTextToDraw()
 	//Add to draw shit vector
 }
 
-void Renderer::AddModelToDraw(Model* _model, glm::vec3 _position, glm::quat _orientation)
+void Renderer::AddModelToDraw(std::shared_ptr<Model> _model, glm::vec3 _position, glm::quat _orientation)
 {
 	glm::mat4 RotationMatrix = glm::toMat4(_orientation);
 	glm::mat4 ModelMatrix = glm::translate(glm::mat4(), _position) * RotationMatrix ;
