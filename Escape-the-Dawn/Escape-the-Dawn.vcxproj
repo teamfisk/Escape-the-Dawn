@@ -165,6 +165,7 @@
     <ClInclude Include="World.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Fragment2.glsl" />
     <None Include="Shaders\Fragment.glsl" />
     <None Include="Shaders\Normals.frag.glsl" />
     <None Include="Shaders\Normals.geo.glsl" />

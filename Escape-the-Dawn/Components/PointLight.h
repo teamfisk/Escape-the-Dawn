@@ -11,8 +11,11 @@ struct PointLight : Component
 {
 	float Intensity;
 	float MaxRange;
-	float SpecularIntensity;
-	Color Color;
+	glm::vec3 Specular;
+	glm::vec3 Diffuse;
+	float constantAttenuation, linearAttenuation, quadraticAttenuation;
+	float spotExponent;
+	Color color;
 };
 
 }

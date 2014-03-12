@@ -1,5 +1,5 @@
 #ifndef RenderSystem_h__
-#define  RenderSystem_h__
+#define RenderSystem_h__
 
 #include <unordered_map>
 

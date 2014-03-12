@@ -30,13 +30,15 @@
 class GameWorld : public World
 {
 public:
-	GameWorld(std::shared_ptr<Renderer> renderer);
-	void Initialize() override;
+	GameWorld(std::shared_ptr<Renderer> renderer) 
+		: m_Renderer(renderer), World() { }
+
+	void Initialize();
 
 	void RegisterSystems() override;
 	void RegisterComponents() override;
 
-	void Update(double dt) override;
+	void Update(double dt) ;
 
 private:
 	std::shared_ptr<Renderer> m_Renderer;

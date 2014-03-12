@@ -19,6 +19,7 @@
 #include "Camera.h"
 #include "ShaderProgram.h"
 #include "Model.h"
+#include "Components/PointLight.h"
 
 class Renderer
 {
@@ -38,6 +39,13 @@ public:
 	};
 
 	std::vector<ModelData*> ModelsToRender;
+	std::vector<float> Light_position;
+	std::vector<float> Light_specular;
+	std::vector<float> Light_diffuse;
+	std::vector<float> Light_constantAttenuation;
+	std::vector<float> Light_linearAttenuation;
+	std::vector<float> Light_quadraticAttenuation;
+	std::vector<float> Light_spotExponent;
 
 	Renderer();
 
@@ -47,6 +55,15 @@ public:
 
 	void AddModelToDraw(std::shared_ptr<Model> model, glm::vec3 position, glm::quat orientation);
 	void AddTextToDraw();
+	void AddPointLightToDraw(
+		glm::vec3 _position,
+		glm::vec3 _specular, 
+		glm::vec3 _diffuse, 
+		float _constantAttenuation, 
+		float _linearAttenuation, 
+		float _quadraticAttenuation, 
+		float _spotExponent
+		);
 
 	void LoadContent();
 
