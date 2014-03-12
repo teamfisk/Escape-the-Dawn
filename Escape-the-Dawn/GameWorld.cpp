@@ -95,8 +95,6 @@ void GameWorld::Initialize()
 	transform->Position = glm::vec3(10.f, 0.f, 0.f);
 	model = AddComponent<Components::Model>(ent, "Model");
 	model->ModelFile = "ship.obj";
-
-	// Camera
 }
 
 void GameWorld::Update(double dt)
