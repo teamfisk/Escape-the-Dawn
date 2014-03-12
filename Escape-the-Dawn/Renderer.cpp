@@ -82,6 +82,17 @@ void Renderer::Draw(double dt)
 #endif
 
 	ModelsToRender.clear();
+	
+#ifdef DEBUG
+	// Debug draw normals
+	if (m_DrawNormals) {
+		m_ShaderProgramNormals.Bind();
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+		DrawModels();
+	}
+#endif
+
+	ModelsToRender.clear();
 
 	glfwSwapBuffers(m_Window);
 }
@@ -113,7 +124,7 @@ void Renderer::DrawModels()
 		for (auto texGroup : model->TextureGroups) {
 			glActiveTexture(GL_TEXTURE0);
 			glBindTexture(GL_TEXTURE_2D, texGroup.Texture->texture); 
-			glDrawArrays(GL_TRIANGLES, texGroup.StartIndex, texGroup.EndIndex - texGroup.StartIndex + 1);
+			glDrawArrays(GL_TRIANGLES, texGroup.StartIndex, (texGroup.EndIndex - texGroup.StartIndex + 1) * abs(sin(glfwGetTime())));
 		}
 	}
 }
