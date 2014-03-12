@@ -21,7 +21,7 @@ uniform float spotExponent[numberOfLights];
 	vec2 TextureCoord;
 } Input;
 
-vec3 scene_ambient = vec3(0.2, 0.2, 0.2);
+vec3 scene_ambient = vec3(0.5, 0.5, 0.5);
  
 out vec4 fragmentColor;
 

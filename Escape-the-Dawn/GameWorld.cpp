@@ -33,36 +33,55 @@ void GameWorld::Initialize()
 	// Fucking lights
 	ent = CreateEntity();
 	transform = AddComponent<Components::Transform>(ent, "Transform");
-	transform->Position = glm::vec3(0.f, 4.f, 0.f);
+	transform->Position = glm::vec3(10.f, 2.f, 5.f);
 	pointLight = AddComponent<Components::PointLight>(ent, "PointLight");
 	pointLight->Specular = glm::vec3(1.0,  1.0,  1.0);
-	pointLight->Diffuse = glm::vec3(1.0,  1.0,  1.0);
+	pointLight->Diffuse = glm::vec3(1.0,  1.0,  5.0);
 	pointLight->constantAttenuation = 0.f;
 	pointLight->linearAttenuation = 1.f;
 	pointLight->quadraticAttenuation = 0.f;
 	pointLight->spotExponent = 0.0f;
+	model = AddComponent<Components::Model>(ent, "Model");
+	model->ModelFile = "sphere.obj";
 	ent = CreateEntity();
 	transform = AddComponent<Components::Transform>(ent, "Transform");
-	transform->Position = glm::vec3(10.f, 4.f, 0.f);
+	transform->Position = glm::vec3(0.f, 2.f, 5.f);
 	pointLight = AddComponent<Components::PointLight>(ent, "PointLight");
-	pointLight->Specular = glm::vec3(1.0,  1.0,  1.0);
-	pointLight->Diffuse = glm::vec3(1.0,  1.0,  1.0);
+	pointLight->Specular = glm::vec3(3.0,  3.0,  3.0);
+	pointLight->Diffuse = glm::vec3(3.0,  0.0,  0.0);
 	pointLight->constantAttenuation = 0.f;
 	pointLight->linearAttenuation = 1.f;
 	pointLight->quadraticAttenuation = 0.f;
 	pointLight->spotExponent = 0.0f;
+	model = AddComponent<Components::Model>(ent, "Model");
+	model->ModelFile = "sphere.obj";
+	ent = CreateEntity();
+	transform = AddComponent<Components::Transform>(ent, "Transform");
+	transform->Position = glm::vec3(-10.f, 2.f, 5.f);
+	pointLight = AddComponent<Components::PointLight>(ent, "PointLight");
+	pointLight->Specular = glm::vec3(1.0,  1.0,  1.0);
+	pointLight->Diffuse = glm::vec3(0.0,  3.0,  0.0);
+	pointLight->constantAttenuation = 0.f;
+	pointLight->linearAttenuation = 1.f;
+	pointLight->quadraticAttenuation = 0.f;
+	pointLight->spotExponent = 0.0f;
+	model = AddComponent<Components::Model>(ent, "Model");
+	model->ModelFile = "sphere.obj";
+
+	//ground
 	ent = CreateEntity();
 	transform = AddComponent<Components::Transform>(ent, "Transform");
 	transform->Position = glm::vec3(0.f, -4.f, 0.f);
-	pointLight = AddComponent<Components::PointLight>(ent, "PointLight");
-	pointLight->Specular = glm::vec3(1.0,  1.0,  1.0);
-	pointLight->Diffuse = glm::vec3(1.0,  1.0,  1.0);
-	pointLight->constantAttenuation = 0.f;
-	pointLight->linearAttenuation = 1.f;
-	pointLight->quadraticAttenuation = 0.f;
-	pointLight->spotExponent = 0.0f;
+	model = AddComponent<Components::Model>(ent, "Model");
+	model->ModelFile = "plane.obj";
 
 	// Player
+	ent = CreateEntity();
+	transform = AddComponent<Components::Transform>(ent, "Transform");
+	transform->Position = glm::vec3(0.f, 0.f, 0.f);
+	model = AddComponent<Components::Model>(ent, "Model");
+	model->ModelFile = "ship.obj";
+
 	ent = CreateEntity();
 	transform = AddComponent<Components::Transform>(ent, "Transform");
 	transform->Position = glm::vec3(10.f, 0.f, 0.f);
