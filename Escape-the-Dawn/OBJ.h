@@ -38,12 +38,13 @@ public:
 
 	struct Face
 	{
+		Face() : Material(nullptr) { }
 		std::vector<FaceDefinition> Definitions;
 		MaterialInfo* Material;
 	};
 
-	OBJ();
-	OBJ(std::string filename) { LoadFromFile(filename); }
+	OBJ() : m_CurrentMaterial(nullptr) { }
+	OBJ(std::string filename) : m_CurrentMaterial(nullptr) { LoadFromFile(filename); }
 
 	std::vector<std::tuple<float, float, float>> Vertices;
 	std::vector<std::tuple<float, float, float>> Normals;
@@ -52,6 +53,7 @@ public:
 	std::map<std::string, MaterialInfo> Materials;
 
 	bool LoadFromFile(std::string filename);
+	boost::filesystem::path Path() const { return m_Path; }
 
 private:
 	boost::filesystem::path m_Path;

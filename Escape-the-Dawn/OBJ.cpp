@@ -1,10 +1,5 @@
 #include "OBJ.h"
 
-OBJ::OBJ()
-{
-	m_CurrentMaterial = nullptr;
-}
-
 bool OBJ::LoadFromFile(std::string filename)
 {
 	m_Path = boost::filesystem::path(filename);

@@ -19,6 +19,7 @@ void GameWorld::Initialize()
 	std::shared_ptr<Components::Camera> camera;
 	EntityID ent;
 
+	// Camera
 	ent = CreateEntity();
 	SetProperty(ent, "Name", std::string("Camera"));
 	transform = AddComponent<Components::Transform>(ent, "Transform");

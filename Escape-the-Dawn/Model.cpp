@@ -13,6 +13,10 @@ Model::Model(OBJ &obj)
 	TextureGroup* currentTexGroup = nullptr;
 	int index = 0;
 	for (auto face : obj.Faces) {
+		if (face.Material == nullptr) {
+			LOG_ERROR("Missing material for .obj file \"%s\"", obj.Path().string().c_str());
+			return;
+		} 
 		// New material
 		if (face.Material != currentMaterial) {
 			currentMaterial = face.Material;
@@ -49,7 +53,9 @@ Model::Model(OBJ &obj)
 		}
 	}
 
-	CreateBuffers(Vertices, Normals, TextureCoords);
+	if (Vertices.size() > 0) {
+		CreateBuffers(Vertices, Normals, TextureCoords);
+	}
 }
 
 bool Model::Loadobj(const char* path, std::vector <glm::vec3> & out_vertices, std::vector <glm::vec3> &out_normals, std::vector <glm::vec2> & out_TextureCoords)
@@ -186,27 +192,39 @@ bool Model::Loadobj(const char* path, std::vector <glm::vec3> & out_vertices, st
 }
 
 
-void Model::CreateBuffers( std::vector<glm::vec3> _Vertices, std::vector<glm::vec3> _Normals, std::vector<glm::vec2>_TextureCoords)
+void Model::CreateBuffers( std::vector<glm::vec3> vertices, std::vector<glm::vec3> normals, std::vector<glm::vec2>textureCoords)
 {
 
 	LOG_INFO("Generating VertexBuffer");
 	glGenBuffers(1, &VertexBuffer);
-	glBindBuffer(GL_ARRAY_BUFFER, VertexBuffer);
-	glBufferData(GL_ARRAY_BUFFER, _Vertices.size() * sizeof(glm::vec3), &_Vertices[0], GL_STATIC_DRAW);
-	GLERROR("GLEW: BufferFail, VertexBuffer");
+	if (vertices.size() > 0) {
+		glBindBuffer(GL_ARRAY_BUFFER, VertexBuffer);
+		glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(glm::vec3), &vertices[0], GL_STATIC_DRAW);
+		GLERROR("GLEW: BufferFail, VertexBuffer");
+	} else {
+		LOG_WARNING("Created empty vertex buffer!");
+	}
 
 	LOG_INFO("Generating NormalBuffer");
 	glGenBuffers(1, &NormalBuffer);
-	glBindBuffer(GL_ARRAY_BUFFER, NormalBuffer);
-	glBufferData(GL_ARRAY_BUFFER, _Normals.size() * sizeof(glm::vec3), &_Normals[0], GL_STATIC_DRAW);
-	GLERROR("GLEW: BufferFail, NormalBuffer");
+	if (normals.size() > 0) {
+		glBindBuffer(GL_ARRAY_BUFFER, NormalBuffer);
+		glBufferData(GL_ARRAY_BUFFER, normals.size() * sizeof(glm::vec3), &normals[0], GL_STATIC_DRAW);
+		GLERROR("GLEW: BufferFail, NormalBuffer");
+	} else {
+		LOG_WARNING("Created empty normal buffer!");
+	}
 
 
 	LOG_INFO("Generating textureCoordBuffer");
 	glGenBuffers(1, &TextureCoordBuffer);
-	glBindBuffer(GL_ARRAY_BUFFER, TextureCoordBuffer);
-	glBufferData(GL_ARRAY_BUFFER, _TextureCoords.size() * sizeof(glm::vec2), &_TextureCoords[0], GL_STATIC_DRAW);
-	GLERROR("GLEW: BufferFail, TextureCoordBuffer");
+	if (textureCoords.size() > 0) {
+		glBindBuffer(GL_ARRAY_BUFFER, TextureCoordBuffer);
+		glBufferData(GL_ARRAY_BUFFER, textureCoords.size() * sizeof(glm::vec2), &textureCoords[0], GL_STATIC_DRAW);
+		GLERROR("GLEW: BufferFail, TextureCoordBuffer");
+	} else {
+		LOG_WARNING("Created empty texture coordinate buffer!");
+	}
 
 	glGenVertexArrays(1, &VAO);
 	glBindVertexArray(VAO);

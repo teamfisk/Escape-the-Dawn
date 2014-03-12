@@ -5,6 +5,10 @@ Renderer::Renderer()
 	m_VSync = false;
 	m_DrawNormals = false;
 	m_DrawWireframe = false;
+
+	m_SunPosition = glm::vec3(0, 10, 10);
+	m_SunTarget = glm::vec3(0);
+	m_SunProjection = glm::ortho<float>(-20, 20, -20, 20, -10, 20);
 }
 
 void Renderer::Initialize()
@@ -55,49 +59,178 @@ void Renderer::Initialize()
 	LoadContent();
 }
 
+void Renderer::LoadContent()
+{
+	auto standardVS = std::shared_ptr<Shader>(new VertexShader("Shaders/Vertex.glsl"));
+	auto standardFS = std::shared_ptr<Shader>(new FragmentShader("Shaders/Fragment.glsl"));
+
+	m_ShaderProgram.AddShader(standardVS);
+	m_ShaderProgram.AddShader(standardFS);
+	m_ShaderProgram.Compile();
+	m_ShaderProgram.Link();
+
+	m_ShaderProgramNormals.AddShader(std::shared_ptr<Shader>(new GeometryShader("Shaders/Normals.geo.glsl")));
+	m_ShaderProgramNormals.AddShader(standardVS);
+	m_ShaderProgramNormals.AddShader(std::shared_ptr<Shader>(new FragmentShader("Shaders/Normals.frag.glsl")));
+	m_ShaderProgramNormals.Compile();
+	m_ShaderProgramNormals.Link();
+
+	m_ShaderProgramShadows.AddShader(std::shared_ptr<Shader>(new VertexShader("Shaders/ShadowMap.vert.glsl")));
+	m_ShaderProgramShadows.AddShader(std::shared_ptr<Shader>(new FragmentShader("Shaders/ShadowMap.frag.glsl")));
+	m_ShaderProgramShadows.Compile();
+	m_ShaderProgramShadows.Link();
+
+	m_ShaderProgramShadowsDrawDepth.AddShader(std::shared_ptr<Shader>(new VertexShader("Shaders/VisualizeDepth.vert.glsl")));
+	m_ShaderProgramShadowsDrawDepth.AddShader(std::shared_ptr<Shader>(new FragmentShader("Shaders/VisualizeDepth.frag.glsl")));
+	m_ShaderProgramShadowsDrawDepth.Compile();
+	m_ShaderProgramShadowsDrawDepth.Link();
+
+	m_ScreenQuad = CreateQuad();
+	CreateShadowMap(2048*2);
+}
+
+void Renderer::CreateShadowMap(int resolution)
+{
+	glGenFramebuffers(1, &m_ShadowFrameBuffer);
+	glBindFramebuffer(GL_FRAMEBUFFER, m_ShadowFrameBuffer);
+
+	// Depth texture
+	glGenTextures(1, &m_ShadowDepthTexture);
+	glBindTexture(GL_TEXTURE_2D, m_ShadowDepthTexture);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT16, resolution, resolution, 0, GL_DEPTH_COMPONENT, GL_FLOAT, nullptr);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+
+	//glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_COMPARE_MODE, GL_NONE );
+	//glTexParameteri( GL_TEXTURE_2D, GL_DEPTH_TEXTURE_MODE, GL_INTENSITY );
+
+	glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, m_ShadowDepthTexture, 0);
+	glDrawBuffer(GL_NONE);
+
+	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
+		LOG_ERROR("Framebuffer incomplete!");
+		return;
+	}
+}
 void Renderer::Draw(double dt)
 {
+	DrawShadowMap();
+	DrawScene();
+
+	DrawDebugShadowMap();
+
+	ModelsToRender.clear();
+	glfwSwapBuffers(m_Window);
+}
+
+void Renderer::DrawScene()
+{
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	glViewport(0, 0, WIDTH, HEIGHT);
+
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glClearColor(1.0f, 1.0f, 0.0f, 1.0f);
 
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_CULL_FACE);
+	glCullFace(GL_BACK);
 #ifdef DEBUG
 	glDisable(GL_CULL_FACE);
 	glPolygonMode(GL_BACK, GL_LINE);
 #endif
 
 	// Draw models
+	glm::mat4 depthViewMatrix = glm::lookAt(m_SunPosition, m_SunTarget, glm::vec3(0, 1, 0));
+	glm::mat4 depthCamera = m_SunProjection * depthViewMatrix;
+	glm::mat4 depthMVP = depthCamera;
+	glm::mat4 biasMatrix(
+		0.5, 0.0, 0.0, 0.0,
+		0.0, 0.5, 0.0, 0.0,
+		0.0, 0.0, 0.5, 0.0,
+		0.5, 0.5, 0.5, 1.0
+		);
+	glm::mat4 depthBiasMVP = biasMatrix * depthMVP;
+
 	m_ShaderProgram.Bind();
-	glPolygonMode(GL_FRONT_AND_BACK, m_DrawWireframe ? GL_LINE : GL_FILL);
-	DrawModels();
-	
+	glUniformMatrix4fv(glGetUniformLocation(m_ShaderProgram.GetHandle(), "DepthMVP"), 1, GL_FALSE, glm::value_ptr(depthBiasMVP));
+	glUniform3fv(glGetUniformLocation(m_ShaderProgram.GetHandle(), "position"), 3, Light_position.data());
+	glUniform3fv(glGetUniformLocation(m_ShaderProgram.GetHandle(), "specular"), 3, Light_specular.data());
+	glUniform3fv(glGetUniformLocation(m_ShaderProgram.GetHandle(), "diffuse"), 3, Light_diffuse.data());
+	glUniform1fv(glGetUniformLocation(m_ShaderProgram.GetHandle(), "constantAttenuation"), 3, Light_constantAttenuation.data());
+	glUniform1fv(glGetUniformLocation(m_ShaderProgram.GetHandle(), "linearAttenuation"), 3, Light_linearAttenuation.data());
+	glUniform1fv(glGetUniformLocation(m_ShaderProgram.GetHandle(), "quadraticAttenuation"), 3, Light_quadraticAttenuation.data());
+	glUniform1fv(glGetUniformLocation(m_ShaderProgram.GetHandle(), "spotExponent"), 3, Light_spotExponent.data());
+	if (m_DrawWireframe) {
+		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	}
+	glActiveTexture(GL_TEXTURE1);
+	glBindTexture(GL_TEXTURE_2D, m_ShadowDepthTexture);
+	DrawModels(m_ShaderProgram);
+
 #ifdef DEBUG
-	// Debug draw normals
+	// Debug draw model normals
 	if (m_DrawNormals) {
 		m_ShaderProgramNormals.Bind();
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-		DrawModels();
+		DrawModels(m_ShaderProgramNormals);
 	}
 #endif
-
-	ModelsToRender.clear();
-	
-#ifdef DEBUG
-	// Debug draw normals
-	if (m_DrawNormals) {
-		m_ShaderProgramNormals.Bind();
-		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-		DrawModels();
-	}
-#endif
-
-	ModelsToRender.clear();
-
-	glfwSwapBuffers(m_Window);
 }
 
-void Renderer::DrawModels()
+void Renderer::DrawShadowMap()
+{
+	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_CULL_FACE);
+	glCullFace(GL_BACK);
+
+	glBindFramebuffer(GL_FRAMEBUFFER, m_ShadowFrameBuffer);
+	glViewport(0, 0, 2048*2, 2048*2);
+
+	glClear(GL_DEPTH_BUFFER_BIT);
+	//glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+
+	glm::mat4 depthViewMatrix = glm::lookAt(m_SunPosition, m_SunTarget, glm::vec3(0, 1, 0));
+	glm::mat4 depthCamera = m_SunProjection * depthViewMatrix;
+
+	//glm::mat4 cameraMatrix = depthProjectionMatrix * m_Camera->ViewMatrix();
+
+	glm::mat4 MVP;
+
+	m_ShaderProgramShadows.Bind();
+	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+	for (int i = 0; i < ModelsToRender.size(); i++)
+	{
+		ModelData* modelData = ModelsToRender.at(i);
+		auto model = modelData->model;
+
+		MVP = depthCamera * modelData->ModelMatrix;
+		glUniformMatrix4fv(glGetUniformLocation(m_ShaderProgramShadows.GetHandle(), "MVP"), 1, GL_FALSE, glm::value_ptr(MVP));
+
+		glBindVertexArray(model->VAO);
+		for (auto texGroup : model->TextureGroups) {
+			glDrawArrays(GL_TRIANGLES, texGroup.StartIndex, texGroup.EndIndex - texGroup.StartIndex + 1);
+		}
+	}
+}
+
+void Renderer::DrawDebugShadowMap()
+{
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	glViewport(0, 0, 200*(16.f/9.f), 200);
+
+	glClear(GL_DEPTH_BUFFER_BIT);
+	//glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+
+	m_ShaderProgramShadowsDrawDepth.Bind();
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, m_ShadowDepthTexture);
+	glBindVertexArray(m_ScreenQuad);
+	glDrawArrays(GL_TRIANGLES, 0, 6);
+}
+
+void Renderer::DrawModels(ShaderProgram &shader)
 {
 	glm::mat4 cameraMatrix = m_Camera->ProjectionMatrix() * m_Camera->ViewMatrix();
 
@@ -108,23 +241,14 @@ void Renderer::DrawModels()
 		auto model = modelData->model;
 
 		MVP = cameraMatrix * modelData->ModelMatrix;
-		glUniformMatrix4fv(glGetUniformLocation(m_ShaderProgram.GetHandle(), "MVP"), 1, GL_FALSE, glm::value_ptr(MVP));
-		glUniformMatrix4fv(glGetUniformLocation(m_ShaderProgram.GetHandle(), "model"), 1, GL_FALSE, glm::value_ptr(modelData->ModelMatrix));
-		glUniformMatrix4fv(glGetUniformLocation(m_ShaderProgram.GetHandle(), "view"), 1, GL_FALSE, glm::value_ptr(m_Camera->ViewMatrix()));
-		glUniform3fv(glGetUniformLocation(m_ShaderProgram.GetHandle(), "position"), 3, Light_position.data());
-		glUniform3fv(glGetUniformLocation(m_ShaderProgram.GetHandle(), "specular"), 3, Light_specular.data());
-		glUniform3fv(glGetUniformLocation(m_ShaderProgram.GetHandle(), "diffuse"), 3, Light_diffuse.data());
-		glUniform1fv(glGetUniformLocation(m_ShaderProgram.GetHandle(), "constantAttenuation"), 3, Light_constantAttenuation.data());
-		glUniform1fv(glGetUniformLocation(m_ShaderProgram.GetHandle(), "linearAttenuation"), 3, Light_linearAttenuation.data());
-		glUniform1fv(glGetUniformLocation(m_ShaderProgram.GetHandle(), "quadraticAttenuation"), 3, Light_quadraticAttenuation.data());
-		glUniform1fv(glGetUniformLocation(m_ShaderProgram.GetHandle(), "spotExponent"), 3, Light_spotExponent.data());
-
-
+		glUniformMatrix4fv(glGetUniformLocation(shader.GetHandle(), "MVP"), 1, GL_FALSE, glm::value_ptr(MVP));
+		glUniformMatrix4fv(glGetUniformLocation(shader.GetHandle(), "model"), 1, GL_FALSE, glm::value_ptr(modelData->ModelMatrix));
+		glUniformMatrix4fv(glGetUniformLocation(shader.GetHandle(), "view"), 1, GL_FALSE, glm::value_ptr(m_Camera->ViewMatrix()));
 		glBindVertexArray(model->VAO);
 		for (auto texGroup : model->TextureGroups) {
 			glActiveTexture(GL_TEXTURE0);
 			glBindTexture(GL_TEXTURE_2D, texGroup.Texture->texture); 
-			glDrawArrays(GL_TRIANGLES, texGroup.StartIndex, (texGroup.EndIndex - texGroup.StartIndex + 1) * abs(sin(glfwGetTime())));
+			glDrawArrays(GL_TRIANGLES, texGroup.StartIndex, texGroup.EndIndex - texGroup.StartIndex + 1);
 		}
 	}
 }
@@ -173,23 +297,43 @@ void Renderer::AddPointLightToDraw(
 
 }
 
-
-void Renderer::LoadContent()
+GLuint Renderer::CreateQuad()
 {
-	auto standardVS = std::shared_ptr<Shader>(new VertexShader("Shaders/Vertex.glsl"));
-	auto standardFS = std::shared_ptr<Shader>(new FragmentShader("Shaders/Fragment.glsl"));
+	float quadVertices[] = {
+		-1.0f, -1.0f, 0.0f,
+		1.0f, 1.0f, 0.0f,
+		-1.0f, 1.0f, 0.0f,
 
-	auto normalsGS = std::shared_ptr<Shader>(new GeometryShader("Shaders/Normals.geo.glsl"));
-	auto normalsFS = std::shared_ptr<Shader>(new FragmentShader("Shaders/Normals.frag.glsl"));
+		-1.0f, -1.0f, 0.0f,
+		1.0f, -1.0f, 0.0f,
+		1.0f, 1.0f, 0.0f,
+	};
+	float quadTexCoords[] = {
+		0.0f, 0.0f,
+		1.0f, 1.0f,
+		0.0f, 1.0f,
 
-	m_ShaderProgram.AddShader(standardVS);
-	m_ShaderProgram.AddShader(standardFS);
-	m_ShaderProgram.Compile();
-	m_ShaderProgram.Link();
+		0.0f, 0.0f,
+		1.0f, 0.0f,
+		1.0f, 1.0f,
+	};
+	GLuint vbo[2], vao;
+	glGenBuffers(2, vbo);
+	glBindBuffer(GL_ARRAY_BUFFER, vbo[0]);
+	glBufferData(GL_ARRAY_BUFFER, 3 * 6 * sizeof(float), quadVertices, GL_STATIC_DRAW);
+	glBindBuffer(GL_ARRAY_BUFFER, vbo[1]);
+	glBufferData(GL_ARRAY_BUFFER, 2 * 6 * sizeof(float), quadTexCoords, GL_STATIC_DRAW);
+	glGenVertexArrays(1, &vao);
+	glBindVertexArray(vao);
+	glBindBuffer(GL_ARRAY_BUFFER, vbo[0]);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+	glBindBuffer(GL_ARRAY_BUFFER, vbo[1]);
+	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 0, 0);
+	glEnableVertexAttribArray(0);
+	glEnableVertexAttribArray(2);
 
-	m_ShaderProgramNormals.AddShader(normalsGS);
-	m_ShaderProgramNormals.AddShader(standardVS);
-	m_ShaderProgramNormals.AddShader(normalsFS);
-	m_ShaderProgramNormals.Compile();
-	m_ShaderProgramNormals.Link();
+	glBindVertexArray(0);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+	return vao;
 }
