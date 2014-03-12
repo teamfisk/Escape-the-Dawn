@@ -218,7 +218,9 @@ void OBJ::ParseMaterial()
 		// Texture file
 		// TODO:
 		if (prefix == "map_Ka" || prefix == "map_Kd") {
-			ss >> currentMaterial->TextureFile;
+			std::string textureFile;
+			ss >> textureFile;
+			currentMaterial->TextureFile = (m_MaterialPath.branch_path() / textureFile).string();
 			continue;
 		}
 	}
