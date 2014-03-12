@@ -19,6 +19,18 @@ void GameWorld::Initialize()
 	std::shared_ptr<Components::Camera> camera;
 	EntityID ent;
 
+	// Camera
+	ent = CreateEntity();
+	SetProperty(ent, "Name", std::string("Camera"));
+	transform = AddComponent<Components::Transform>(ent, "Transform");
+	AddComponent<Components::Input>(ent, "Input");
+	transform->Position = glm::vec3(0.f, 2.f, 10.f);
+	camera = AddComponent<Components::Camera>(ent, "Camera");
+	camera->FOV		= 45.f;
+	camera->FarClip	= 1000.f;
+	camera->NearClip	= 0.01f;
+	transform->Orientation = glm::angleAxis<float>(glm::radians(25.0f),glm::vec3(1,0,0));
+
 	// Fucking lights
 	ent = CreateEntity();
 	transform = AddComponent<Components::Transform>(ent, "Transform");
@@ -83,6 +95,8 @@ void GameWorld::Initialize()
 	transform->Position = glm::vec3(10.f, 0.f, 0.f);
 	model = AddComponent<Components::Model>(ent, "Model");
 	model->ModelFile = "ship.obj";
+
+	// Camera
 }
 
 void GameWorld::Update(double dt)

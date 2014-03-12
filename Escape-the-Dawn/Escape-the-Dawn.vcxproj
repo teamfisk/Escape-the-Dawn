@@ -169,6 +169,10 @@
     <None Include="Shaders\Fragment.glsl" />
     <None Include="Shaders\Normals.frag.glsl" />
     <None Include="Shaders\Normals.geo.glsl" />
+    <None Include="Shaders\VisualizeDepth.frag.glsl" />
+    <None Include="Shaders\VisualizeDepth.vert.glsl" />
+    <None Include="Shaders\ShadowMap.frag.glsl" />
+    <None Include="Shaders\ShadowMap.vert.glsl" />
     <None Include="Shaders\Vertex.glsl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

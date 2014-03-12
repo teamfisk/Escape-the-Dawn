@@ -164,6 +164,18 @@
     <None Include="Fragment2.glsl">
       <Filter>Shaders</Filter>
     </None>
+    <None Include="Shaders\ShadowMap.frag.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\ShadowMap.vert.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\VisualizeDepth.frag.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\VisualizeDepth.vert.glsl">
+      <Filter>Shaders</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Systems">

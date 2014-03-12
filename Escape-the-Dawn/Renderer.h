@@ -83,12 +83,27 @@ private:
 	bool m_DrawNormals;
 	bool m_DrawWireframe;
 
+	glm::vec3 m_SunPosition;
+	glm::vec3 m_SunTarget;
+	glm::mat4 m_SunProjection;
+
+	GLuint m_ScreenQuad;
+	GLuint m_ShadowFrameBuffer;
+	GLuint m_ShadowDepthTexture;
+
 	std::shared_ptr<Camera> m_Camera;
 
 	ShaderProgram m_ShaderProgram;
 	ShaderProgram m_ShaderProgramNormals;
+	ShaderProgram m_ShaderProgramShadows;
+	ShaderProgram m_ShaderProgramShadowsDrawDepth;
 
-	void DrawModels();
+	void DrawScene();
+	void DrawModels(ShaderProgram &shader);
+	void DrawShadowMap();
+	void CreateShadowMap(int resolution);
+	GLuint CreateQuad();
+	void DrawDebugShadowMap();
 
 };
 
