@@ -6,9 +6,7 @@
 #include "Components/SoundEmitter.h"
 #include <AL/al.h>
 #include <AL/alc.h>
-#include <windows.h>
 #include <vector>
-#include <glm/gtc/quaternion.hpp>
 #include <glm/gtx/quaternion.hpp>
 
 namespace Systems
@@ -30,11 +28,11 @@ private:
 
 	//File-info
 	char type[4];
-	DWORD size, chunkSize;
+	unsigned long size, chunkSize;
 	short formatType, channels;
-	DWORD sampleRate, avgBytesPerSec;
+	unsigned long sampleRate, avgBytesPerSec;
 	short bytesPerSample, bitsPerSample;
-	DWORD dataSize;
+	unsigned long dataSize;
 	
 	
 	std::map<Component*, ALuint> m_Source; 

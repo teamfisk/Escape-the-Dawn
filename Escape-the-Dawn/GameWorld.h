@@ -54,7 +54,7 @@ void GameWorld::Initialize()
 
 	//AddSystem("LevelGenerationSystem");
 	AddSystem("InputSystem");
-	//AddSystem("CollisionSystem");
+	AddSystem("CollisionSystem");
 	//AddSystem("ParticleSystem");
 	AddSystem("PlayerSystem");
 	AddSystem("SoundSystem");
@@ -75,9 +75,12 @@ void GameWorld::Initialize()
 	soundEmitter->MaxDistance = FLT_MAX;
 	soundEmitter->ReferenceDistance = 10;
 	soundEmitter->Loop = true;
-	
 	soundEmitter->Pitch = 1;
 	GetSystem<Systems::SoundSystem>("SoundSystem")->PlaySound(soundEmitter, "Sounds/hallelujah.wav");
+	auto aabb = AddComponent<Components::Bounds>(ent, "Bounds");
+	aabb->Origin = transform->Position;
+	aabb->VolumeVector = glm::vec3(30.f, 20.f, 50.f);
+	GetSystem<Systems::CollisionSystem>("CollisionSystem")->Intersects(ent, ent);
 	
 
 	ent = CreateEntity();
@@ -96,7 +99,7 @@ void GameWorld::RegisterSystems()
 {
 	//m_SystemFactory.Register("LevelGenerationSystem", [this]() { return new Systems::LevelGenerationSystem(this); });
 	m_SystemFactory.Register("InputSystem", [this]() { return new Systems::InputSystem(this, m_Renderer); });
-	//m_SystemFactory.Register("CollisionSystem", [this]() { return new Systems::CollisionSystem(this); });
+	m_SystemFactory.Register("CollisionSystem", [this]() { return new Systems::CollisionSystem(this); });
 	//m_SystemFactory.Register("ParticleSystem", [this]() { return new Systems::ParticleSystem(this); });
 	m_SystemFactory.Register("PlayerSystem", [this]() { return new Systems::PlayerSystem(this); });
 	m_SystemFactory.Register("SoundSystem", [this]() { return new Systems::SoundSystem(this); });
