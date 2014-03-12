@@ -4,7 +4,6 @@
 #include <array>
 
 #include "System.h"
-#include "Renderer.h"
 #include "Components/Transform.h"
 #include "Components/Input.h"
 #include "logging.h"

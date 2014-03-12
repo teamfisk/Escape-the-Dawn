@@ -19,41 +19,44 @@ void Systems::PlayerSystem::UpdateEntity(double dt, EntityID entity, EntityID pa
 
 	auto name = m_World->GetProperty<std::string>(entity, "Name");
 	if (name == "Camera") {
+		if (input->MouseState[GLFW_MOUSE_BUTTON_LEFT]) {
+			glm::vec3 Camera_Right = glm::vec3(glm::vec4(1, 0, 0, 0) * transform->Orientation);
+			glm::vec3 Camera_Forward = glm::vec3(glm::vec4(0, 0, 1, 0) * transform->Orientation);
 
-		glm::vec3 Camera_Right = glm::vec3(glm::vec4(1, 0, 0, 0) * transform->Orientation);
-		glm::vec3 Camera_Forward = glm::vec3(glm::vec4(0, 0, 1, 0) * transform->Orientation);
-
-
-		float speed = 4.0f;
-		if(input->KeyState[GLFW_KEY_LEFT_SHIFT] == GLFW_PRESS)
-		{
-			speed = 1.0f;
-		}
-		if(input->KeyState[GLFW_KEY_A] == GLFW_PRESS)
-		{
-			transform->Position -= Camera_Right * (float)dt*2.f * speed;
-		}
-		if(input->KeyState[GLFW_KEY_D] == GLFW_PRESS)
-		{
-			transform->Position += Camera_Right * (float)dt*2.f * speed;
-		}
-		if(input->KeyState[GLFW_KEY_W] == GLFW_PRESS)
-		{
-			transform->Position -= Camera_Forward * (float)dt*2.f * speed;
-		}
-		if(input->KeyState[GLFW_KEY_S] == GLFW_PRESS)
-		{
-			transform->Position += Camera_Forward * (float)dt*2.f * speed;
-		}
+			float speed = 8.0f;
+			if(input->KeyState[GLFW_KEY_LEFT_SHIFT]) {
+				speed *= 2.0f;
+			}
+			if(input->KeyState[GLFW_KEY_LEFT_ALT]) {
+				speed /= 2.0f;
+			}
+			if(input->KeyState[GLFW_KEY_A]) {
+				transform->Position -= Camera_Right * (float)dt * speed;
+			}
+			if(input->KeyState[GLFW_KEY_D]) {
+				transform->Position += Camera_Right * (float)dt * speed;
+			}
+			if(input->KeyState[GLFW_KEY_W]) {
+				transform->Position -= Camera_Forward * (float)dt * speed;
+			}
+			if(input->KeyState[GLFW_KEY_S]) {
+				transform->Position += Camera_Forward * (float)dt * speed;
+			}
+			if(input->KeyState[GLFW_KEY_SPACE]) {
+				transform->Position += glm::vec3(0, 1, 0) * (float)dt * speed;
+			}
+			if(input->KeyState[GLFW_KEY_LEFT_CONTROL]) {
+				transform->Position -= glm::vec3(0, 1, 0) * (float)dt * speed;
+			}
 		
-		// TOUCHING THIS CODE MIGHT COUSE THE UNIVERSE TO IMPLODE, ALSO DRAGONS
-		//---------------------------------------------------------------------
-		transform->Orientation = glm::angleAxis<float>(input->dY/300.f,glm::vec3(1,0,0)) * transform->Orientation;
+			// TOUCHING THIS CODE MIGHT COUSE THE UNIVERSE TO IMPLODE, ALSO DRAGONS
+			//---------------------------------------------------------------------
+			transform->Orientation = glm::angleAxis<float>(input->dY/300.f,glm::vec3(1,0,0)) * transform->Orientation;
 
-		transform->Orientation = transform->Orientation * glm::angleAxis<float>(input->dX/300.f,glm::vec3(0,1,0));
-		//---------------------------------------------------------------------
-		// TOUCHING THIS CODE MIGHT COUSE THE UNIVERSE TO IMPLODE, ALSO DRAGONS
-		
+			transform->Orientation = transform->Orientation * glm::angleAxis<float>(input->dX/300.f,glm::vec3(0,1,0));
+			//---------------------------------------------------------------------
+			// TOUCHING THIS CODE MIGHT COUSE THE UNIVERSE TO IMPLODE, ALSO DRAGONS
+		}
 		
 	}
 }

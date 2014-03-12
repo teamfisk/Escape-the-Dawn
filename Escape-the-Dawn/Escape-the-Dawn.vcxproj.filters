@@ -44,6 +44,9 @@
       <Filter>GUI</Filter>
     </ClCompile>
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="OBJ.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="GameWorld.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component.h" />
@@ -142,12 +145,35 @@
     </ClInclude>
     <ClInclude Include="GameWorld.h" />
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="OBJ.h" />
+    <ClInclude Include="OpenGL.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Shaders\Fragment.glsl">
       <Filter>Shaders</Filter>
     </None>
     <None Include="Shaders\Vertex.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\Normals.geo.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\Normals.frag.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Fragment2.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\ShadowMap.frag.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\ShadowMap.vert.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\VisualizeDepth.frag.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\VisualizeDepth.vert.glsl">
       <Filter>Shaders</Filter>
     </None>
   </ItemGroup>

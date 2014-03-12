@@ -2,6 +2,7 @@
 #define DEBUG_H
 
 #ifdef _WIN32
+#define _CRT_SECURE_NO_WARNINGS
 // http://stackoverflow.com/a/2282433
 #define __func__ __FUNCTION__
 // http://stackoverflow.com/a/8488201
@@ -46,10 +47,13 @@ static void _LOG(_LOG_LEVEL logLevel, char* file, char* func, unsigned int line,
 	if (logLevel > LOG_LEVEL)
 		return;
 
-	char message[512];
 	va_list args;
 	va_start(args, format);
-	vsnprintf_s(message, 512, format, args);
+	char* message = nullptr;
+	size_t size = vsnprintf(message, 0, format, args);
+	message = new char[size+1];
+	message[size] = '\0';
+	vsnprintf(message, size, format, args);
 	va_end(args);
 
 	if (logLevel == LOG_LEVEL_ERROR)
@@ -61,6 +65,8 @@ static void _LOG(_LOG_LEVEL logLevel, char* file, char* func, unsigned int line,
 	{
 		std::cout << _LOG_LEVEL_PREFIX[logLevel] << message << std::endl;
 	}
+
+	delete[] message;
 }
 
 #define LOG(logLevel, format, ...) \
