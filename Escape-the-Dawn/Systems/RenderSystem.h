@@ -9,6 +9,7 @@
 #include "Components/Model.h"
 #include "Components/Transform.h"
 #include "Components/Camera.h"
+#include "Components/Bounds.h"
 #include "Renderer.h"
 
 namespace Systems

@@ -7,7 +7,7 @@ Renderer::Renderer()
 	m_DrawWireframe = false;
 
 	m_SunPosition = glm::vec3(0, 10, 10);
-	m_SunTarget = glm::vec3(0);
+	m_SunTarget = glm::vec3(0, 0, 0);
 	m_SunProjection = glm::ortho<float>(-20, 20, -20, 20, -10, 20);
 }
 
@@ -85,6 +85,12 @@ void Renderer::LoadContent()
 	m_ShaderProgramShadowsDrawDepth.Compile();
 	m_ShaderProgramShadowsDrawDepth.Link();
 
+	m_ShaderProgramDebugAABB.AddShader(standardVS);
+	m_ShaderProgramDebugAABB.AddShader(std::shared_ptr<Shader>(new FragmentShader("Shaders/AABB.frag.glsl")));
+	m_ShaderProgramDebugAABB.Compile();
+	m_ShaderProgramDebugAABB.Link();
+
+	m_DebugAABB = CreateAABB();
 	m_ScreenQuad = CreateQuad();
 	CreateShadowMap(2048*2);
 }
@@ -116,8 +122,24 @@ void Renderer::CreateShadowMap(int resolution)
 }
 void Renderer::Draw(double dt)
 {
+	glDisable(GL_BLEND);
+
 	DrawShadowMap();
 	DrawScene();
+
+#ifdef DEBUG
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_ONE_MINUS_DST_COLOR, GL_ZERO);
+	m_ShaderProgramDebugAABB.Bind();
+	for (auto aabbModelMatrix : AABBsToRender) {
+		glm::mat4 cameraMatrix = m_Camera->ProjectionMatrix() * m_Camera->ViewMatrix();
+		glm::mat4 MVP = cameraMatrix * aabbModelMatrix;
+		glUniformMatrix4fv(glGetUniformLocation(m_ShaderProgramDebugAABB.GetHandle(), "MVP"), 1, GL_FALSE, glm::value_ptr(MVP));
+		glBindVertexArray(m_DebugAABB);
+		glDrawArrays(GL_LINES, 0, 24);
+	}
+	AABBsToRender.clear();
+#endif
 
 	DrawDebugShadowMap();
 
@@ -336,4 +358,63 @@ GLuint Renderer::CreateQuad()
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
 	return vao;
+}
+
+GLuint Renderer::CreateAABB()
+{
+	float vertices[] = {
+		// Bottom
+		-1.0f, -1.0f, 1.0f, // 0
+		1.0f, -1.0f, 1.0f, // 1
+		1.0f, -1.0f, 1.0f, // 1
+		1.0f, -1.0f, -1.0f, // 2
+		1.0f, -1.0f, -1.0f, // 2
+		-1.0f, -1.0f, -1.0f, // 3
+		-1.0f, -1.0f, -1.0f, // 3
+		-1.0f, -1.0f, 1.0f, // 0
+
+		// Top
+		-1.0f, 1.0f, 1.0f, // 4
+		1.0f, 1.0f, 1.0f, // 5
+		1.0f, 1.0f, 1.0f, // 5
+		1.0f, 1.0f, -1.0f, // 6
+		1.0f, 1.0f, -1.0f, // 6
+		-1.0f, 1.0f, -1.0f, // 7
+		-1.0f, 1.0f, -1.0f, // 7
+		-1.0f, 1.0f, 1.0f, // 4
+
+		// Connectors
+		-1.0f, -1.0f, 1.0f, // 0
+		-1.0f, 1.0f, 1.0f, // 4
+		1.0f, -1.0f, 1.0f, // 1
+		1.0f, 1.0f, 1.0f, // 5
+		1.0f, -1.0f, -1.0f, // 2
+		1.0f, 1.0f, -1.0f, // 6
+		-1.0f, -1.0f, -1.0f, // 3
+		-1.0f, 1.0f, -1.0f, // 7
+	};
+
+	GLuint vbo, vao;
+	glGenBuffers(1, &vbo);
+	glBindBuffer(GL_ARRAY_BUFFER, vbo);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+	glGenVertexArrays(1, &vao);
+	glBindVertexArray(vao);
+	glBindBuffer(GL_ARRAY_BUFFER, vbo);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+	glEnableVertexAttribArray(0);
+
+	glBindVertexArray(0);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+	return vao;
+}
+
+void Renderer::AddAABBToDraw(glm::vec3 origin, glm::vec3 volumeVector)
+{
+	glm::mat4 model;
+	model *= glm::translate(origin);
+	model *= glm::scale(volumeVector);
+	AABBsToRender.push_back(model);
 }

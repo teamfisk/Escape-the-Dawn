@@ -79,20 +79,23 @@ void GameWorld::Initialize()
 	//ground
 	ent = CreateEntity();
 	transform = AddComponent<Components::Transform>(ent, "Transform");
-	transform->Position = glm::vec3(0.f, -4.f, 0.f);
+	transform->Position = glm::vec3(0.f, 0.f, 0.f);
 	model = AddComponent<Components::Model>(ent, "Model");
 	model->ModelFile = "plane.obj";
 
 	// Player
-	ent = CreateEntity();
-	transform = AddComponent<Components::Transform>(ent, "Transform");
-	transform->Position = glm::vec3(0.f, 0.f, 0.f);
-	model = AddComponent<Components::Model>(ent, "Model");
+	m_Player = CreateEntity();
+	transform = AddComponent<Components::Transform>(m_Player, "Transform");
+	transform->Position = glm::vec3(0.f, 4.f, 0.f);
+	model = AddComponent<Components::Model>(m_Player, "Model");
 	model->ModelFile = "ship.obj";
+	auto bounds = AddComponent<Components::Bounds>(m_Player, "Bounds");
+	bounds->Origin = glm::vec3(0.f);
+	bounds->VolumeVector = glm::vec3(1.0f, 2.0f, 3.0f);
 
 	ent = CreateEntity();
 	transform = AddComponent<Components::Transform>(ent, "Transform");
-	transform->Position = glm::vec3(10.f, 0.f, 0.f);
+	transform->Position = glm::vec3(10.f, 4.f, 0.f);
 	model = AddComponent<Components::Model>(ent, "Model");
 	model->ModelFile = "ship.obj";
 }
@@ -100,6 +103,9 @@ void GameWorld::Initialize()
 void GameWorld::Update(double dt)
 {
 	World::Update(dt);
+
+	auto transform = GetComponent<Components::Transform>(m_Player, "Transform");
+	transform->Orientation = transform->Orientation * glm::angleAxis<float>(dt, glm::vec3(0, 0, 1));
 }
 
 void GameWorld::RegisterComponents()
