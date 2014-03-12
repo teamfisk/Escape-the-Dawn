@@ -5,7 +5,7 @@ void GameWorld::Initialize()
 {
 	World::Initialize();
 
-	//AddSystem("LevelGenerationSystem");
+	AddSystem("LevelGenerationSystem");
 	AddSystem("InputSystem");
 	//AddSystem("CollisionSystem");
 	//AddSystem("ParticleSystem");
@@ -79,7 +79,7 @@ void GameWorld::Initialize()
 	//ground
 	ent = CreateEntity();
 	transform = AddComponent<Components::Transform>(ent, "Transform");
-	transform->Position = glm::vec3(0.f, -4.f, 0.f);
+	transform->Position = glm::vec3(0.f, 0.f, 0.f);
 	model = AddComponent<Components::Model>(ent, "Model");
 	model->ModelFile = "Models/plane.obj";
 
@@ -122,7 +122,7 @@ void GameWorld::RegisterComponents()
 
 void GameWorld::RegisterSystems()
 {
-	//m_SystemFactory.Register("LevelGenerationSystem", [this]() { return new Systems::LevelGenerationSystem(this); });
+	m_SystemFactory.Register("LevelGenerationSystem", [this]() { return new Systems::LevelGenerationSystem(this); });
 	m_SystemFactory.Register("InputSystem", [this]() { return new Systems::InputSystem(this, m_Renderer); });
 	//m_SystemFactory.Register("CollisionSystem", [this]() { return new Systems::CollisionSystem(this); });
 	//m_SystemFactory.Register("ParticleSystem", [this]() { return new Systems::ParticleSystem(this); });

@@ -8,22 +8,32 @@
 #include "Components/Collision.h"
 #include "Components/Model.h"
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <time.h>
+
 
 namespace Systems
 {
 	class  LevelGenerationSystem : public System
 	{
 	public:
-		LevelGenerationSystem(World* world)
-			: System(world) {	}
+		LevelGenerationSystem(World* world);
+			
 
 		void SpawnObstacle();
 
-	private:
+		void Update(double dt) override;
 		
+	private:
+		int typeRandom;
+		int positionRandom;
+		glm::vec2 startyz;
+		double elapsedtime;
+
+		std::vector<EntityID> obstacles;
+
+		std::shared_ptr<Components::Transform> transform;
+		std::shared_ptr<Components::Bounds> bounds;
+		std::shared_ptr<Components::Collision> collision;
+		std::shared_ptr<Components::Model> model;
 	};
 }
 
