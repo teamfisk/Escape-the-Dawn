@@ -45,7 +45,7 @@ void GameWorld::Initialize()
 	pointLight->quadraticAttenuation = 0.f;
 	pointLight->spotExponent = 0.0f;
 	model = AddComponent<Components::Model>(ent, "Model");
-	model->ModelFile = "sphere.obj";
+	model->ModelFile = "Models/sphere.obj";
 	ent = CreateEntity();
 	transform = AddComponent<Components::Transform>(ent, "Transform");
 	transform->Position = glm::vec3(10.f, 4.f, 0.f);
@@ -60,7 +60,7 @@ void GameWorld::Initialize()
 	pointLight->quadraticAttenuation = 0.f;
 	pointLight->spotExponent = 0.0f;
 	model = AddComponent<Components::Model>(ent, "Model");
-	model->ModelFile = "sphere.obj";
+	model->ModelFile = "Models/sphere.obj";
 	ent = CreateEntity();
 	transform = AddComponent<Components::Transform>(ent, "Transform");
 	transform->Position = glm::vec3(0.f, -4.f, 0.f);
@@ -74,27 +74,27 @@ void GameWorld::Initialize()
 	pointLight->quadraticAttenuation = 0.f;
 	pointLight->spotExponent = 0.0f;
 	model = AddComponent<Components::Model>(ent, "Model");
-	model->ModelFile = "sphere.obj";
+	model->ModelFile = "Models/sphere.obj";
 
 	//ground
 	ent = CreateEntity();
 	transform = AddComponent<Components::Transform>(ent, "Transform");
 	transform->Position = glm::vec3(0.f, -4.f, 0.f);
 	model = AddComponent<Components::Model>(ent, "Model");
-	model->ModelFile = "plane.obj";
+	model->ModelFile = "Models/plane.obj";
 
 	// Player
 	ent = CreateEntity();
 	transform = AddComponent<Components::Transform>(ent, "Transform");
 	transform->Position = glm::vec3(0.f, 0.f, 0.f);
 	model = AddComponent<Components::Model>(ent, "Model");
-	model->ModelFile = "ship.obj";
+	model->ModelFile = "Models/ship.obj";
 
 	ent = CreateEntity();
 	transform = AddComponent<Components::Transform>(ent, "Transform");
 	transform->Position = glm::vec3(10.f, 0.f, 0.f);
 	model = AddComponent<Components::Model>(ent, "Model");
-	model->ModelFile = "ship.obj";
+	model->ModelFile = "Models/ship.obj";
 }
 
 void GameWorld::Update(double dt)
