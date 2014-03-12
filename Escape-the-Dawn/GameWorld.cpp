@@ -85,10 +85,12 @@ void GameWorld::Initialize()
 
 	// Player
 	ent = CreateEntity();
+	SetProperty(ent, "Name", std::string("PlayerShip"));
 	transform = AddComponent<Components::Transform>(ent, "Transform");
 	transform->Position = glm::vec3(0.f, 0.f, 0.f);
 	model = AddComponent<Components::Model>(ent, "Model");
 	model->ModelFile = "ship.obj";
+	AddComponent<Components::Input>(ent, "Input");
 
 	ent = CreateEntity();
 	transform = AddComponent<Components::Transform>(ent, "Transform");
