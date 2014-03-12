@@ -42,6 +42,7 @@ public:
 
 private:
 	std::shared_ptr<Renderer> m_Renderer;
+	EntityID entcamera, player1, player2;
 };
 
 #endif // GameWorld_h__
