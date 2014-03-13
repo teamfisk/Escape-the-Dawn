@@ -25,8 +25,10 @@ public:
 
 	virtual void Initialize();
 
-	virtual void RegisterComponents();
-	virtual void RegisterSystems();
+	virtual void RegisterSystems() = 0;
+	virtual void AddSystems() = 0;
+	virtual void RegisterComponents() = 0;
+	
 
 	void AddSystem(std::string systemType);
 	template <class T>

@@ -11,8 +11,10 @@ namespace Components
 
 struct Model : Component
 {
-	const char* ModelFile;
+	Model() : Visible(true) { }
+	std::string ModelFile;
 	Color Color;
+	bool Visible;
 };
 
 }

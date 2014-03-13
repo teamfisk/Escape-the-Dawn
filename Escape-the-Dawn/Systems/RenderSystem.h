@@ -4,6 +4,7 @@
 #include <unordered_map>
 
 #include "System.h"
+#include "Systems/TransformSystem.h"
 #include "Model.h"
 #include "Texture.h"
 #include "Components/Model.h"
@@ -22,6 +23,8 @@ namespace Systems
 		RenderSystem(World* world, std::shared_ptr<Renderer> renderer)
 			: System(world), m_Renderer(renderer){ }
 
+		void Initialize() override;
+
 		std::unordered_map<std::string, std::shared_ptr<Model>> m_CachedModels;
 
 		void OnComponentCreated(std::string type, std::	shared_ptr<Component> component) override;
@@ -29,7 +32,7 @@ namespace Systems
 
 	private:
 		std::shared_ptr<Renderer> m_Renderer;
-
+		std::shared_ptr<Systems::TransformSystem> m_TransformSystem;
 	};
 
 

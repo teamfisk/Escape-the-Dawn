@@ -93,6 +93,7 @@ void Systems::LevelGenerationSystem::Update( double dt )
 	for(auto ent : obstacles)
 	{
 		auto transform = m_World->GetComponent<Components::Transform>(ent, "Transform");
+		auto model = m_World->GetComponent<Components::Model>(ent, "Model");
 
 		transform->Velocity.z = velocity;
 		transform->Position += transform->Velocity * (float)dt;
@@ -103,7 +104,12 @@ void Systems::LevelGenerationSystem::Update( double dt )
 			transform->Velocity.y = 0;
 		}
 
-		if(transform->Position.z > 800)
+		if (transform->Position.z > 10 && model->Visible)
+		{
+			model->Visible = false;
+		}
+
+		if(transform->Position.z > 2000)
 		{
 			removethis.push_back(ent);	
 		}

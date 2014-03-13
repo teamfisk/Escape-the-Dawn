@@ -14,7 +14,7 @@ Renderer::Renderer()
 #endif
 
 	m_ShadowMapRes = 2048*2;
-	m_SunPosition = glm::vec3(0, 0.3f, 10);
+	m_SunPosition = glm::vec3(0, 1.5f, 10);
 	m_SunTarget = glm::vec3(0, 0, 0);
 	m_SunProjection = glm::ortho<float>(-200, 200, -10, 100, -800, 800);
 	Lights = 0;
@@ -216,7 +216,11 @@ void Renderer::DrawScene()
 	{
 		Model* model;
 		glm::mat4 modelMatrix;
-		std::tie(model, modelMatrix) = tuple;
+		bool visible;
+		std::tie(model, modelMatrix, visible) = tuple;
+		if (!visible)
+			continue;
+
 		MVP = cameraMatrix * modelMatrix;
 		depthMVP = depthCameraMatrix * modelMatrix;
 		glUniformMatrix4fv(glGetUniformLocation(m_ShaderProgram.GetHandle(), "MVP"), 1, GL_FALSE, glm::value_ptr(MVP));
@@ -267,7 +271,8 @@ void Renderer::DrawShadowMap()
 	{
 		Model* model;
 		glm::mat4 modelMatrix;
-		std::tie(model, modelMatrix) = tuple;
+		bool visible;
+		std::tie(model, modelMatrix, visible) = tuple;
 
 		MVP = depthCamera * modelMatrix;
 		glUniformMatrix4fv(glGetUniformLocation(m_ShaderProgramShadows.GetHandle(), "MVP"), 1, GL_FALSE, glm::value_ptr(MVP));
@@ -296,26 +301,26 @@ void Renderer::DrawDebugShadowMap()
 
 void Renderer::DrawModels(ShaderProgram &shader)
 {
-	glm::mat4 cameraMatrix = m_Camera->ProjectionMatrix() * m_Camera->ViewMatrix();
+	/*glm::mat4 cameraMatrix = m_Camera->ProjectionMatrix() * m_Camera->ViewMatrix();
 
 	glm::mat4 MVP;
 	for (auto tuple : ModelsToRender)
 	{
-		Model* model;
-		glm::mat4 modelMatrix;
-		std::tie(model, modelMatrix) = tuple;
+	Model* model;
+	glm::mat4 modelMatrix;
+	std::tie(model, modelMatrix) = tuple;
 
-		MVP = cameraMatrix * modelMatrix;
-		glUniformMatrix4fv(glGetUniformLocation(shader.GetHandle(), "MVP"), 1, GL_FALSE, glm::value_ptr(MVP));
-		glUniformMatrix4fv(glGetUniformLocation(shader.GetHandle(), "model"), 1, GL_FALSE, glm::value_ptr(modelMatrix));
-		glUniformMatrix4fv(glGetUniformLocation(shader.GetHandle(), "view"), 1, GL_FALSE, glm::value_ptr(m_Camera->ViewMatrix()));
-		glBindVertexArray(model->VAO);
-		for (auto texGroup : model->TextureGroups) {
-			glActiveTexture(GL_TEXTURE0);
-			glBindTexture(GL_TEXTURE_2D, texGroup.Texture->texture); 
-			glDrawArrays(GL_TRIANGLES, texGroup.StartIndex, texGroup.EndIndex - texGroup.StartIndex + 1);
-		}
+	MVP = cameraMatrix * modelMatrix;
+	glUniformMatrix4fv(glGetUniformLocation(shader.GetHandle(), "MVP"), 1, GL_FALSE, glm::value_ptr(MVP));
+	glUniformMatrix4fv(glGetUniformLocation(shader.GetHandle(), "model"), 1, GL_FALSE, glm::value_ptr(modelMatrix));
+	glUniformMatrix4fv(glGetUniformLocation(shader.GetHandle(), "view"), 1, GL_FALSE, glm::value_ptr(m_Camera->ViewMatrix()));
+	glBindVertexArray(model->VAO);
+	for (auto texGroup : model->TextureGroups) {
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, texGroup.Texture->texture); 
+	glDrawArrays(GL_TRIANGLES, texGroup.StartIndex, texGroup.EndIndex - texGroup.StartIndex + 1);
 	}
+	}*/
 }
 
 void Renderer::DrawText()
@@ -328,11 +333,11 @@ void Renderer::AddTextToDraw()
 	//Add to draw shit vector
 }
 
-void Renderer::AddModelToDraw(std::shared_ptr<Model> model, glm::vec3 position, glm::quat orientation, glm::vec3 scale)
+void Renderer::AddModelToDraw(std::shared_ptr<Model> model, glm::vec3 position, glm::quat orientation, glm::vec3 scale, bool visible)
 {
 	glm::mat4 modelMatrix = glm::translate(glm::mat4(), position) * glm::toMat4(orientation) * glm::scale(scale);
 	// You can now use ModelMatrix to build the MVP matrix
-	ModelsToRender.push_back(std::make_tuple(model.get(), modelMatrix));
+	ModelsToRender.push_back(std::make_tuple(model.get(), modelMatrix, visible));
 }
 
 void Renderer::AddPointLightToDraw(

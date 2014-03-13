@@ -30,7 +30,7 @@ public:
 
 	int HEIGHT, WIDTH;
 
-	std::list<std::tuple<Model*, glm::mat4>> ModelsToRender;
+	std::list<std::tuple<Model*, glm::mat4, bool>> ModelsToRender;
 	int Lights;
 	std::vector<float> Light_position;
 	std::vector<float> Light_specular;
@@ -47,7 +47,7 @@ public:
 	void Draw(double dt);
 	void DrawText();
 
-	void AddModelToDraw(std::shared_ptr<Model> model, glm::vec3 position, glm::quat orientation, glm::vec3 scale);
+	void AddModelToDraw(std::shared_ptr<Model> model, glm::vec3 position, glm::quat orientation, glm::vec3 scale, bool visible);
 	void AddTextToDraw();
 	void AddPointLightToDraw(
 		glm::vec3 _position,
