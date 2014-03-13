@@ -53,13 +53,9 @@ void Systems::LevelGenerationSystem::SpawnObstacle()
 		transform->Position = glm::vec3( positionRandom, startyz); // fix position
 		float scale = (float)(rand() % 1000) / 200;
 		transform->Scale = glm::vec3(scale);
-
 		bounds->VolumeVector = glm::vec3(1, 1, 1);
 		bounds->Origin = glm::vec3(0,1,0);
-
 		model->ModelFile = "Models/obstacle_cube_1.obj";
-
-
 		}
 		break;
 	default:

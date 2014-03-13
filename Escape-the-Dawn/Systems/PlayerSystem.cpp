@@ -18,7 +18,7 @@ void Systems::PlayerSystem::UpdateEntity(double dt, EntityID entity, EntityID pa
 	if (input == nullptr)
 		return;
 
-	float speed = 200.0f;
+	float speed = 50.0f;
 
 	auto name = m_World->GetProperty<std::string>(entity, "Name");
 	if (name == "Camera") {
