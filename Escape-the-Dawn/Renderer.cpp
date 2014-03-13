@@ -16,7 +16,7 @@ Renderer::Renderer()
 	m_ShadowMapRes = 2048*2;
 	m_SunPosition = glm::vec3(0, 0.3f, 10);
 	m_SunTarget = glm::vec3(0, 0, 0);
-	m_SunProjection = glm::ortho<float>(-200, 200, -10, 100, -800, 400);
+	m_SunProjection = glm::ortho<float>(-200, 200, -10, 100, -800, 800);
 	Lights = 0;
 }
 
@@ -209,14 +209,16 @@ void Renderer::DrawScene()
 	glBindTexture(GL_TEXTURE_2D, m_ShadowDepthTexture);
 	//DrawModels(m_ShaderProgram);
 	glm::mat4 cameraMatrix = m_Camera->ProjectionMatrix() * m_Camera->ViewMatrix();
+	glm::mat4 depthCameraMatrix = biasMatrix * depthCamera;
 	glm::mat4 MVP;
+	glm::mat4 depthMVP;
 	for (auto tuple : ModelsToRender)
 	{
 		Model* model;
 		glm::mat4 modelMatrix;
 		std::tie(model, modelMatrix) = tuple;
 		MVP = cameraMatrix * modelMatrix;
-		glm::mat4 depthMVP = biasMatrix * depthCamera * modelMatrix;
+		depthMVP = depthCameraMatrix * modelMatrix;
 		glUniformMatrix4fv(glGetUniformLocation(m_ShaderProgram.GetHandle(), "MVP"), 1, GL_FALSE, glm::value_ptr(MVP));
 		glUniformMatrix4fv(glGetUniformLocation(m_ShaderProgram.GetHandle(), "DepthMVP"), 1, GL_FALSE, glm::value_ptr(depthMVP));
 		glUniformMatrix4fv(glGetUniformLocation(m_ShaderProgram.GetHandle(), "model"), 1, GL_FALSE, glm::value_ptr(modelMatrix));
@@ -243,7 +245,7 @@ void Renderer::DrawShadowMap()
 {
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_CULL_FACE);
-	glCullFace(GL_BACK);
+	glCullFace(GL_FRONT);
 
 	glBindFramebuffer(GL_FRAMEBUFFER, m_ShadowFrameBuffer);
 	glViewport(0, 0, m_ShadowMapRes, m_ShadowMapRes);
