@@ -5,6 +5,12 @@ Systems::PlayerSystem::PlayerSystem( World* world ) : System(world)
 {
 	m_PlayerSpeed = 20;
 	m_PlayerOriginalBounds = glm::vec3(0);
+
+	m_CameraOffset = glm::vec3(0.f, 5.f, 14.f);
+	m_CameraOrientation = glm::angleAxis<float>(glm::radians(15.0f),glm::vec3(1,0,0));
+
+	freecamEnabled = false;
+
 }
 
 void Systems::PlayerSystem::Update(double dt)
@@ -21,35 +27,36 @@ void Systems::PlayerSystem::UpdateEntity(double dt, EntityID entity, EntityID pa
 		return;
 
 	auto name = m_World->GetProperty<std::string>(entity, "Name");
-	if (name == "Camera") {
-			glm::vec3 Camera_Right = glm::vec3(glm::vec4(1, 0, 0, 0) * transform->Orientation);
-			glm::vec3 Camera_Forward = glm::vec3(glm::vec4(0, 0, 1, 0) * transform->Orientation);
+	if (name == "Camera" && freecamEnabled) {
+		glm::vec3 Camera_Right = glm::vec3(glm::vec4(1, 0, 0, 0) * transform->Orientation);
+		glm::vec3 Camera_Forward = glm::vec3(glm::vec4(0, 0, 1, 0) * transform->Orientation);
 
-			float speed = m_PlayerSpeed;
-			if(input->KeyState[GLFW_KEY_LEFT_SHIFT]) {
-				speed *= 4.0f;
-			}
-			if(input->KeyState[GLFW_KEY_LEFT_ALT]) {
-				speed /= 4.0f;
-			}
-			if(input->KeyState[GLFW_KEY_A] || input->KeyState[GLFW_KEY_LEFT]) {
-				transform->Position -= Camera_Right * (float)dt * speed;
-			}
-			else if(input->KeyState[GLFW_KEY_D] || input->KeyState[GLFW_KEY_RIGHT]) {
-				transform->Position += Camera_Right * (float)dt * speed;
-			}
-			if(input->KeyState[GLFW_KEY_W]) {
-				transform->Position -= Camera_Forward * (float)dt * speed;
-			}
-			if(input->KeyState[GLFW_KEY_S]) {
-				transform->Position += Camera_Forward * (float)dt * speed;
-			}
-			if(input->KeyState[GLFW_KEY_SPACE]) {
-				transform->Position += glm::vec3(0, 1, 0) * (float)dt * speed;
-			}
-			if(input->KeyState[GLFW_KEY_LEFT_CONTROL]) {
-				transform->Position -= glm::vec3(0, 1, 0) * (float)dt * speed;
-			}
+ 		float speed = m_PlayerSpeed;
+ 		if(input->KeyState[GLFW_KEY_LEFT_SHIFT]) {
+ 			speed *= 4.0f;
+ 		}
+ 		if(input->KeyState[GLFW_KEY_LEFT_ALT]) {
+ 			speed /= 4.0f;
+ 		}
+ 		if(input->KeyState[GLFW_KEY_A]) {
+ 			transform->Position -= Camera_Right * (float)dt * speed;
+ 		}
+ 		else if(input->KeyState[GLFW_KEY_D]) {
+ 			transform->Position += Camera_Right * (float)dt * speed;
+ 		}
+ 		if(input->KeyState[GLFW_KEY_W]) {
+ 			transform->Position -= Camera_Forward * (float)dt * speed;
+ 		}
+ 		if(input->KeyState[GLFW_KEY_S]) {
+ 			transform->Position += Camera_Forward * (float)dt * speed;
+ 		}
+ 		if(input->KeyState[GLFW_KEY_SPACE]) {
+ 			transform->Position += glm::vec3(0, 1, 0) * (float)dt * speed;
+ 		}
+ 		if(input->KeyState[GLFW_KEY_LEFT_CONTROL]) {
+ 			transform->Position -= glm::vec3(0, 1, 0) * (float)dt * speed;
+ 		}
+
 		if (input->MouseState[GLFW_MOUSE_BUTTON_LEFT]) {
 			// TOUCHING THIS CODE MIGHT COUSE THE UNIVERSE TO IMPLODE, ALSO DRAGONS
 			//---------------------------------------------------------------------
@@ -61,7 +68,7 @@ void Systems::PlayerSystem::UpdateEntity(double dt, EntityID entity, EntityID pa
 		}
 	}
 
-	if (name == "PlayerShip") 
+	if (name == "Player") 
 	{
 		auto bounds = m_World->GetComponent<Components::Bounds>(entity, "Bounds");
 		if (bounds && m_PlayerOriginalBounds == glm::vec3(0)) {
@@ -121,6 +128,26 @@ void Systems::PlayerSystem::UpdateEntity(double dt, EntityID entity, EntityID pa
 		if (bounds) {
 			Euler = glm::eulerAngles(transform->Orientation);
 			bounds->VolumeVector.x = m_PlayerOriginalBounds.x * glm::cos(glm::radians(Euler.z));
+		}
+
+
+		if(input->KeyState[GLFW_KEY_F4] && !input->LastKeyState[GLFW_KEY_F4]) {
+			if(freecamEnabled)
+				freecamEnabled = false;
+			else
+				freecamEnabled = true;
+		}
+
+
+		// Update camera
+		if(! freecamEnabled)
+		{
+			auto cameraEntity = m_World->GetProperty<EntityID>(entity, "Camera");
+			auto cameraTransform = m_World->GetComponent<Components::Transform>(cameraEntity, "Transform");
+			if (cameraTransform) {
+				cameraTransform->Position = transform->Position + m_CameraOffset;
+				cameraTransform->Orientation = m_CameraOrientation;
+			}
 		}
 	}
 }
