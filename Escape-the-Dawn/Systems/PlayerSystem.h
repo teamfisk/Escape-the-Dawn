@@ -7,6 +7,7 @@
 #include "Components/Transform.h"
 #include "Components/Input.h"
 #include "Components/Collision.h"
+#include "Components/Camera.h"
 #include "Components/Bounds.h"
 #include "logging.h"
 
@@ -26,6 +27,11 @@ namespace Systems
 	private:
 		float m_PlayerSpeed;
 		glm::vec3 m_PlayerOriginalBounds;
+
+		glm::vec3 m_CameraOffset;
+		glm::quat m_CameraOrientation;
+
+		bool freecamEnabled;
 	};
 
 }

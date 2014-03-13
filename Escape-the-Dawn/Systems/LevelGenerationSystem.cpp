@@ -64,13 +64,7 @@ void Systems::LevelGenerationSystem::SpawnObstacle()
 			float scale = (float)(rand() % 1000) / 100;
 			bounds->VolumeVector = glm::vec3(4, 4, 4);
 			bounds->Origin = glm::vec3(0,4,0);
-			pointLight = m_World->AddComponent<Components::PointLight>(ent, "PointLight");
-			pointLight->Specular = glm::vec3(1.0,  1.0,  1.0);
-			pointLight->Diffuse = glm::vec3(0.3,  1.0,  0.3);
-			pointLight->constantAttenuation = 0.f;
-			pointLight->linearAttenuation = 1.f;
-			pointLight->quadraticAttenuation = 0.f;
-			pointLight->spotExponent = 0.0f;
+			
 
 			powerUp = m_World->AddComponent<Components::PowerUp>(ent, "PowerUp");
 			powerUp->Speed = 10.f;
@@ -80,7 +74,7 @@ void Systems::LevelGenerationSystem::SpawnObstacle()
 	
 
 	// Put it below ground level
-	transform->Position.y -= bounds->VolumeVector.y * 2.f;
+	//transform->Position.y -= bounds->VolumeVector.y * 2.f;
 	
 }
 
@@ -100,7 +94,7 @@ void Systems::LevelGenerationSystem::Update( double dt )
 	{
 		auto transform = m_World->GetComponent<Components::Transform>(ent, "Transform");
 
-		transform->Velocity.z = -velocity;
+		transform->Velocity.z = velocity;
 		transform->Position += transform->Velocity * (float)dt;
 
 		// Stop raising obstacles when they reach ground level
@@ -126,7 +120,7 @@ void Systems::LevelGenerationSystem::Update( double dt )
 
 void Systems::LevelGenerationSystem::UpdateEntity( double dt, EntityID entity, EntityID parent )
 {
-	if( m_World->GetProperty<std::string>(entity, "Name") == "PlayerShip")
+	if( m_World->GetProperty<std::string>(entity, "Name") == "Player")
 	{
 		auto transformComponent = m_World->GetComponent<Components::Transform>(entity, "Transform");
 		startyz = glm::vec2(0, transformComponent->Position.z - 1000);
