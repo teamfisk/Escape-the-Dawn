@@ -94,7 +94,7 @@ void GameWorld::Initialize()
 	bounds->VolumeVector = glm::vec3(4.f, 0.7f, 1);
 	soundEmitter = AddComponent<Components::SoundEmitter>(m_Player, "SoundEmitter");
 	soundEmitter->Loop = true;
-	soundEmitter->MaxDistance = FLT_MAX;
+	//soundEmitter->MaxDistance = FLT_MAX;
 	soundEmitter->ReferenceDistance = 10;
 	soundEmitter->Gain = 1;
 	soundEmitter->Pitch = 1;

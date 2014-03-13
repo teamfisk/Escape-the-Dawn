@@ -89,14 +89,14 @@ void Systems::SoundSystem::PlaySound(std::shared_ptr<Components::SoundEmitter> e
 void Systems::SoundSystem::PlaySound(std::shared_ptr<Components::SoundEmitter> emitter)
 {
 	ALuint buffer = LoadFile(emitter->Path);
-	ALuint source = m_Source[emitter.get()];
+	ALuint source = m_Sources[emitter.get()];
 	alSourcei(source, AL_BUFFER, buffer);
-	alSourcePlay(m_Source[emitter.get()]);
+	alSourcePlay(m_Sources[emitter.get()]);
 }
 
 void Systems::SoundSystem::StopSound(std::shared_ptr<Components::SoundEmitter> emitter)
 {
-	alSourceStop(m_Source[emitter.get()]);
+	alSourceStop(m_Sources[emitter.get()]);
 }
 
 void Systems::SoundSystem::OnComponentCreated(std::string type, std::shared_ptr<Component> component)
