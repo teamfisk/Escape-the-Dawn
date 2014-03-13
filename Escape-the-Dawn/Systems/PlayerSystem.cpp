@@ -18,7 +18,7 @@ void Systems::PlayerSystem::UpdateEntity(double dt, EntityID entity, EntityID pa
 	if (input == nullptr)
 		return;
 
-	float speed = 10.0f;
+	float speed = 20.0f;
 
 	auto name = m_World->GetProperty<std::string>(entity, "Name");
 	if (name == "Camera") {
@@ -26,7 +26,6 @@ void Systems::PlayerSystem::UpdateEntity(double dt, EntityID entity, EntityID pa
 			glm::vec3 Camera_Right = glm::vec3(glm::vec4(1, 0, 0, 0) * transform->Orientation);
 			glm::vec3 Camera_Forward = glm::vec3(glm::vec4(0, 0, 1, 0) * transform->Orientation);
 
-			float speed = 15.0f;
 			if(input->KeyState[GLFW_KEY_LEFT_SHIFT]) {
 				speed *= 4.0f;
 			}
