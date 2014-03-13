@@ -31,7 +31,7 @@ void Systems::LevelGenerationSystem::SpawnObstacle()
 	case 0: // Mountain stuff :D
 		{
 		transform->Position = glm::vec3( positionRandom, startyz); // fix position
-		float scale = (float)(rand() % 1000) / 200;
+		float scale = (float)(rand() % 1000) / 250;
 		transform->Scale = glm::vec3(scale);
 		bounds->VolumeVector = glm::vec3(9, 12, 7);
 		bounds->Origin = glm::vec3(1,11,-1);
@@ -51,7 +51,7 @@ void Systems::LevelGenerationSystem::SpawnObstacle()
 	case 2:
 		{
 		transform->Position = glm::vec3( positionRandom, startyz); // fix position
-		float scale = (float)(rand() % 1000) / 200;
+		float scale = (float)(rand() % 1000) / 100;
 		transform->Scale = glm::vec3(scale);
 		bounds->VolumeVector = glm::vec3(1, 1, 1);
 		bounds->Origin = glm::vec3(0,1,0);
@@ -84,8 +84,7 @@ void Systems::LevelGenerationSystem::Update( double dt )
 
 		if(transformComponent->Position.z > 100)
 		{
-			removethis.push_back(ent);
-			
+			removethis.push_back(ent);	
 		}
 	}
 
