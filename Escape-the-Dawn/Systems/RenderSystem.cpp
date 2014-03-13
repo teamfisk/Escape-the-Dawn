@@ -27,10 +27,19 @@ void Systems::RenderSystem::UpdateEntity( double dt, EntityID entity, EntityID p
 		auto model = m_CachedModels[modelComponent->ModelFile];
 		m_Renderer->AddModelToDraw(model, transformComponent->Position, transformComponent->Orientation);
 	}
+
+	// Debug draw bounds
+#ifdef DEBUG
+	auto bounds = m_World->GetComponent<Components::Bounds>(entity, "Bounds");
+	if (bounds != nullptr) {
+		glm::vec3 origin = transformComponent->Position + bounds->Origin;
+		m_Renderer->AddAABBToDraw(origin, bounds->VolumeVector);
+	}
+#endif
+
 	auto pointLightComponent = m_World->GetComponent<Components::PointLight>(entity, "PointLight");
 	if (pointLightComponent != nullptr)
 	{
-		
 		m_Renderer->AddPointLightToDraw(
 			transformComponent->Position, 
 			pointLightComponent->Specular,

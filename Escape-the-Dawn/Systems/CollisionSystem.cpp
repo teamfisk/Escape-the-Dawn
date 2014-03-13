@@ -15,42 +15,42 @@ void Systems::CollisionSystem::UpdateEntity(double dt, EntityID entity, EntityID
 	LOG_INFO("Updating entity %i with parent %i", entity, parent);
 }
 
-bool Systems::CollisionSystem::Intersects(EntityID entity1, EntityID entity2)
+bool Systems::CollisionSystem::Intersects(EntityID aEntity, EntityID bEntity)
 {
-	auto collisionComponent1 = m_World->GetComponent<Components::Collision>(entity1, "Collision");
-	if(collisionComponent1 == nullptr)
+	auto aTransform = m_World->GetComponent<Components::Transform>(aEntity, "Transform");
+	if(aTransform == nullptr)
 		return false;
-	auto collisionComponent2 = m_World->GetComponent<Components::Collision>(entity2, "Collision");
-	if(collisionComponent2 == nullptr)
+	auto bTransform = m_World->GetComponent<Components::Transform>(bEntity, "Transform");
+	if(bTransform == nullptr)
 		return false;
-	collisionComponent1->CollidingEntities.clear();
-	collisionComponent2->CollidingEntities.clear();
+
+	auto aCollisionComponent = m_World->GetComponent<Components::Collision>(aEntity, "Collision");
+	if(aCollisionComponent == nullptr)
+		return false;
+	auto bCollisionComponent = m_World->GetComponent<Components::Collision>(bEntity, "Collision");
+	if(bCollisionComponent == nullptr)
+		return false;
+	aCollisionComponent->CollidingEntities.clear();
+	bCollisionComponent->CollidingEntities.clear();
 	
-	auto bounds1 = m_World->GetComponent<Components::Bounds>(entity1, "Bounds");
+	auto aBounds = m_World->GetComponent<Components::Bounds>(aEntity, "Bounds");
 	
-	auto bounds2 = m_World->GetComponent<Components::Bounds>(entity2, "Bounds");
-	
+	auto bBounds = m_World->GetComponent<Components::Bounds>(bEntity, "Bounds");
 
-	glm::vec3 max1 = glm::vec3(bounds1->Origin.x + bounds1->VolumeVector.x, bounds1->Origin.y + bounds1->VolumeVector.y, bounds1->Origin.z + bounds1->VolumeVector.z); 
-	glm::vec3 min1 = glm::vec3(bounds1->Origin.x - bounds1->VolumeVector.x, bounds1->Origin.y - bounds1->VolumeVector.y, bounds1->Origin.z - bounds1->VolumeVector.z); 
-	glm::vec3 max2 = glm::vec3(bounds2->Origin.x + bounds2->VolumeVector.x, bounds2->Origin.y + bounds2->VolumeVector.y, bounds2->Origin.z + bounds2->VolumeVector.z); 
-	glm::vec3 min2 = glm::vec3(bounds2->Origin.x - bounds2->VolumeVector.x, bounds2->Origin.y - bounds2->VolumeVector.y, bounds2->Origin.z - bounds2->VolumeVector.z);
+	glm::vec3 aMax = aTransform->Position + aBounds->Origin + aBounds->VolumeVector;
+	glm::vec3 aMin = aTransform->Position + aBounds->Origin - aBounds->VolumeVector;
+	glm::vec3 bMax = bTransform->Position + bBounds->Origin + bBounds->VolumeVector;
+	glm::vec3 bMin = bTransform->Position + bBounds->Origin - bBounds->VolumeVector;
 
-
-
-	for(int z = min1.z; z < max1.z; z++)
-		if (z > min2.z && z < max2.z)
-			for (int y = min1.y; y < max1.y; y++)
-				if(y > min2.y && y < max2.y)
-					for (int x = min1.x; x < max1.x; x++)
-						if(x > min2.x && x < max2.x)
-						{
-							//vi har en kollision!!! kanske :(
-							collisionComponent1->CollidingEntities.push_back(entity2);
-							collisionComponent2->CollidingEntities.push_back(entity1);
-							return true;
-						}
-
+	if (aMin.x <= bMax.x && bMin.x <= aMax.x) {
+		if (aMin.y <= bMax.y && bMin.y <= aMax.y) {
+			if (aMin.z <= bMax.z && bMin.z <= aMax.z) {
+				aCollisionComponent->CollidingEntities.push_back(aEntity);
+				bCollisionComponent->CollidingEntities.push_back(bEntity);
+				return true;
+			}
+		}
+	}
 
 	return false;
 }

@@ -35,7 +35,8 @@ void GameWorld::Initialize()
 	collision = AddComponent<Components::Collision>(entcamera, "Collision");
 	collision->Phantom = false;
 	bounds = AddComponent<Components::Bounds>(entcamera, "Bounds");
-	bounds->VolumeVector = glm::vec3(0.1f,0.1f,0.1f);
+	bounds->Origin = transform->Position;
+	bounds->VolumeVector = glm::vec3(4.f,2.f,2.f);
 
 	// Fucking lights
 	ent = CreateEntity();
@@ -90,23 +91,38 @@ void GameWorld::Initialize()
 	model->ModelFile = "plane.obj";
 
 	// Player
-	m_Player = CreateEntity();
-	transform = AddComponent<Components::Transform>(m_Player, "Transform");
-	transform->Position = glm::vec3(0.f, 4.f, 0.f);
-	model = AddComponent<Components::Model>(m_Player, "Model");
+<<<<<<< HEAD
+	player1 = CreateEntity();
+	transform = AddComponent<Components::Transform>(player1, "Transform");
+	transform->Position = glm::vec3(0.f, 0.f, 0.f);
+	model = AddComponent<Components::Model>(player1, "Model");
 	model->ModelFile = "ship.obj";
-	collision = AddComponent<Components::Collision>(m_Player, "Collision");
+	collision = AddComponent<Components::Collision>(player1, "Collision");
 	collision->Phantom = false;
-	bounds = AddComponent<Components::Bounds>(m_Player, "Bounds");
-	bounds->Origin = glm::vec3(transform->Position.x, transform->Position.y - 4, transform->Position.z + 3);
-	bounds->VolumeVector = glm::vec3(4.f,0.7f,4);
-	bounds->VolumeVector = glm::vec3(1.f,0.7f,1.f);
+	bounds = AddComponent<Components::Bounds>(player1, "Bounds");
+	bounds->Origin = transform->Position;
+	bounds->VolumeVector = glm::vec3(10.f,10.f,5.f);
 
 
 	player2 = CreateEntity();
 	transform = AddComponent<Components::Transform>(player2, "Transform");
 	transform->Position = glm::vec3(10.f, 0.f, 0.f);
 	model = AddComponent<Components::Model>(player2, "Model");
+=======
+	m_Player = CreateEntity();
+	transform = AddComponent<Components::Transform>(m_Player, "Transform");
+	transform->Position = glm::vec3(0.f, 4.f, 0.f);
+	model = AddComponent<Components::Model>(m_Player, "Model");
+	model->ModelFile = "ship.obj";
+	auto bounds = AddComponent<Components::Bounds>(m_Player, "Bounds");
+	bounds->Origin = glm::vec3(0.f);
+	bounds->VolumeVector = glm::vec3(1.0f, 2.0f, 3.0f);
+
+	ent = CreateEntity();
+	transform = AddComponent<Components::Transform>(ent, "Transform");
+	transform->Position = glm::vec3(10.f, 4.f, 0.f);
+	model = AddComponent<Components::Model>(ent, "Model");
+>>>>>>> 21b2e3bdc15ac8b21f027a7f531574f46187ae80
 	model->ModelFile = "ship.obj";
 	collision = AddComponent<Components::Collision>(player2, "Collision");
 	collision->Phantom = false;
@@ -118,11 +134,14 @@ void GameWorld::Initialize()
 void GameWorld::Update(double dt)
 {
 	World::Update(dt);
-	if(GetSystem<Systems::CollisionSystem>("CollisionSystem")->Intersects(m_Player, entcamera))
+<<<<<<< HEAD
+	if(GetSystem<Systems::CollisionSystem>("CollisionSystem")->Intersects(player1, entcamera))
 		assert(false);
+=======
 
 	auto transform = GetComponent<Components::Transform>(m_Player, "Transform");
 	transform->Orientation = transform->Orientation * glm::angleAxis<float>(dt, glm::vec3(0, 0, 1));
+>>>>>>> 21b2e3bdc15ac8b21f027a7f531574f46187ae80
 }
 
 void GameWorld::RegisterComponents()
