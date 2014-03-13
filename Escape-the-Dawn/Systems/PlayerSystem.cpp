@@ -136,6 +136,23 @@ void Systems::PlayerSystem::UpdateEntity(double dt, EntityID entity, EntityID pa
 			else
 				freecamEnabled = true;
 		}
+		
+		//powerup
+		auto collisionComponent = m_World->GetComponent<Components::Collision>(entity, "Collision");
+		for(auto ent : collisionComponent->CollidingEntities)
+		{
+			std::string name = m_World->GetProperty<std::string>(ent, "Name");
+			if(name == "PowerUp")
+			{
+				auto powerupComp = m_World->GetComponent<Components::PowerUp>(ent, "PowerUp");
+				if(powerupComp != nullptr)
+				{
+					transform->Velocity.z = powerupComp->Speed;
+					m_World->RemoveEntity(ent);	
+				}
+			}
+		}
+
 
 
 		// Update camera
