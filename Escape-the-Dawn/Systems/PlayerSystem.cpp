@@ -9,7 +9,7 @@ Systems::PlayerSystem::PlayerSystem( World* world ) : System(world)
 	m_CameraOffset = glm::vec3(0.f, 5.f, 14.f);
 	m_CameraOrientation = glm::angleAxis<float>(glm::radians(15.0f),glm::vec3(1,0,0));
 
-	m_freecamEnabled = false;
+	freecamEnabled = false;
 	m_poweruptimeleft = 0;
 	m_basespeed = 100.f;
 }
@@ -28,15 +28,30 @@ void Systems::PlayerSystem::UpdateEntity(double dt, EntityID entity, EntityID pa
 	if (input == nullptr)
 		return;
 
+	auto collision = m_World->GetComponent<Components::Collision>(entity, "Collision");
+
 	auto name = m_World->GetProperty<std::string>(entity, "Name");
-	if (name == "Camera") {
-		if(input->KeyState[GLFW_KEY_F4] && !input->LastKeyState[GLFW_KEY_F4]) {
-			if(m_freecamEnabled)
-				m_freecamEnabled = false;
-			else
-				m_freecamEnabled = true;
+	if(collision != nullptr)
+	{
+		for(auto ent : collision->CollidingEntities)
+		{
+			if(m_World->GetProperty<std::string>(ent, "Name") == "Obstacle")
+			{
+				m_World->RemoveEntity(entity);
+			}
 		}
-		if(m_freecamEnabled)
+	}
+
+	if (name == "Camera") {
+
+		if(input->KeyState[GLFW_KEY_F4] && !input->LastKeyState[GLFW_KEY_F4]) {
+			if(freecamEnabled)
+				freecamEnabled = false;
+			else
+				freecamEnabled = true;
+		}
+
+		if(freecamEnabled)
 		{
 			glm::vec3 Camera_Right = glm::vec3(glm::vec4(1, 0, 0, 0) * transform->Orientation);
 			glm::vec3 Camera_Forward = glm::vec3(glm::vec4(0, 0, 1, 0) * transform->Orientation);
@@ -128,6 +143,7 @@ void Systems::PlayerSystem::UpdateEntity(double dt, EntityID entity, EntityID pa
 		}
 		else
 		{
+			transform->Position -= Ship_Right * (float)dt *  Euler.z;
 			if(Euler.z < 1.5f && Euler.z > -1.5f)
 				transform->Orientation = glm::angleAxis<float>(0,glm::vec3(0,0,1));
 			else if(Euler.z < 0.f)
@@ -166,7 +182,7 @@ void Systems::PlayerSystem::UpdateEntity(double dt, EntityID entity, EntityID pa
 		
 
 		// Update camera
-		if(! m_freecamEnabled)
+		if(! freecamEnabled)
 		{
 			auto cameraEntity = m_World->GetProperty<EntityID>(entity, "Camera");
 			auto cameraTransform = m_World->GetComponent<Components::Transform>(cameraEntity, "Transform");

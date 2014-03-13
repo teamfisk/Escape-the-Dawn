@@ -33,7 +33,7 @@ namespace Systems
 		glm::vec3 m_CameraOffset;
 		glm::quat m_CameraOrientation;
 
-		bool m_freecamEnabled;
+		bool freecamEnabled;
 		float m_basespeed;
 		float m_poweruptimeleft;
 	};

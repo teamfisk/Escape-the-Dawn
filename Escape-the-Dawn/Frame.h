@@ -1,4 +1,4 @@
-/*#ifndef Frame_h__
+#ifndef Frame_h__
 #define  Frame_h__
 
 #include <map>
@@ -7,7 +7,7 @@
 #include "GUIManager.h"
 #include "Texture.h"
 #include "Color.h"
-//#include "Camera.h"
+#include "Camera.h"
 
 namespace GUI
 {
@@ -22,14 +22,19 @@ public:
 	int GetHeight();
 	int GetX();
 	int GetY();
-	void SetWidth(int wid);
-	void SetHeight(int hei);
-	void SetX( int xcord);
-	void SetY(int ycord);
+	int GetRight();
+	int GetLeft();
+	int GetBottom();
+	int GetTop();
+	void SetWidth(int _width);
+	void SetHeight(int _height);
+	void SetX( int _x);
+	void SetY(int _y);
+	void SetTexture(std::string fileName);
 	Rectangle *rectangle;
 	Rectangle AbsouluteRectangle();
-	Texture texture;
-	Color color;
+	Texture* texture;
+	Color* color;
 	bool _Visible;
 	bool Visible();
 	int layer;
@@ -48,4 +53,4 @@ protected:
 }; 
 }
 
-#endif*/
+#endif
