@@ -19,7 +19,7 @@ namespace Systems
 	{
 	public:
 		RenderSystem(World* world, std::shared_ptr<Renderer> renderer)
-			: System(world), m_Renderer(renderer) {}
+			: System(world), m_Renderer(renderer){ }
 
 		std::unordered_map<std::string, std::shared_ptr<Model>> m_CachedModels;
 

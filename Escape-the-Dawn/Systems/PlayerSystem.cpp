@@ -18,7 +18,7 @@ void Systems::PlayerSystem::UpdateEntity(double dt, EntityID entity, EntityID pa
 	if (input == nullptr)
 		return;
 
-	float speed = 10.0f;
+	float speed = 20.0f;
 
 	auto name = m_World->GetProperty<std::string>(entity, "Name");
 	if (name == "Camera") {
@@ -26,7 +26,6 @@ void Systems::PlayerSystem::UpdateEntity(double dt, EntityID entity, EntityID pa
 			glm::vec3 Camera_Right = glm::vec3(glm::vec4(1, 0, 0, 0) * transform->Orientation);
 			glm::vec3 Camera_Forward = glm::vec3(glm::vec4(0, 0, 1, 0) * transform->Orientation);
 
-			
 			if(input->KeyState[GLFW_KEY_LEFT_SHIFT]) {
 				speed *= 4.0f;
 			}
@@ -36,7 +35,7 @@ void Systems::PlayerSystem::UpdateEntity(double dt, EntityID entity, EntityID pa
 			if(input->KeyState[GLFW_KEY_A] || input->KeyState[GLFW_KEY_LEFT]) {
 				transform->Position -= Camera_Right * (float)dt * speed;
 			}
-			if(input->KeyState[GLFW_KEY_D] || input->KeyState[GLFW_KEY_RIGHT]) {
+			else if(input->KeyState[GLFW_KEY_D] || input->KeyState[GLFW_KEY_RIGHT]) {
 				transform->Position += Camera_Right * (float)dt * speed;
 			}
 			if(input->KeyState[GLFW_KEY_W]) {
@@ -77,27 +76,42 @@ void Systems::PlayerSystem::UpdateEntity(double dt, EntityID entity, EntityID pa
 
 		float TurnSpeed = 2.0f;
 		glm::vec3 Euler = glm::eulerAngles(transform->Orientation);
-		LOG_DEBUG("Euler: %f", Euler.z);
 
 		if(input->KeyState[GLFW_KEY_LEFT]) {
 			transform->Position -= Ship_Right * (float)dt * speed;
 			
-			if(Euler.z < 25.f)
+			if(Euler.z < 10.f)
 			{
-			transform->Orientation = transform->Orientation * glm::angleAxis<float>((float)dt * TurnSpeed,glm::vec3(0,0,1));
+				transform->Orientation = transform->Orientation * glm::angleAxis<float>((float)dt * TurnSpeed,glm::vec3(0,0,1));
+			}
+			else if(Euler.z < 20.f)
+			{
+				transform->Orientation = transform->Orientation * glm::angleAxis<float>((float)dt * TurnSpeed/2,glm::vec3(0,0,1));
+			}
+			else if (Euler.z < 25.f)
+			{
+				transform->Orientation = transform->Orientation * glm::angleAxis<float>((float)dt * TurnSpeed/4,glm::vec3(0,0,1));
 			}
 		}
 		else if(input->KeyState[GLFW_KEY_RIGHT]) {
 			transform->Position += Ship_Right * (float)dt * speed;
 
-			if(Euler.z > -25.f)
+			if(Euler.z > -10.f)
 			{
 				transform->Orientation = transform->Orientation * glm::angleAxis<float>((float)dt * TurnSpeed,glm::vec3(0,0,-1));
+			}
+			else if(Euler.z > -20.f)
+			{
+				transform->Orientation = transform->Orientation * glm::angleAxis<float>((float)dt * TurnSpeed/2,glm::vec3(0,0,-1));
+			}
+			else if (Euler.z > -25.f)
+			{
+				transform->Orientation = transform->Orientation * glm::angleAxis<float>((float)dt * TurnSpeed/4,glm::vec3(0,0,-1));
 			}
 		}
 		else
 		{
-			if(Euler.z < 0.5f && Euler.z > -0.5f)
+			if(Euler.z < 1.5f && Euler.z > -1.5f)
 				transform->Orientation = glm::angleAxis<float>(0,glm::vec3(0,0,1));
 			else if(Euler.z < 0.f)
 				transform->Orientation = transform->Orientation * glm::angleAxis<float>((float)dt,glm::vec3(0,0,1));
