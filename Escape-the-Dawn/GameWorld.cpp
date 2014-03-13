@@ -87,10 +87,10 @@ void GameWorld::Initialize()
 	m_Player = CreateEntity();
 	transform = AddComponent<Components::Transform>(m_Player, "Transform");
 	transform->Position = glm::vec3(0.f, 4.f, 0.f);
+	transform->Scale = glm::vec3(2.0f);
 	model = AddComponent<Components::Model>(m_Player, "Model");
 	model->ModelFile = "ship.obj";
 	auto bounds = AddComponent<Components::Bounds>(m_Player, "Bounds");
-	bounds->Origin = glm::vec3(0.f);
 	bounds->VolumeVector = glm::vec3(1.0f, 2.0f, 3.0f);
 
 	ent = CreateEntity();
