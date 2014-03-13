@@ -2,7 +2,6 @@
 #define Components_Bounds_h__
 
 #include "Component.h"
-#include <glm/common.hpp>
 
 namespace Components
 {

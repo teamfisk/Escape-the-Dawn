@@ -7,7 +7,6 @@
 #include <AL/al.h>
 #include <AL/alc.h>
 #include <vector>
-#include <glm/gtx/quaternion.hpp>
 
 namespace Systems
 {
