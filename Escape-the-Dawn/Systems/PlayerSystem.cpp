@@ -5,11 +5,8 @@ Systems::PlayerSystem::PlayerSystem( World* world ) : System(world)
 {
 }
 
-
-
 void Systems::PlayerSystem::Update(double dt)
 {
-
 }
 
 void Systems::PlayerSystem::UpdateEntity(double dt, EntityID entity, EntityID parent)
@@ -100,8 +97,6 @@ void Systems::PlayerSystem::UpdateEntity(double dt, EntityID entity, EntityID pa
 			else if(Euler.z > 0.f)
 				transform->Orientation = transform->Orientation * glm::angleAxis<float>((float)dt,glm::vec3(0,0,-1));
 		}
-
-
 	}
 }
 

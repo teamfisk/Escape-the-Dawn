@@ -176,6 +176,9 @@
     <None Include="Shaders\VisualizeDepth.vert.glsl">
       <Filter>Shaders</Filter>
     </None>
+    <None Include="Shaders\AABB.frag.glsl">
+      <Filter>Shaders</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Systems">

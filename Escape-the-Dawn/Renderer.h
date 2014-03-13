@@ -46,6 +46,7 @@ public:
 	std::vector<float> Light_linearAttenuation;
 	std::vector<float> Light_quadraticAttenuation;
 	std::vector<float> Light_spotExponent;
+	std::vector<glm::mat4> AABBsToRender;
 
 	Renderer();
 
@@ -64,6 +65,7 @@ public:
 		float _quadraticAttenuation, 
 		float _spotExponent
 		);
+	void AddAABBToDraw(glm::vec3 origin, glm::vec3 volumeVector);
 
 	void LoadContent();
 
@@ -87,6 +89,7 @@ private:
 	glm::vec3 m_SunTarget;
 	glm::mat4 m_SunProjection;
 
+	GLuint m_DebugAABB;
 	GLuint m_ScreenQuad;
 	GLuint m_ShadowFrameBuffer;
 	GLuint m_ShadowDepthTexture;
@@ -97,6 +100,7 @@ private:
 	ShaderProgram m_ShaderProgramNormals;
 	ShaderProgram m_ShaderProgramShadows;
 	ShaderProgram m_ShaderProgramShadowsDrawDepth;
+	ShaderProgram m_ShaderProgramDebugAABB;
 
 	void DrawScene();
 	void DrawModels(ShaderProgram &shader);
@@ -104,6 +108,7 @@ private:
 	void CreateShadowMap(int resolution);
 	GLuint CreateQuad();
 	void DrawDebugShadowMap();
+	GLuint CreateAABB();
 
 };
 
