@@ -30,25 +30,40 @@ void Systems::LevelGenerationSystem::SpawnObstacle()
 	switch (typeRandom)
 	{
 	case 0:
+		{
 		transform->Position = glm::vec3( positionRandom, startyz); // fix position
+		float scale = (float)(rand() % 1000) / 100;
+		transform->Scale = glm::vec3(scale);
 		bounds->VolumeVector = glm::vec3(9, 12, 7);
 		bounds->Origin = glm::vec3(1,11,-1);
 		model->ModelFile = "Models/obstacle_mountain_1.obj";
-
+		}
 		break;
 	case 1:
+		{
 		transform->Position = glm::vec3( positionRandom, startyz); // fix position
+		float scale = (float)(rand() % 1000) / 100;
+		transform->Scale = glm::vec3(scale);
 		bounds->VolumeVector = glm::vec3(3.5f, 7.5f, 3.5f);
 		bounds->Origin = glm::vec3(0,7.5f,0);
 		model->ModelFile = "Models/obstacle_mountain_2.obj";
-
+		}
 		break;
 	case 2:
+		{
+
+	
 		transform->Position = glm::vec3( positionRandom, startyz); // fix position
+		float scale = (float)(rand() % 1000) / 100;
+		transform->Scale = glm::vec3(scale);
+
 		bounds->VolumeVector = glm::vec3(1, 1, 1);
 		bounds->Origin = glm::vec3(0,1,0);
+
 		model->ModelFile = "Models/obstacle_cube_1.obj";
 
+
+		}
 		break;
 	default:
 
