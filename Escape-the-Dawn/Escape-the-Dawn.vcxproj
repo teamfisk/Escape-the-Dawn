@@ -110,6 +110,7 @@
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="ShaderProgram.cpp" />
     <ClCompile Include="Systems\CollisionSystem.cpp" />
+    <ClCompile Include="Systems\TransformSystem.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="TextFrame.cpp" />
     <ClCompile Include="World.cpp" />
@@ -161,6 +162,7 @@
     <ClInclude Include="Systems\PlayerSystem.h" />
     <ClInclude Include="Systems\RenderSystem.h" />
     <ClInclude Include="Systems\SoundSystem.h" />
+    <ClInclude Include="Systems\TransformSystem.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="TextFrame.h" />
     <ClInclude Include="World.h" />

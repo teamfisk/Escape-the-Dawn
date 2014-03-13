@@ -47,6 +47,9 @@
     <ClCompile Include="OBJ.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="GameWorld.cpp" />
+    <ClCompile Include="Systems\TransformSystem.cpp">
+      <Filter>Systems</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component.h" />
@@ -148,6 +151,9 @@
     <ClInclude Include="Camera.h" />
     <ClInclude Include="OBJ.h" />
     <ClInclude Include="OpenGL.h" />
+    <ClInclude Include="Systems\TransformSystem.h">
+      <Filter>Systems</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Shaders\Fragment.glsl">

@@ -78,3 +78,21 @@ void Camera::UpdateViewMatrix()
 {
 	m_ViewMatrix = glm::translate(glm::toMat4(m_Orientation), -m_Position);
 }
+
+void Camera::FOV(float val)
+{
+	m_FOV = val;
+	UpdateProjectionMatrix();
+}
+
+void Camera::NearClip(float val)
+{
+	m_NearClip = val;
+	UpdateProjectionMatrix();
+}
+
+void Camera::FarClip(float val)
+{
+	m_FarClip = val;
+	UpdateProjectionMatrix();
+}

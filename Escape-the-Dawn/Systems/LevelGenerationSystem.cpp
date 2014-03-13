@@ -91,9 +91,7 @@ void Systems::LevelGenerationSystem::Update( double dt )
 		elapsedtime = 0;
 	}
 
-	
 
-	
 	
 }
 
@@ -112,9 +110,15 @@ void Systems::LevelGenerationSystem::UpdateEntity( double dt, EntityID entity, E
 			transform->Velocity.y = 0;
 		}
 
-		if(transform->Position.z > 800)
+		auto model = m_World->GetComponent<Components::Model>(entity, "Model");
+		if (transform->Position.z > 10 && model->Visible)
+		{
+			model->Visible = false;
+		}
+
+		if(transform->Position.z > 800) {
 			m_World->RemoveEntity(entity);
-		
+		}
 	}
 
 	if( m_World->GetProperty<std::string>(entity, "Name") == "Player")

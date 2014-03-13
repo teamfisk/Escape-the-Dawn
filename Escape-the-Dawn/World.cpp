@@ -107,17 +107,12 @@ World::World()
 void World::Initialize()
 {
 	RegisterSystems();
+	AddSystems();
+	for (auto system : m_Systems) {
+		system.second->Initialize();
+	}
+
 	RegisterComponents();
-}
-
-void World::RegisterSystems()
-{
-
-}
-
-void World::RegisterComponents()
-{
-	
 }
 
 std::shared_ptr<Component> World::AddComponent(EntityID entity, std::string componentType)

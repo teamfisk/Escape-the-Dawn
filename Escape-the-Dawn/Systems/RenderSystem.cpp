@@ -25,7 +25,9 @@ void Systems::RenderSystem::UpdateEntity( double dt, EntityID entity, EntityID p
 		}
 
 		auto model = m_CachedModels[modelComponent->ModelFile];
-		m_Renderer->AddModelToDraw(model, transformComponent->Position, transformComponent->Orientation, transformComponent->Scale);
+		glm::vec3 position = m_TransformSystem->AbsolutePosition(entity);
+		glm::quat orientation = m_TransformSystem->AbsoluteOrientation(entity);
+		m_Renderer->AddModelToDraw(model, position, orientation, transformComponent->Scale, modelComponent->Visible);
 	}
 
 	// Debug draw bounds
@@ -33,7 +35,7 @@ void Systems::RenderSystem::UpdateEntity( double dt, EntityID entity, EntityID p
 	auto collision = m_World->GetComponent<Components::Collision>(entity, "Collision");
 	auto bounds = m_World->GetComponent<Components::Bounds>(entity, "Bounds");
 	if (bounds != nullptr) {
-		glm::vec3 origin = transformComponent->Position + (transformComponent->Scale * bounds->Origin);
+		glm::vec3 origin = m_TransformSystem->AbsolutePosition(entity) + (transformComponent->Scale * bounds->Origin);
 		glm::vec3 volumeVector = transformComponent->Scale * bounds->VolumeVector;
 		m_Renderer->AddAABBToDraw(origin, volumeVector, (collision != nullptr && collision->CollidingEntities.size() > 0));
 	}
@@ -42,8 +44,9 @@ void Systems::RenderSystem::UpdateEntity( double dt, EntityID entity, EntityID p
 	auto pointLightComponent = m_World->GetComponent<Components::PointLight>(entity, "PointLight");
 	if (pointLightComponent != nullptr)
 	{
+		glm::vec3 position = m_TransformSystem->AbsolutePosition(entity);
 		m_Renderer->AddPointLightToDraw(
-			transformComponent->Position, 
+			position, 
 			pointLightComponent->Specular,
 			pointLightComponent->Diffuse,
 			pointLightComponent->constantAttenuation,
@@ -51,6 +54,7 @@ void Systems::RenderSystem::UpdateEntity( double dt, EntityID entity, EntityID p
 			pointLightComponent->quadraticAttenuation,
 			pointLightComponent->spotExponent);
 	}
+
 	auto cameraComponent = m_World->GetComponent<Components::Camera>(entity, "Camera");
 	if (cameraComponent != nullptr)
 	{
@@ -62,6 +66,12 @@ void Systems::RenderSystem::UpdateEntity( double dt, EntityID entity, EntityID p
 		m_Renderer->GetCamera()->FarClip(cameraComponent->FarClip);
 	}
 }
+
+void Systems::RenderSystem::Initialize()
+{
+	m_TransformSystem = m_World->GetSystem<Systems::TransformSystem>("TransformSystem");
+}
+
 
 
 
