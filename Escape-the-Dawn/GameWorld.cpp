@@ -103,7 +103,7 @@ void GameWorld::Initialize()
 	bounds = AddComponent<Components::Bounds>(m_Player, "Bounds");
 	bounds->Origin = glm::vec3(transform->Position.x, transform->Position.y - 4, transform->Position.z + 3);
 	bounds->VolumeVector = glm::vec3(4.f,0.7f,4);
-	bounds->VolumeVector = glm::vec3(1.f,0.7f,1.f);
+	//bounds->VolumeVector = glm::vec3(1.f,0.7f,1.f);
 
 
 	player2 = CreateEntity();
