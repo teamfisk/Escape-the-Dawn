@@ -78,6 +78,7 @@ private:
 	bool m_DrawNormals;
 	bool m_DrawWireframe;
 
+	int m_ShadowMapRes;
 	glm::vec3 m_SunPosition;
 	glm::vec3 m_SunTarget;
 	glm::mat4 m_SunProjection;

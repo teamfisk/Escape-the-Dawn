@@ -86,7 +86,7 @@ void GameWorld::Initialize()
 	m_Player = CreateEntity();
 	SetProperty(m_Player, "Name", std::string("PlayerShip"));
 	transform = AddComponent<Components::Transform>(m_Player, "Transform");
-	transform->Position = glm::vec3(0.f, 4.f, -5.f);
+	transform->Position = glm::vec3(0.f, 2.f, -5.f);
 	transform->Scale = glm::vec3(1.0f);
 	model = AddComponent<Components::Model>(m_Player, "Model");
 	model->ModelFile = "Models/ship.obj";
@@ -102,10 +102,10 @@ void GameWorld::Initialize()
 	collision->Phantom = false;
 	collision->Interested = true;
 	bounds = AddComponent<Components::Bounds>(m_Player, "Bounds");
-	bounds->Origin = glm::vec3(transform->Position.x, transform->Position.y - 4, transform->Position.z + 3);
-	bounds->VolumeVector = glm::vec3(4.f,0.7f,4);
+	bounds->Origin = glm::vec3(0, 0, 2.f);
+	bounds->VolumeVector = glm::vec3(4.f, 0.7f, 1);
 
-	ent = CreateEntity();
+	/*ent = CreateEntity();
 	transform = AddComponent<Components::Transform>(ent, "Transform");
 	transform->Position = glm::vec3(10.f, 4.f, 0.f);
 	model = AddComponent<Components::Model>(ent, "Model");
@@ -114,7 +114,7 @@ void GameWorld::Initialize()
 	collision->Phantom = false;
 	bounds = AddComponent<Components::Bounds>(player2, "Bounds");
 	bounds->Origin = transform->Position;
-	bounds->VolumeVector = glm::vec3(2.f,2.f,2.f);
+	bounds->VolumeVector = glm::vec3(2.f,2.f,2.f);*/
 }
 
 void GameWorld::Update(double dt)

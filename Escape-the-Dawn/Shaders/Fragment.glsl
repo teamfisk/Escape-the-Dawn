@@ -23,7 +23,7 @@ in VertexData {
 	vec3 ShadowCoord;
 } Input;
 
-vec3 scene_ambient = vec3(0.2);
+vec3 scene_ambient = vec3(0.3);
  
 out vec4 fragmentColor;
 
@@ -49,18 +49,20 @@ void main() {
 	//float cosTheta = clamp(dot(Input.Normal, vec3(0, 1, 0)), 0.0, 1.0);
 	//float bias = 0.001 * tan(acos(cosTheta)); // cosTheta is dot( n,l ), clamped between 0 and 1
 	//bias = clamp(bias, 0.0, 0.01);
-	float bias = 0.003;
 	float visibility = 1.0;
-	vec4 shadowMapValue = texture(shadowMap, Input.ShadowCoord.xy);
-	if (shadowMapValue.z < Input.ShadowCoord.z - bias) {
-		visibility = 0.5;
+	if (Input.ShadowCoord.x >= 0.0 && Input.ShadowCoord.x <= 1.0 && Input.ShadowCoord.y >= 0.0 && Input.ShadowCoord.y <= 1.0) {
+		float bias = 0.003;
+		vec4 shadowMapValue = texture(shadowMap, Input.ShadowCoord.xy);
+		if (shadowMapValue.z < Input.ShadowCoord.z - bias) {
+			visibility = 0.5;
+		}
 	}
 
 	vec3 totalLighting = La * Ka * visibility;
 
 	float attenuation;
 
-	for(int i = 0; i < numberOfLights; i++)
+	for(int i = 0; i < numberOfLights && i < maxNumberOfLights; i++)
 	{
 		// Light
 		//vec3 lightPosition = vec3(0, 0, 2);

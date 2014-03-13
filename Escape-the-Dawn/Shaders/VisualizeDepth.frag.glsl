@@ -12,7 +12,7 @@ out vec4 FragmentColor;
 float LinearizeDepth(float z)
 {
   float n = 0.1; // camera z near
-  float f = 10.0; // camera z far
+  float f = 800.0; // camera z far
   return (2.0 * n) / (f + n - z * (f - n));	
 }
 

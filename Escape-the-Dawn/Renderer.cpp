@@ -6,9 +6,10 @@ Renderer::Renderer()
 	m_DrawNormals = false;
 	m_DrawWireframe = false;
 
-	m_SunPosition = glm::vec3(0, 10, 10);
+	m_ShadowMapRes = 2048*2;
+	m_SunPosition = glm::vec3(0, 0.3f, 10);
 	m_SunTarget = glm::vec3(0, 0, 0);
-	m_SunProjection = glm::ortho<float>(-20, 20, -20, 20, -10, 20);
+	m_SunProjection = glm::ortho<float>(-200, 200, -10, 100, -800, 400);
 	Lights = 0;
 }
 
@@ -93,7 +94,7 @@ void Renderer::LoadContent()
 
 	m_DebugAABB = CreateAABB();
 	m_ScreenQuad = CreateQuad();
-	CreateShadowMap(2048*2);
+	CreateShadowMap(m_ShadowMapRes);
 }
 
 void Renderer::CreateShadowMap(int resolution)
@@ -129,6 +130,7 @@ void Renderer::Draw(double dt)
 	DrawScene();
 
 #ifdef DEBUG
+	// Draw bounding boxes
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_ONE_MINUS_DST_COLOR, GL_ZERO);
 	m_ShaderProgramDebugAABB.Bind();
@@ -148,10 +150,9 @@ void Renderer::Draw(double dt)
 		glBindVertexArray(m_DebugAABB);
 		glDrawArrays(GL_LINES, 0, 24);
 	}
-	
-#endif
 
 	DrawDebugShadowMap();
+#endif
 
 	ClearStuff();
 	glfwSwapBuffers(m_Window);
@@ -174,19 +175,16 @@ void Renderer::DrawScene()
 #endif
 
 	// Draw models
-	glm::mat4 depthViewMatrix = glm::lookAt(m_SunPosition, m_SunTarget, glm::vec3(0, 1, 0));
+	glm::mat4 depthViewMatrix = glm::lookAt(m_SunPosition, m_SunTarget, glm::vec3(0, 1, 0)) * glm::translate(-m_Camera->Position() * glm::vec3(1, 0, 0));
 	glm::mat4 depthCamera = m_SunProjection * depthViewMatrix;
-	glm::mat4 depthMVP = depthCamera;
 	glm::mat4 biasMatrix(
 		0.5, 0.0, 0.0, 0.0,
 		0.0, 0.5, 0.0, 0.0,
 		0.0, 0.0, 0.5, 0.0,
 		0.5, 0.5, 0.5, 1.0
 		);
-	glm::mat4 depthBiasMVP = biasMatrix * depthMVP;
 
 	m_ShaderProgram.Bind();
-	glUniformMatrix4fv(glGetUniformLocation(m_ShaderProgram.GetHandle(), "DepthMVP"), 1, GL_FALSE, glm::value_ptr(depthBiasMVP));
 	glUniform1i(glGetUniformLocation(m_ShaderProgram.GetHandle(), "numberOfLights"), Lights);
 	glUniform3fv(glGetUniformLocation(m_ShaderProgram.GetHandle(), "position"), Lights, Light_position.data());
 	glUniform3fv(glGetUniformLocation(m_ShaderProgram.GetHandle(), "specular"), Lights, Light_specular.data());
@@ -200,8 +198,28 @@ void Renderer::DrawScene()
 	}
 	glActiveTexture(GL_TEXTURE1);
 	glBindTexture(GL_TEXTURE_2D, m_ShadowDepthTexture);
-	DrawModels(m_ShaderProgram);
-
+	//DrawModels(m_ShaderProgram);
+	glm::mat4 cameraMatrix = m_Camera->ProjectionMatrix() * m_Camera->ViewMatrix();
+	glm::mat4 MVP;
+	for (auto tuple : ModelsToRender)
+	{
+		Model* model;
+		glm::mat4 modelMatrix;
+		std::tie(model, modelMatrix) = tuple;
+		MVP = cameraMatrix * modelMatrix;
+		glm::mat4 depthMVP = biasMatrix * depthCamera * modelMatrix;
+		glUniformMatrix4fv(glGetUniformLocation(m_ShaderProgram.GetHandle(), "MVP"), 1, GL_FALSE, glm::value_ptr(MVP));
+		glUniformMatrix4fv(glGetUniformLocation(m_ShaderProgram.GetHandle(), "DepthMVP"), 1, GL_FALSE, glm::value_ptr(depthMVP));
+		glUniformMatrix4fv(glGetUniformLocation(m_ShaderProgram.GetHandle(), "model"), 1, GL_FALSE, glm::value_ptr(modelMatrix));
+		glUniformMatrix4fv(glGetUniformLocation(m_ShaderProgram.GetHandle(), "view"), 1, GL_FALSE, glm::value_ptr(m_Camera->ViewMatrix()));
+		glBindVertexArray(model->VAO);
+		for (auto texGroup : model->TextureGroups) {
+			glActiveTexture(GL_TEXTURE0);
+			glBindTexture(GL_TEXTURE_2D, texGroup.Texture->texture); 
+			glDrawArrays(GL_TRIANGLES, texGroup.StartIndex, texGroup.EndIndex - texGroup.StartIndex + 1);
+		}
+	}
+	 
 #ifdef DEBUG
 	// Debug draw model normals
 	if (m_DrawNormals) {
@@ -219,12 +237,13 @@ void Renderer::DrawShadowMap()
 	glCullFace(GL_BACK);
 
 	glBindFramebuffer(GL_FRAMEBUFFER, m_ShadowFrameBuffer);
-	glViewport(0, 0, 2048*2, 2048*2);
+	glViewport(0, 0, m_ShadowMapRes, m_ShadowMapRes);
 
 	glClear(GL_DEPTH_BUFFER_BIT);
 	//glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 
-	glm::mat4 depthViewMatrix = glm::lookAt(m_SunPosition, m_SunTarget, glm::vec3(0, 1, 0));
+	glm::mat4 depthViewMatrix = glm::lookAt(m_SunPosition, m_SunTarget, glm::vec3(0, 1, 0)) * glm::translate(-m_Camera->Position() * glm::vec3(1, 0, 0));
+//	glm::mat4 depthViewMatrix = glm::lookAt(m_SunPosition, m_SunTarget, glm::vec3(0, 1, 0));
 	glm::mat4 depthCamera = m_SunProjection * depthViewMatrix;
 
 	//glm::mat4 cameraMatrix = depthProjectionMatrix * m_Camera->ViewMatrix();

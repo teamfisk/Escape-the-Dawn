@@ -19,7 +19,9 @@ public:
 	virtual void UpdateEntity(double dt, EntityID entity, EntityID parent) { }
 
 	// Called when a component is created
-	virtual void OnComponentCreated(std::string type, std::	shared_ptr<Component> component) { }
+	virtual void OnComponentCreated(std::string type, std::shared_ptr<Component> component) { }
+	// Called when a component is removed
+	virtual void OnComponentRemoved(std::string type, Component* component) { }
 
 protected:
 	World* m_World;
