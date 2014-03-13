@@ -36,13 +36,16 @@ void Systems::PlayerSystem::UpdateEntity(double dt, EntityID entity, EntityID pa
 	}
 
 	auto name = m_World->GetProperty<std::string>(entity, "Name");
+
 	if (name == "Camera") {
+
 		if(input->KeyState[GLFW_KEY_F4] && !input->LastKeyState[GLFW_KEY_F4]) {
 			if(freecamEnabled)
 				freecamEnabled = false;
 			else
 				freecamEnabled = true;
 		}
+
 		if(freecamEnabled)
 		{
 			glm::vec3 Camera_Right = glm::vec3(glm::vec4(1, 0, 0, 0) * transform->Orientation);
