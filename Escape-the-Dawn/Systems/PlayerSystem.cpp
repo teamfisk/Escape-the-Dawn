@@ -27,15 +27,18 @@ void Systems::PlayerSystem::UpdateEntity(double dt, EntityID entity, EntityID pa
 		return;
 
 	auto collision = m_World->GetComponent<Components::Collision>(entity, "Collision");
-	if(collision == nullptr)
-		return;
-
-	if(collision->CollidingEntities.size() > 0)
-	{
-		m_World->RemoveEntity(entity);
-	}
 
 	auto name = m_World->GetProperty<std::string>(entity, "Name");
+	if(collision != nullptr)
+	{
+		for(auto ent : collision->CollidingEntities)
+		{
+			if(m_World->GetProperty<std::string>(ent, "Name") == "Obstacle")
+			{
+				m_World->RemoveEntity(entity);
+			}
+		}
+	}
 
 	if (name == "Camera") {
 
