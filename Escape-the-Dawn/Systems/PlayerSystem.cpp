@@ -35,7 +35,7 @@ void Systems::PlayerSystem::UpdateEntity(double dt, EntityID entity, EntityID pa
 			if(input->KeyState[GLFW_KEY_A] || input->KeyState[GLFW_KEY_LEFT]) {
 				transform->Position -= Camera_Right * (float)dt * speed;
 			}
-			if(input->KeyState[GLFW_KEY_D] || input->KeyState[GLFW_KEY_RIGHT]) {
+			else if(input->KeyState[GLFW_KEY_D] || input->KeyState[GLFW_KEY_RIGHT]) {
 				transform->Position += Camera_Right * (float)dt * speed;
 			}
 			if(input->KeyState[GLFW_KEY_W]) {
@@ -69,7 +69,6 @@ void Systems::PlayerSystem::UpdateEntity(double dt, EntityID entity, EntityID pa
 
 		float TurnSpeed = 2.0f;
 		glm::vec3 Euler = glm::eulerAngles(transform->Orientation);
-		LOG_DEBUG("Euler: %f", Euler.z);
 
 		if(input->KeyState[GLFW_KEY_LEFT]) {
 			transform->Position -= Ship_Right * (float)dt * speed;
@@ -105,7 +104,7 @@ void Systems::PlayerSystem::UpdateEntity(double dt, EntityID entity, EntityID pa
 		}
 		else
 		{
-			if(Euler.z < 0.5f && Euler.z > -0.5f)
+			if(Euler.z < 1.5f && Euler.z > -1.5f)
 				transform->Orientation = glm::angleAxis<float>(0,glm::vec3(0,0,1));
 			else if(Euler.z < 0.f)
 				transform->Orientation = transform->Orientation * glm::angleAxis<float>((float)dt,glm::vec3(0,0,1));
