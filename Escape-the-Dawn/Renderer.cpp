@@ -3,12 +3,21 @@
 Renderer::Renderer()
 {
 	m_VSync = false;
+#ifdef DEBUG
 	m_DrawNormals = false;
 	m_DrawWireframe = false;
+	m_DrawBounds = true;
+#else
+	m_DrawNormals = false;
+	m_DrawWireframe = false;
+	m_DrawBounds = false;
+#endif
 
-	m_SunPosition = glm::vec3(0, 10, 10);
+	m_ShadowMapRes = 2048*2;
+	m_SunPosition = glm::vec3(0, 0.3f, 10);
 	m_SunTarget = glm::vec3(0, 0, 0);
-	m_SunProjection = glm::ortho<float>(-20, 20, -20, 20, -10, 20);
+	m_SunProjection = glm::ortho<float>(-200, 200, -10, 100, -800, 800);
+	Lights = 0;
 }
 
 void Renderer::Initialize()
@@ -92,7 +101,7 @@ void Renderer::LoadContent()
 
 	m_DebugAABB = CreateAABB();
 	m_ScreenQuad = CreateQuad();
-	CreateShadowMap(2048*2);
+	CreateShadowMap(m_ShadowMapRes);
 }
 
 void Renderer::CreateShadowMap(int resolution)
@@ -128,22 +137,33 @@ void Renderer::Draw(double dt)
 	DrawScene();
 
 #ifdef DEBUG
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_ONE_MINUS_DST_COLOR, GL_ZERO);
-	m_ShaderProgramDebugAABB.Bind();
-	for (auto aabbModelMatrix : AABBsToRender) {
-		glm::mat4 cameraMatrix = m_Camera->ProjectionMatrix() * m_Camera->ViewMatrix();
-		glm::mat4 MVP = cameraMatrix * aabbModelMatrix;
-		glUniformMatrix4fv(glGetUniformLocation(m_ShaderProgramDebugAABB.GetHandle(), "MVP"), 1, GL_FALSE, glm::value_ptr(MVP));
-		glBindVertexArray(m_DebugAABB);
-		glDrawArrays(GL_LINES, 0, 24);
+	// Draw bounding boxes
+	if (m_DrawBounds) {
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_ONE_MINUS_DST_COLOR, GL_ZERO);
+		m_ShaderProgramDebugAABB.Bind();
+		for (auto tuple : AABBsToRender) {
+			glm::mat4 modelMatrix;
+			bool colliding;
+			std::tie(modelMatrix, colliding) = tuple;
+			// Model matrix
+			glm::mat4 cameraMatrix = m_Camera->ProjectionMatrix() * m_Camera->ViewMatrix();
+			glm::mat4 MVP = cameraMatrix * modelMatrix;
+			glUniformMatrix4fv(glGetUniformLocation(m_ShaderProgramDebugAABB.GetHandle(), "MVP"), 1, GL_FALSE, glm::value_ptr(MVP));
+			// Color
+			glm::vec4 color(1.f, 1.f, 1.f, 0.f);
+			if (colliding)
+				color = glm::vec4(1.f, 0.f, 0.f, 0.f);
+			glUniform4fv(glGetUniformLocation(m_ShaderProgramDebugAABB.GetHandle(), "Color"), 1, glm::value_ptr(color));
+			glBindVertexArray(m_DebugAABB);
+			glDrawArrays(GL_LINES, 0, 24);
+		}
 	}
-	AABBsToRender.clear();
+
+	//DrawDebugShadowMap();
 #endif
 
-	DrawDebugShadowMap();
-
-	ModelsToRender.clear();
+	ClearStuff();
 	glfwSwapBuffers(m_Window);
 }
 
@@ -164,33 +184,53 @@ void Renderer::DrawScene()
 #endif
 
 	// Draw models
-	glm::mat4 depthViewMatrix = glm::lookAt(m_SunPosition, m_SunTarget, glm::vec3(0, 1, 0));
+	glm::mat4 depthViewMatrix = glm::lookAt(m_SunPosition, m_SunTarget, glm::vec3(0, 1, 0)) * glm::translate(-m_Camera->Position() * glm::vec3(1, 0, 0));
 	glm::mat4 depthCamera = m_SunProjection * depthViewMatrix;
-	glm::mat4 depthMVP = depthCamera;
 	glm::mat4 biasMatrix(
 		0.5, 0.0, 0.0, 0.0,
 		0.0, 0.5, 0.0, 0.0,
 		0.0, 0.0, 0.5, 0.0,
 		0.5, 0.5, 0.5, 1.0
 		);
-	glm::mat4 depthBiasMVP = biasMatrix * depthMVP;
 
 	m_ShaderProgram.Bind();
-	glUniformMatrix4fv(glGetUniformLocation(m_ShaderProgram.GetHandle(), "DepthMVP"), 1, GL_FALSE, glm::value_ptr(depthBiasMVP));
-	glUniform3fv(glGetUniformLocation(m_ShaderProgram.GetHandle(), "position"), 3, Light_position.data());
-	glUniform3fv(glGetUniformLocation(m_ShaderProgram.GetHandle(), "specular"), 3, Light_specular.data());
-	glUniform3fv(glGetUniformLocation(m_ShaderProgram.GetHandle(), "diffuse"), 3, Light_diffuse.data());
-	glUniform1fv(glGetUniformLocation(m_ShaderProgram.GetHandle(), "constantAttenuation"), 3, Light_constantAttenuation.data());
-	glUniform1fv(glGetUniformLocation(m_ShaderProgram.GetHandle(), "linearAttenuation"), 3, Light_linearAttenuation.data());
-	glUniform1fv(glGetUniformLocation(m_ShaderProgram.GetHandle(), "quadraticAttenuation"), 3, Light_quadraticAttenuation.data());
-	glUniform1fv(glGetUniformLocation(m_ShaderProgram.GetHandle(), "spotExponent"), 3, Light_spotExponent.data());
+	glUniform1i(glGetUniformLocation(m_ShaderProgram.GetHandle(), "numberOfLights"), Lights);
+	glUniform3fv(glGetUniformLocation(m_ShaderProgram.GetHandle(), "position"), Lights, Light_position.data());
+	glUniform3fv(glGetUniformLocation(m_ShaderProgram.GetHandle(), "specular"), Lights, Light_specular.data());
+	glUniform3fv(glGetUniformLocation(m_ShaderProgram.GetHandle(), "diffuse"), Lights, Light_diffuse.data());
+	glUniform1fv(glGetUniformLocation(m_ShaderProgram.GetHandle(), "constantAttenuation"), Lights, Light_constantAttenuation.data());
+	glUniform1fv(glGetUniformLocation(m_ShaderProgram.GetHandle(), "linearAttenuation"), Lights, Light_linearAttenuation.data());
+	glUniform1fv(glGetUniformLocation(m_ShaderProgram.GetHandle(), "quadraticAttenuation"), Lights, Light_quadraticAttenuation.data());
+	glUniform1fv(glGetUniformLocation(m_ShaderProgram.GetHandle(), "spotExponent"), Lights, Light_spotExponent.data());
 	if (m_DrawWireframe) {
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	}
 	glActiveTexture(GL_TEXTURE1);
 	glBindTexture(GL_TEXTURE_2D, m_ShadowDepthTexture);
-	DrawModels(m_ShaderProgram);
-
+	//DrawModels(m_ShaderProgram);
+	glm::mat4 cameraMatrix = m_Camera->ProjectionMatrix() * m_Camera->ViewMatrix();
+	glm::mat4 depthCameraMatrix = biasMatrix * depthCamera;
+	glm::mat4 MVP;
+	glm::mat4 depthMVP;
+	for (auto tuple : ModelsToRender)
+	{
+		Model* model;
+		glm::mat4 modelMatrix;
+		std::tie(model, modelMatrix) = tuple;
+		MVP = cameraMatrix * modelMatrix;
+		depthMVP = depthCameraMatrix * modelMatrix;
+		glUniformMatrix4fv(glGetUniformLocation(m_ShaderProgram.GetHandle(), "MVP"), 1, GL_FALSE, glm::value_ptr(MVP));
+		glUniformMatrix4fv(glGetUniformLocation(m_ShaderProgram.GetHandle(), "DepthMVP"), 1, GL_FALSE, glm::value_ptr(depthMVP));
+		glUniformMatrix4fv(glGetUniformLocation(m_ShaderProgram.GetHandle(), "model"), 1, GL_FALSE, glm::value_ptr(modelMatrix));
+		glUniformMatrix4fv(glGetUniformLocation(m_ShaderProgram.GetHandle(), "view"), 1, GL_FALSE, glm::value_ptr(m_Camera->ViewMatrix()));
+		glBindVertexArray(model->VAO);
+		for (auto texGroup : model->TextureGroups) {
+			glActiveTexture(GL_TEXTURE0);
+			glBindTexture(GL_TEXTURE_2D, texGroup.Texture->texture); 
+			glDrawArrays(GL_TRIANGLES, texGroup.StartIndex, texGroup.EndIndex - texGroup.StartIndex + 1);
+		}
+	}
+	 
 #ifdef DEBUG
 	// Debug draw model normals
 	if (m_DrawNormals) {
@@ -205,15 +245,16 @@ void Renderer::DrawShadowMap()
 {
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_CULL_FACE);
-	glCullFace(GL_BACK);
+	glCullFace(GL_FRONT);
 
 	glBindFramebuffer(GL_FRAMEBUFFER, m_ShadowFrameBuffer);
-	glViewport(0, 0, 2048*2, 2048*2);
+	glViewport(0, 0, m_ShadowMapRes, m_ShadowMapRes);
 
 	glClear(GL_DEPTH_BUFFER_BIT);
 	//glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 
-	glm::mat4 depthViewMatrix = glm::lookAt(m_SunPosition, m_SunTarget, glm::vec3(0, 1, 0));
+	glm::mat4 depthViewMatrix = glm::lookAt(m_SunPosition, m_SunTarget, glm::vec3(0, 1, 0)) * glm::translate(-m_Camera->Position() * glm::vec3(1, 0, 0));
+//	glm::mat4 depthViewMatrix = glm::lookAt(m_SunPosition, m_SunTarget, glm::vec3(0, 1, 0));
 	glm::mat4 depthCamera = m_SunProjection * depthViewMatrix;
 
 	//glm::mat4 cameraMatrix = depthProjectionMatrix * m_Camera->ViewMatrix();
@@ -222,12 +263,13 @@ void Renderer::DrawShadowMap()
 
 	m_ShaderProgramShadows.Bind();
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-	for (int i = 0; i < ModelsToRender.size(); i++)
+	for (auto tuple : ModelsToRender)
 	{
-		ModelData* modelData = ModelsToRender.at(i);
-		auto model = modelData->model;
+		Model* model;
+		glm::mat4 modelMatrix;
+		std::tie(model, modelMatrix) = tuple;
 
-		MVP = depthCamera * modelData->ModelMatrix;
+		MVP = depthCamera * modelMatrix;
 		glUniformMatrix4fv(glGetUniformLocation(m_ShaderProgramShadows.GetHandle(), "MVP"), 1, GL_FALSE, glm::value_ptr(MVP));
 
 		glBindVertexArray(model->VAO);
@@ -257,14 +299,15 @@ void Renderer::DrawModels(ShaderProgram &shader)
 	glm::mat4 cameraMatrix = m_Camera->ProjectionMatrix() * m_Camera->ViewMatrix();
 
 	glm::mat4 MVP;
-	for (int i = 0; i < ModelsToRender.size(); i++)
+	for (auto tuple : ModelsToRender)
 	{
-		ModelData* modelData = ModelsToRender.at(i);
-		auto model = modelData->model;
+		Model* model;
+		glm::mat4 modelMatrix;
+		std::tie(model, modelMatrix) = tuple;
 
-		MVP = cameraMatrix * modelData->ModelMatrix;
+		MVP = cameraMatrix * modelMatrix;
 		glUniformMatrix4fv(glGetUniformLocation(shader.GetHandle(), "MVP"), 1, GL_FALSE, glm::value_ptr(MVP));
-		glUniformMatrix4fv(glGetUniformLocation(shader.GetHandle(), "model"), 1, GL_FALSE, glm::value_ptr(modelData->ModelMatrix));
+		glUniformMatrix4fv(glGetUniformLocation(shader.GetHandle(), "model"), 1, GL_FALSE, glm::value_ptr(modelMatrix));
 		glUniformMatrix4fv(glGetUniformLocation(shader.GetHandle(), "view"), 1, GL_FALSE, glm::value_ptr(m_Camera->ViewMatrix()));
 		glBindVertexArray(model->VAO);
 		for (auto texGroup : model->TextureGroups) {
@@ -287,9 +330,9 @@ void Renderer::AddTextToDraw()
 
 void Renderer::AddModelToDraw(std::shared_ptr<Model> model, glm::vec3 position, glm::quat orientation, glm::vec3 scale)
 {
-	glm::mat4 ModelMatrix = glm::translate(glm::mat4(), position) * glm::toMat4(orientation) * glm::scale(scale);
+	glm::mat4 modelMatrix = glm::translate(glm::mat4(), position) * glm::toMat4(orientation) * glm::scale(scale);
 	// You can now use ModelMatrix to build the MVP matrix
-	ModelsToRender.push_back(new ModelData(model, ModelMatrix));
+	ModelsToRender.push_back(std::make_tuple(model.get(), modelMatrix));
 }
 
 void Renderer::AddPointLightToDraw(
@@ -315,7 +358,15 @@ void Renderer::AddPointLightToDraw(
 	Light_linearAttenuation.push_back(_linearAttenuation);
 	Light_quadraticAttenuation.push_back(_quadraticAttenuation);
 	Light_spotExponent.push_back(_spotExponent);
+	Lights = Light_constantAttenuation.size();
+}
 
+void Renderer::AddAABBToDraw(glm::vec3 origin, glm::vec3 volumeVector, bool colliding)
+{
+	glm::mat4 model;
+	model *= glm::translate(origin);
+	model *= glm::scale(volumeVector);
+	AABBsToRender.push_back(std::make_tuple(model, colliding));
 }
 
 GLuint Renderer::CreateQuad()
@@ -410,10 +461,15 @@ GLuint Renderer::CreateAABB()
 	return vao;
 }
 
-void Renderer::AddAABBToDraw(glm::vec3 origin, glm::vec3 volumeVector)
+void Renderer::ClearStuff()
 {
-	glm::mat4 model;
-	model *= glm::translate(origin);
-	model *= glm::scale(volumeVector);
-	AABBsToRender.push_back(model);
+	AABBsToRender.clear();
+	ModelsToRender.clear();
+	Light_position.clear();
+	Light_specular.clear();
+	Light_diffuse.clear();
+	Light_constantAttenuation.clear();
+	Light_linearAttenuation.clear();
+	Light_quadraticAttenuation.clear();
+	Light_spotExponent.clear();
 }

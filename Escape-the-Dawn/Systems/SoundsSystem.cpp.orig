@@ -75,13 +75,18 @@ void Systems::SoundSystem::UpdateEntity(double dt, EntityID entity, EntityID par
 	}
 }
 
-void Systems::SoundSystem::PlaySound(std::shared_ptr<Components::SoundEmitter> emitter, std::string fileName)
+void Systems::SoundSystem::PlaySound(std::shared_ptr<Components::SoundEmitter> emitter, std::string path)
 {
+<<<<<<< HEAD
+	ALuint buffer = LoadFile(path);
+	ALuint source = m_Source[emitter.get()];
+=======
 	if (m_Sources.find(emitter.get()) == m_Sources.end())
 		return;
 
 	ALuint buffer = LoadFile(fileName);
 	ALuint source = m_Sources[emitter.get()];
+>>>>>>> f76c0b336f87a259a7eabf3c532fc885f155a605
 	alSourcei(source, AL_BUFFER, buffer);
 	alSourcePlay(m_Sources[emitter.get()]);
 }

@@ -144,10 +144,13 @@
       <Filter>GUI</Filter>
     </ClInclude>
     <ClInclude Include="GameWorld.h" />
+<<<<<<< HEAD
     <ClInclude Include="Rectangle.h" />
+=======
     <ClInclude Include="Camera.h" />
     <ClInclude Include="OBJ.h" />
     <ClInclude Include="OpenGL.h" />
+>>>>>>> d0320477a978a38d87e94afbea65dc08fd10c860
   </ItemGroup>
   <ItemGroup>
     <None Include="Shaders\Fragment.glsl">

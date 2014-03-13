@@ -3,6 +3,8 @@
 
 Systems::PlayerSystem::PlayerSystem( World* world ) : System(world)
 {
+	m_PlayerSpeed = 20;
+	m_PlayerOriginalBounds = glm::vec3(0);
 }
 
 void Systems::PlayerSystem::Update(double dt)
@@ -18,14 +20,12 @@ void Systems::PlayerSystem::UpdateEntity(double dt, EntityID entity, EntityID pa
 	if (input == nullptr)
 		return;
 
-	float speed = 20.0f;
-
 	auto name = m_World->GetProperty<std::string>(entity, "Name");
 	if (name == "Camera") {
-
 			glm::vec3 Camera_Right = glm::vec3(glm::vec4(1, 0, 0, 0) * transform->Orientation);
 			glm::vec3 Camera_Forward = glm::vec3(glm::vec4(0, 0, 1, 0) * transform->Orientation);
 
+			float speed = m_PlayerSpeed;
 			if(input->KeyState[GLFW_KEY_LEFT_SHIFT]) {
 				speed *= 4.0f;
 			}
@@ -59,26 +59,23 @@ void Systems::PlayerSystem::UpdateEntity(double dt, EntityID entity, EntityID pa
 			//---------------------------------------------------------------------
 			// TOUCHING THIS CODE MIGHT COUSE THE UNIVERSE TO IMPLODE, ALSO DRAGONS
 		}
-
-		auto collision = m_World->GetComponent<Components::Collision>(entity, "Collision");
-		if(collision->CollidingEntities.size() != 0)
-			int c = 1; // lol
 	}
 
-
-
-
-	name = m_World->GetProperty<std::string>(entity, "Name");
 	if (name == "PlayerShip") 
 	{
+		auto bounds = m_World->GetComponent<Components::Bounds>(entity, "Bounds");
+		if (bounds && m_PlayerOriginalBounds == glm::vec3(0)) {
+			m_PlayerOriginalBounds = bounds->VolumeVector;
+		}
+
 		glm::vec3 Ship_Right = glm::vec3(glm::vec4(1, 0, 0, 0));
 		glm::vec3 Ship_Forward = glm::vec3(glm::vec4(0, 0, 1, 0));
 
-		float TurnSpeed = 2.0f;
+		float TurnSpeed = 1.0f;
 		glm::vec3 Euler = glm::eulerAngles(transform->Orientation);
 
 		if(input->KeyState[GLFW_KEY_LEFT]) {
-			transform->Position -= Ship_Right * (float)dt * speed;
+			transform->Position -= Ship_Right * (float)dt * (m_PlayerSpeed + Euler.z);
 			
 			if(Euler.z < 10.f)
 			{
@@ -94,7 +91,7 @@ void Systems::PlayerSystem::UpdateEntity(double dt, EntityID entity, EntityID pa
 			}
 		}
 		else if(input->KeyState[GLFW_KEY_RIGHT]) {
-			transform->Position += Ship_Right * (float)dt * speed;
+			transform->Position += Ship_Right * (float)dt * (m_PlayerSpeed - Euler.z);
 
 			if(Euler.z > -10.f)
 			{
@@ -117,6 +114,12 @@ void Systems::PlayerSystem::UpdateEntity(double dt, EntityID entity, EntityID pa
 				transform->Orientation = transform->Orientation * glm::angleAxis<float>((float)dt,glm::vec3(0,0,1));
 			else if(Euler.z > 0.f)
 				transform->Orientation = transform->Orientation * glm::angleAxis<float>((float)dt,glm::vec3(0,0,-1));
+		}
+
+		// Update player bounds based on rotation
+		if (bounds) {
+			Euler = glm::eulerAngles(transform->Orientation);
+			bounds->VolumeVector.x = m_PlayerOriginalBounds.x * glm::cos(glm::radians(Euler.z));
 		}
 	}
 }

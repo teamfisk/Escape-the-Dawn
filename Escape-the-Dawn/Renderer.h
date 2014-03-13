@@ -30,15 +30,8 @@ public:
 
 	int HEIGHT, WIDTH;
 
-	struct ModelData
-	{
-		std::shared_ptr<Model> model;
-		glm::mat4 ModelMatrix;
-		ModelData(std::shared_ptr<Model> _model, glm::mat4 _modelMatrix) 
-			: model(_model), ModelMatrix(_modelMatrix) {}
-	};
-
-	std::vector<ModelData*> ModelsToRender;
+	std::list<std::tuple<Model*, glm::mat4>> ModelsToRender;
+	int Lights;
 	std::vector<float> Light_position;
 	std::vector<float> Light_specular;
 	std::vector<float> Light_diffuse;
@@ -46,7 +39,7 @@ public:
 	std::vector<float> Light_linearAttenuation;
 	std::vector<float> Light_quadraticAttenuation;
 	std::vector<float> Light_spotExponent;
-	std::vector<glm::mat4> AABBsToRender;
+	std::list<std::tuple<glm::mat4, bool>> AABBsToRender;
 
 	Renderer();
 
@@ -65,7 +58,7 @@ public:
 		float _quadraticAttenuation, 
 		float _spotExponent
 		);
-	void AddAABBToDraw(glm::vec3 origin, glm::vec3 volumeVector);
+	void AddAABBToDraw(glm::vec3 origin, glm::vec3 volumeVector, bool colliding);
 
 	void LoadContent();
 
@@ -76,6 +69,8 @@ public:
 	void DrawNormals(bool val) { m_DrawNormals = val; }
 	bool DrawWireframe() const { return m_DrawWireframe; }
 	void DrawWireframe(bool val) { m_DrawWireframe = val; }
+	bool DrawBounds() const { return m_DrawBounds; }
+	void DrawBounds(bool val) { m_DrawBounds = val; }
 
 private:
 	GLFWwindow* m_Window;
@@ -84,7 +79,9 @@ private:
 	bool m_VSync;
 	bool m_DrawNormals;
 	bool m_DrawWireframe;
+	bool m_DrawBounds;
 
+	int m_ShadowMapRes;
 	glm::vec3 m_SunPosition;
 	glm::vec3 m_SunTarget;
 	glm::mat4 m_SunProjection;
@@ -101,7 +98,8 @@ private:
 	ShaderProgram m_ShaderProgramShadows;
 	ShaderProgram m_ShaderProgramShadowsDrawDepth;
 	ShaderProgram m_ShaderProgramDebugAABB;
-
+	
+	void ClearStuff();
 	void DrawScene();
 	void DrawModels(ShaderProgram &shader);
 	void DrawShadowMap();

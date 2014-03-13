@@ -11,6 +11,9 @@ void Systems::CollisionSystem::UpdateEntity(double dt, EntityID entity, EntityID
 		transform->Position[0] += parentTransform->Position[0];
 		transform->Position[1] += parentTransform->Position[1];
 		transform->Position[2] += parentTransform->Position[2];
+<<<<<<< HEAD
+	}
+=======
 	}*/
 
 	auto collisionComponent = m_World->GetComponent<Components::Collision>(entity, "Collision");
@@ -23,6 +26,7 @@ void Systems::CollisionSystem::UpdateEntity(double dt, EntityID entity, EntityID
 	// Quit out if we're not interested in collision events
 	if (!collisionComponent->Interested)
 		return;
+>>>>>>> f76c0b336f87a259a7eabf3c532fc885f155a605
 
 	auto entities = m_World->GetEntities();
 

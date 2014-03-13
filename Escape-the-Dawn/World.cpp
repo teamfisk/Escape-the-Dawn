@@ -61,12 +61,19 @@ bool World::ValidEntity(EntityID entity)
 void World::RemoveEntity(EntityID entity)
 {
 	m_EntityParents.erase(entity);
-	m_EntityComponents.erase(entity);
+	// Remove components
 	for (auto pair : m_EntityComponents[entity]) {
 		auto type = pair.first;
 		auto component = pair.second;
+		// Trigger events
+		for (auto pair : m_Systems) {
+			auto system = pair.second;
+			system->OnComponentRemoved(type, component.get());
+		}
 		m_ComponentsOfType[type].remove(component);
 	}
+	m_EntityComponents.erase(entity);
+
 	RecycleEntityID(entity);
 }
 
