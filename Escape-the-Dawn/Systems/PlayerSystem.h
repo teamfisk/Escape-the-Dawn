@@ -9,6 +9,8 @@
 #include "Components/Collision.h"
 #include "Components/Camera.h"
 #include "Components/Bounds.h"
+#include "Components/PowerUp.h"
+
 #include "logging.h"
 
 
