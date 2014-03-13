@@ -59,7 +59,14 @@ void Systems::PlayerSystem::UpdateEntity(double dt, EntityID entity, EntityID pa
 			//---------------------------------------------------------------------
 			// TOUCHING THIS CODE MIGHT COUSE THE UNIVERSE TO IMPLODE, ALSO DRAGONS
 		}
+
+		auto collision = m_World->GetComponent<Components::Collision>(entity, "Collision");
+		if(collision->CollidingEntities.size() != 0)
+			int c = 1; // lol
 	}
+
+
+
 
 	name = m_World->GetProperty<std::string>(entity, "Name");
 	if (name == "PlayerShip") 

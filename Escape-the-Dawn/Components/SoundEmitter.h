@@ -15,6 +15,7 @@ struct SoundEmitter : Component
 	float ReferenceDistance;
 	float Pitch;
 	bool Loop;
+	std::string Path;
 };
 
 }

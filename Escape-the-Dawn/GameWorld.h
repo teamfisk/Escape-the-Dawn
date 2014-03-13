@@ -42,7 +42,7 @@ public:
 
 private:
 	std::shared_ptr<Renderer> m_Renderer;
-
+	EntityID entcamera, player2;
 	EntityID m_Player;
 };
 
