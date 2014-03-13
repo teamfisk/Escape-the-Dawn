@@ -68,6 +68,8 @@ public:
 	// Recursively update through the scene graph 
 	void RecursiveUpdate(std::shared_ptr<System> system, double dt, EntityID parentEntity);
 
+	std::unordered_map<EntityID, EntityID>* GetEntities() { return &m_EntityParents; }
+
 protected:
 	SystemFactory m_SystemFactory;
 	ComponentFactory m_ComponentFactory;
@@ -77,8 +79,7 @@ protected:
 	EntityID m_LastEntityID;
 	std::stack<EntityID> m_RecycledEntityIDs;
 	// A bottom to top tree. A map of child entities to parent entities.
-	std::unordered_map<EntityID, EntityID> m_EntityParents;
-
+	std::unordered_map<EntityID, EntityID> m_EntityParents ;
 	std::unordered_map<EntityID, std::unordered_map<std::string, boost::any>> m_EntityProperties;
 
 	std::unordered_map<std::string, std::vector<std::shared_ptr<Component>>> m_ComponentsOfType;

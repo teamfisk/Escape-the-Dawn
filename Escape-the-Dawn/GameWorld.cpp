@@ -93,7 +93,7 @@ void GameWorld::Initialize()
 	m_Player = CreateEntity();
 	SetProperty(m_Player, "Name", std::string("PlayerShip"));
 	transform = AddComponent<Components::Transform>(m_Player, "Transform");
-	transform->Position = glm::vec3(0.f, 4.f, 0.f);
+	transform->Position = glm::vec3(0.f, 4.f, -5.f);
 	transform->Scale = glm::vec3(2.0f);
 	model = AddComponent<Components::Model>(m_Player, "Model");
 	model->ModelFile = "ship.obj";
@@ -103,7 +103,6 @@ void GameWorld::Initialize()
 	bounds = AddComponent<Components::Bounds>(m_Player, "Bounds");
 	bounds->Origin = glm::vec3(transform->Position.x, transform->Position.y - 4, transform->Position.z + 3);
 	bounds->VolumeVector = glm::vec3(4.f,0.7f,4);
-	//bounds->VolumeVector = glm::vec3(1.f,0.7f,1.f);
 
 
 	player2 = CreateEntity();
@@ -121,8 +120,8 @@ void GameWorld::Initialize()
 void GameWorld::Update(double dt)
 {
 	World::Update(dt);
-	if(GetSystem<Systems::CollisionSystem>("CollisionSystem")->Intersects(m_Player, entcamera))
-		assert(false);
+	/*if(GetSystem<Systems::CollisionSystem>("CollisionSystem")->Intersects(m_Player, entcamera))
+		assert(false);*/
 }
 
 void GameWorld::RegisterComponents()

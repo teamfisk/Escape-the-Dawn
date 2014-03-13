@@ -6,7 +6,10 @@
 #include "System.h"
 #include "Components/Transform.h"
 #include "Components/Input.h"
+#include "Components/Collision.h"
 #include "logging.h"
+
+
 
 namespace Systems
 {

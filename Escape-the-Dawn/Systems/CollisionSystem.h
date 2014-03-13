@@ -19,7 +19,7 @@ public:
 		: System(world) { }
 
 	void UpdateEntity(double dt, EntityID entity, EntityID parent) override;
-	bool Intersects(EntityID, EntityID);
+	void Intersects(EntityID, EntityID);
 	void CreateBoundingBox(std::shared_ptr<Components::Bounds>);
 };
 
