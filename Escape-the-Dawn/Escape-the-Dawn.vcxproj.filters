@@ -140,6 +140,7 @@
       <Filter>GUI</Filter>
     </ClInclude>
     <ClInclude Include="GameWorld.h" />
+    <ClInclude Include="Rectangle.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Shaders\Fragment.glsl">

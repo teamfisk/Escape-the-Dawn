@@ -143,6 +143,7 @@
     <ClInclude Include="glerror.h" />
     <ClInclude Include="MenuFrame.h" />
     <ClInclude Include="Model.h" />
+    <ClInclude Include="Rectangle.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="ShaderProgram.h" />
     <ClInclude Include="Systems\InputSystem.h" />
