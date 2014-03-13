@@ -3,7 +3,7 @@
 
 void Systems::CollisionSystem::UpdateEntity(double dt, EntityID entity, EntityID parent)
 {
-	if (parent != 0)
+	/*if (parent != 0)
 	{
 		auto transform = m_World->GetComponent<Components::Transform>(entity, "Transform");
 		auto parentTransform = m_World->GetComponent<Components::Transform>(parent, "Transform");
@@ -11,8 +11,14 @@ void Systems::CollisionSystem::UpdateEntity(double dt, EntityID entity, EntityID
 		transform->Position[0] += parentTransform->Position[0];
 		transform->Position[1] += parentTransform->Position[1];
 		transform->Position[2] += parentTransform->Position[2];
-	}
-	LOG_INFO("Updating entity %i with parent %i", entity, parent);
+	}*/
+
+	auto collisionComponent = m_World->GetComponent<Components::Collision>(entity, "Collision");
+	if (!collisionComponent)
+		return;
+
+	// Clear old collisions
+	collisionComponent->CollidingEntities.clear();
 
 	auto entities = m_World->GetEntities();
 

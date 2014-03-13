@@ -61,8 +61,9 @@ void Systems::PlayerSystem::UpdateEntity(double dt, EntityID entity, EntityID pa
 		}
 
 		auto collision = m_World->GetComponent<Components::Collision>(entity, "Collision");
-		if(collision->CollidingEntities.size() != 0)
-			int c = 1; // lol
+		if(collision->CollidingEntities.size() > 0) {
+			// DO STUFF
+		}
 	}
 
 

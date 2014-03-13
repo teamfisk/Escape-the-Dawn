@@ -30,11 +30,12 @@ void Systems::RenderSystem::UpdateEntity( double dt, EntityID entity, EntityID p
 
 	// Debug draw bounds
 #ifdef DEBUG
+	auto collision = m_World->GetComponent<Components::Collision>(entity, "Collision");
 	auto bounds = m_World->GetComponent<Components::Bounds>(entity, "Bounds");
 	if (bounds != nullptr) {
 		glm::vec3 origin = transformComponent->Position + (transformComponent->Scale * bounds->Origin);
 		glm::vec3 volumeVector = transformComponent->Scale * bounds->VolumeVector;
-		m_Renderer->AddAABBToDraw(origin, volumeVector, true);
+		m_Renderer->AddAABBToDraw(origin, volumeVector, (collision != nullptr && collision->CollidingEntities.size() > 0));
 	}
 #endif
 
