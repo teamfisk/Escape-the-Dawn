@@ -108,6 +108,7 @@ void Systems::PlayerSystem::UpdateEntity(double dt, EntityID entity, EntityID pa
 		}
 		else
 		{
+			transform->Position -= Ship_Right * (float)dt *  Euler.z;
 			if(Euler.z < 1.5f && Euler.z > -1.5f)
 				transform->Orientation = glm::angleAxis<float>(0,glm::vec3(0,0,1));
 			else if(Euler.z < 0.f)
