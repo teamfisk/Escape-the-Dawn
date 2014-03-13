@@ -12,6 +12,7 @@ Systems::PlayerSystem::PlayerSystem( World* world ) : System(world)
 	freecamEnabled = false;
 	m_poweruptimeleft = 0;
 	m_basespeed = 100.f;
+	m_maxspeed = 100.f;
 }
 
 void Systems::PlayerSystem::Update(double dt)
@@ -164,6 +165,7 @@ void Systems::PlayerSystem::UpdateEntity(double dt, EntityID entity, EntityID pa
 		//powerup
 		auto cameraEntity = m_World->GetProperty<EntityID>(entity, "Camera");
 		auto cameracamera = m_World->GetComponent<Components::Camera>(cameraEntity, "Camera");
+		cameracamera->FOV = glm::radians(20.f + transform->Velocity.z/3 );
 
 		auto collisionComponent = m_World->GetComponent<Components::Collision>(entity, "Collision");
 		for(auto ent : collisionComponent->CollidingEntities)
@@ -172,19 +174,29 @@ void Systems::PlayerSystem::UpdateEntity(double dt, EntityID entity, EntityID pa
 			if(name == "PowerUp")
 			{
 				auto powerupComp = m_World->GetComponent<Components::PowerUp>(ent, "PowerUp");
-				transform->Velocity.z = powerupComp->Speed;
-				m_poweruptimeleft = 3.f;
+				m_maxspeed = powerupComp->Speed;
+				m_poweruptimeleft = 5.f;
 				m_World->RemoveEntity(ent);
-
 				
-				cameracamera->FOV = 55.f;
 			}
 		}
 		if(m_poweruptimeleft <= 0)
 		{
-			transform->Velocity.z = m_basespeed;
-			cameracamera->FOV = 45.f;
+			m_maxspeed = m_basespeed;
 		}
+		if(transform->Velocity.z < m_maxspeed)
+		{
+			transform->Velocity.z += 100.f*dt;
+			if(transform->Velocity.z >= m_maxspeed)
+				transform->Velocity.z = m_maxspeed;
+		}
+		else if(transform->Velocity.z > m_maxspeed)
+		{
+			transform->Velocity.z -= 50.f*dt;
+			if(transform->Velocity.z <= m_maxspeed)
+				transform->Velocity.z = m_maxspeed;
+		}
+
 		
 
 		// Update camera

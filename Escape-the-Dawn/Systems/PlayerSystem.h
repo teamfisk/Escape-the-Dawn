@@ -34,7 +34,10 @@ namespace Systems
 		glm::quat m_CameraOrientation;
 
 		bool freecamEnabled;
+		
 		float m_basespeed;
+		float m_maxspeed;
+
 		float m_poweruptimeleft;
 	};
 

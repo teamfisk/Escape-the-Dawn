@@ -8,6 +8,7 @@ Systems::LevelGenerationSystem::LevelGenerationSystem( World* world )
 	velocity = 0;
 	startx = 0;
 	startyz = glm::vec2(0, -1000);
+	spawnFrequency = 0.1f;
 }
 
 void Systems::LevelGenerationSystem::SpawnObstacle()
@@ -85,8 +86,9 @@ void Systems::LevelGenerationSystem::Update( double dt )
 {
 	
 	elapsedtime += dt;
+	spawnFrequency = velocity/1000;
 
-	if(elapsedtime > 0.1){
+	if(elapsedtime > spawnFrequency){
 		SpawnObstacle();
 		elapsedtime = 0;
 	}
