@@ -25,7 +25,7 @@ void Systems::RenderSystem::UpdateEntity( double dt, EntityID entity, EntityID p
 		}
 
 		auto model = m_CachedModels[modelComponent->ModelFile];
-		m_Renderer->AddModelToDraw(model, transformComponent->Position, transformComponent->Orientation);
+		m_Renderer->AddModelToDraw(model, transformComponent->Position, transformComponent->Orientation, transformComponent->Scale);
 	}
 
 	// Debug draw bounds
@@ -33,7 +33,8 @@ void Systems::RenderSystem::UpdateEntity( double dt, EntityID entity, EntityID p
 	auto bounds = m_World->GetComponent<Components::Bounds>(entity, "Bounds");
 	if (bounds != nullptr) {
 		glm::vec3 origin = transformComponent->Position + bounds->Origin;
-		m_Renderer->AddAABBToDraw(origin, bounds->VolumeVector);
+		glm::vec3 volumeVector = transformComponent->Scale * bounds->VolumeVector;
+		m_Renderer->AddAABBToDraw(origin, volumeVector);
 	}
 #endif
 

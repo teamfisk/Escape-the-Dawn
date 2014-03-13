@@ -54,7 +54,7 @@ public:
 	void Draw(double dt);
 	void DrawText();
 
-	void AddModelToDraw(std::shared_ptr<Model> model, glm::vec3 position, glm::quat orientation);
+	void AddModelToDraw(std::shared_ptr<Model> model, glm::vec3 position, glm::quat orientation, glm::vec3 scale);
 	void AddTextToDraw();
 	void AddPointLightToDraw(
 		glm::vec3 _position,
