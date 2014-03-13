@@ -9,7 +9,6 @@
 #include "Components/Model.h"
 
 
-
 namespace Systems
 {
 	class  LevelGenerationSystem : public System
@@ -28,7 +27,8 @@ namespace Systems
 		glm::vec2 startyz;
 		double elapsedtime;
 
-		std::vector<EntityID> obstacles;
+		std::list<EntityID> obstacles;
+		
 
 		std::shared_ptr<Components::Transform> transform;
 		std::shared_ptr<Components::Bounds> bounds;
