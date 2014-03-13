@@ -51,6 +51,7 @@ void Systems::LevelGenerationSystem::SpawnObstacle()
 
 		break;
 	default:
+
 		break;
 	}
 	
