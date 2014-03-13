@@ -23,7 +23,7 @@ in VertexData {
 	vec3 ShadowCoord;
 } Input;
 
-vec3 scene_ambient = vec3(0.3);
+vec3 scene_ambient = vec3(0.98f, 0.95f, 0.8f);
  
 out vec4 fragmentColor;
 
@@ -54,7 +54,7 @@ void main() {
 		float bias = 0.0005;
 		vec4 shadowMapValue = texture(shadowMap, Input.ShadowCoord.xy);
 		if (shadowMapValue.z < clamp(Input.ShadowCoord.z - bias, 0, 1)) {
-			visibility = 0.5;
+			visibility = 0.3;
 		}
 	}
 

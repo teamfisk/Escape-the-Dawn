@@ -31,18 +31,8 @@ namespace Systems
 		int positionRandom;
 		glm::vec2 startyz;
 		float startx;
-
 		double elapsedtime;
-
-		std::list<EntityID> obstacles;
 		float velocity;
-
-		std::shared_ptr<Components::Transform> transform;
-		std::shared_ptr<Components::Bounds> bounds;
-		std::shared_ptr<Components::Collision> collision;
-		std::shared_ptr<Components::Model> model;
-		std::shared_ptr<Components::PointLight> pointLight;
-		std::shared_ptr<Components::PowerUp> powerUp;
 	};
 }
 

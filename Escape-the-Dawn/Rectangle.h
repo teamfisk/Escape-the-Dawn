@@ -22,6 +22,14 @@ public:
 	
 	int Y() const { return y; }
 	void Y(int val) { y = val; }
+
+	int Left() const { return x; }
+
+	int Right() const { return x+width; }
+
+	int Top() const { return y; }
+
+	int Bottom() const { return y+height; }
 };
 
 Rectangle::Rectangle()

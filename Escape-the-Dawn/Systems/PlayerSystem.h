@@ -9,6 +9,8 @@
 #include "Components/Collision.h"
 #include "Components/Camera.h"
 #include "Components/Bounds.h"
+#include "Components/PowerUp.h"
+
 #include "logging.h"
 
 
@@ -32,6 +34,8 @@ namespace Systems
 		glm::quat m_CameraOrientation;
 
 		bool freecamEnabled;
+		float m_basespeed;
+		float m_poweruptimeleft;
 	};
 
 }
