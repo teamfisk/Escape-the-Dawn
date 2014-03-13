@@ -30,15 +30,7 @@ public:
 
 	int HEIGHT, WIDTH;
 
-	struct ModelData
-	{
-		std::shared_ptr<Model> model;
-		glm::mat4 ModelMatrix;
-		ModelData(std::shared_ptr<Model> _model, glm::mat4 _modelMatrix) 
-			: model(_model), ModelMatrix(_modelMatrix) {}
-	};
-
-	std::vector<ModelData*> ModelsToRender;
+	std::list<std::tuple<Model*, glm::mat4>> ModelsToRender;
 	int Lights;
 	std::vector<float> Light_position;
 	std::vector<float> Light_specular;
@@ -47,7 +39,7 @@ public:
 	std::vector<float> Light_linearAttenuation;
 	std::vector<float> Light_quadraticAttenuation;
 	std::vector<float> Light_spotExponent;
-	std::vector<std::tuple<glm::mat4, bool>> AABBsToRender;
+	std::list<std::tuple<glm::mat4, bool>> AABBsToRender;
 
 	Renderer();
 

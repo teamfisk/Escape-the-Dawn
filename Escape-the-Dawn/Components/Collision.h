@@ -10,7 +10,10 @@ namespace Components
 
 struct Collision : Component
 {
+	Collision() : Phantom(false), Interested(false) { }
+
 	bool Phantom;
+	bool Interested;
 	std::vector<EntityID> CollidingEntities;
 };
 

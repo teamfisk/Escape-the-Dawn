@@ -233,12 +233,13 @@ void Renderer::DrawShadowMap()
 
 	m_ShaderProgramShadows.Bind();
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-	for (int i = 0; i < ModelsToRender.size(); i++)
+	for (auto tuple : ModelsToRender)
 	{
-		ModelData* modelData = ModelsToRender.at(i);
-		auto model = modelData->model;
+		Model* model;
+		glm::mat4 modelMatrix;
+		std::tie(model, modelMatrix) = tuple;
 
-		MVP = depthCamera * modelData->ModelMatrix;
+		MVP = depthCamera * modelMatrix;
 		glUniformMatrix4fv(glGetUniformLocation(m_ShaderProgramShadows.GetHandle(), "MVP"), 1, GL_FALSE, glm::value_ptr(MVP));
 
 		glBindVertexArray(model->VAO);
@@ -268,14 +269,15 @@ void Renderer::DrawModels(ShaderProgram &shader)
 	glm::mat4 cameraMatrix = m_Camera->ProjectionMatrix() * m_Camera->ViewMatrix();
 
 	glm::mat4 MVP;
-	for (int i = 0; i < ModelsToRender.size(); i++)
+	for (auto tuple : ModelsToRender)
 	{
-		ModelData* modelData = ModelsToRender.at(i);
-		auto model = modelData->model;
+		Model* model;
+		glm::mat4 modelMatrix;
+		std::tie(model, modelMatrix) = tuple;
 
-		MVP = cameraMatrix * modelData->ModelMatrix;
+		MVP = cameraMatrix * modelMatrix;
 		glUniformMatrix4fv(glGetUniformLocation(shader.GetHandle(), "MVP"), 1, GL_FALSE, glm::value_ptr(MVP));
-		glUniformMatrix4fv(glGetUniformLocation(shader.GetHandle(), "model"), 1, GL_FALSE, glm::value_ptr(modelData->ModelMatrix));
+		glUniformMatrix4fv(glGetUniformLocation(shader.GetHandle(), "model"), 1, GL_FALSE, glm::value_ptr(modelMatrix));
 		glUniformMatrix4fv(glGetUniformLocation(shader.GetHandle(), "view"), 1, GL_FALSE, glm::value_ptr(m_Camera->ViewMatrix()));
 		glBindVertexArray(model->VAO);
 		for (auto texGroup : model->TextureGroups) {
@@ -298,9 +300,9 @@ void Renderer::AddTextToDraw()
 
 void Renderer::AddModelToDraw(std::shared_ptr<Model> model, glm::vec3 position, glm::quat orientation, glm::vec3 scale)
 {
-	glm::mat4 ModelMatrix = glm::translate(glm::mat4(), position) * glm::toMat4(orientation) * glm::scale(scale);
+	glm::mat4 modelMatrix = glm::translate(glm::mat4(), position) * glm::toMat4(orientation) * glm::scale(scale);
 	// You can now use ModelMatrix to build the MVP matrix
-	ModelsToRender.push_back(new ModelData(model, ModelMatrix));
+	ModelsToRender.push_back(std::make_tuple(model.get(), modelMatrix));
 }
 
 void Renderer::AddPointLightToDraw(

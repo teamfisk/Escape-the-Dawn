@@ -54,7 +54,7 @@ void Systems::SoundSystem::UpdateEntity(double dt, EntityID entity, EntityID par
 	auto soundEmitter = m_World->GetComponent<Components::SoundEmitter>(entity, "SoundEmitter");
 	if(soundEmitter != nullptr)
 	{
-		ALuint source = m_Source[soundEmitter.get()];
+		ALuint source = m_Source[soundEmitter];
 		alSourcei(source, AL_GAIN, soundEmitter->Gain);
 		alSourcei(source, AL_MAX_DISTANCE, soundEmitter->MaxDistance);
 		alSourcei(source, AL_REFERENCE_DISTANCE, soundEmitter->ReferenceDistance);

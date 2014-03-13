@@ -9,9 +9,6 @@ Systems::LevelGenerationSystem::LevelGenerationSystem( World* world )
 
 void Systems::LevelGenerationSystem::SpawnObstacle()
 {
-	
-	
-	
 	typeRandom = 0 + (rand() % 3);
 	
 
@@ -75,7 +72,7 @@ void Systems::LevelGenerationSystem::Update( double dt )
 		elapsedtime = 0;
 	}
 
-	std::vector<EntityID> removethis;
+	std::list<EntityID> removethis;
 
 	for(auto ent : obstacles)
 	{
@@ -85,7 +82,6 @@ void Systems::LevelGenerationSystem::Update( double dt )
 		if(transformComponent->Position.z > 100)
 		{
 			removethis.push_back(ent);
-			
 		}
 	}
 
