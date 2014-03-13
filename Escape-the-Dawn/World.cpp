@@ -36,6 +36,8 @@ void World::Update(double dt)
 		system->Update(dt);
 		RecursiveUpdate(system, dt, 0);
 	}
+
+	ProcessEntityRemovals();
 }
 
 //std::vector<EntityID> GetEntityChildren(EntityID entity);
@@ -60,21 +62,29 @@ bool World::ValidEntity(EntityID entity)
 
 void World::RemoveEntity(EntityID entity)
 {
-	m_EntityParents.erase(entity);
-	// Remove components
-	for (auto pair : m_EntityComponents[entity]) {
-		auto type = pair.first;
-		auto component = pair.second;
-		// Trigger events
-		for (auto pair : m_Systems) {
-			auto system = pair.second;
-			system->OnComponentRemoved(type, component.get());
-		}
-		m_ComponentsOfType[type].remove(component);
-	}
-	m_EntityComponents.erase(entity);
+	m_EntitiesToRemove.push_back(entity);
+}
 
-	RecycleEntityID(entity);
+void World::ProcessEntityRemovals()
+{
+	for (auto entity : m_EntitiesToRemove) {
+		m_EntityParents.erase(entity);
+		// Remove components
+		for (auto pair : m_EntityComponents[entity]) {
+			auto type = pair.first;
+			auto component = pair.second;
+			// Trigger events
+			for (auto pair : m_Systems) {
+				auto system = pair.second;
+				system->OnComponentRemoved(type, component.get());
+			}
+			m_ComponentsOfType[type].remove(component);
+		}
+		m_EntityComponents.erase(entity);
+
+		RecycleEntityID(entity);
+	}
+	m_EntitiesToRemove.clear();
 }
 
 EntityID World::CreateEntity(EntityID parent /*= 0*/)
