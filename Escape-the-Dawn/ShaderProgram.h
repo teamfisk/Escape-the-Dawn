@@ -6,11 +6,7 @@
 #include <fstream>
 #include <vector>
 
-#define _CRT_SECURE_NO_WARNINGS
-#include <GL/glew.h>
-#define GLFW_INCLUDE_GLU
-#include <GLFW/glfw3.h>
-#include <glext.h>
+#include "OpenGL.h"
 
 #include "glerror.h"
 
@@ -68,23 +64,20 @@ public:
 class ShaderProgram
 {
 public:
-	ShaderProgram();
+	ShaderProgram() 
+		: m_ShaderProgramHandle(0) { }
 	~ShaderProgram();
 	
-	void AddShader(std::unique_ptr<Shader> shader);
-
+	void AddShader(std::shared_ptr<Shader> shader);
 	void Compile();
 	GLuint Link();
-
+	GLuint GetHandle();
 	void Bind();
-
 	void Unbind();
 
 private:
 	GLuint m_ShaderProgramHandle;
-	std::vector<std::unique_ptr<Shader>> m_Shaders;
-	
-	void Initialize();
+	std::vector<std::shared_ptr<Shader>> m_Shaders;
 };
 
 #endif // ShaderProgram_h__

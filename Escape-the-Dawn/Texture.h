@@ -1,22 +1,21 @@
 #ifndef Texture_h__
 #define Texture_h__
 
-#include <GL/glew.h>
-#define GLFW_INCLUDE_GLU
-#include <GLFW/glfw3.h>
-#include <glext.h>
+#include <string>
+
+#include "OpenGL.h"
 #include <SOIL.h>
 
 class Texture
 {
 public:
-	Texture(const char* path);
+	Texture(std::string path);
 	
 	~Texture();
 
 	GLuint texture;
 	
-	void Load(const char* path);
+	void Load(std::string path);
 	void Bind();
 };
 

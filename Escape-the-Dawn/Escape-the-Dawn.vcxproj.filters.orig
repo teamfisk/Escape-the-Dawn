@@ -1,0 +1,204 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="World.cpp" />
+    <ClCompile Include="Systems\CollisionSystem.cpp">
+      <Filter>Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="Systems\LevelGenerationSystem.cpp">
+      <Filter>Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="Systems\InputSystem.cpp">
+      <Filter>Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="Systems\ParticleSystem.cpp">
+      <Filter>Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="Systems\PlayerSystem.cpp">
+      <Filter>Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="Systems\RenderSystem.cpp">
+      <Filter>Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="Systems\SoundsSystem.cpp">
+      <Filter>Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="Model.cpp" />
+    <ClCompile Include="Engine.h" />
+    <ClCompile Include="Texture.cpp" />
+    <ClCompile Include="GUIManager.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="Renderer.cpp" />
+    <ClCompile Include="ShaderProgram.cpp" />
+    <ClCompile Include="Frame.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="TextFrame.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="MenuFrame.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="GameFrame.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="OBJ.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="GameWorld.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Component.h" />
+    <ClInclude Include="Entity.h" />
+    <ClInclude Include="System.h" />
+    <ClInclude Include="World.h" />
+    <ClInclude Include="Systems\CollisionSystem.h">
+      <Filter>Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="Systems\LevelGenerationSystem.h">
+      <Filter>Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="Systems\InputSystem.h">
+      <Filter>Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="Systems\ParticleSystem.h">
+      <Filter>Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="Systems\PlayerSystem.h">
+      <Filter>Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="Systems\RenderSystem.h">
+      <Filter>Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="Systems\SoundSystem.h">
+      <Filter>Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="Model.h" />
+    <ClInclude Include="Components\Transform.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="ShaderProgram.h" />
+    <ClInclude Include="Components\Input.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\Model.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\ParticleEmitter.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\PointLight.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\PowerUp.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\Sprite.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\Stat.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\Template.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\SoundEmitter.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Color.h" />
+    <ClInclude Include="Factory.h" />
+    <ClInclude Include="Components\DirectionalLight.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\Collision.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\Camera.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\Bounds.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="glerror.h">
+      <Filter>Util</Filter>
+    </ClInclude>
+    <ClInclude Include="logging.h">
+      <Filter>Util</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderer.h" />
+    <ClInclude Include="Texture.h" />
+    <ClInclude Include="GUIManager.h">
+      <Filter>GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="Frame.h">
+      <Filter>GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="TextFrame.h">
+      <Filter>GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="MenuFrame.h">
+      <Filter>GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="GameFrame.h">
+      <Filter>GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="GameWorld.h" />
+<<<<<<< HEAD
+    <ClInclude Include="Rectangle.h" />
+=======
+    <ClInclude Include="Camera.h" />
+    <ClInclude Include="OBJ.h" />
+    <ClInclude Include="OpenGL.h" />
+>>>>>>> d0320477a978a38d87e94afbea65dc08fd10c860
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Shaders\Fragment.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\Vertex.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\Normals.geo.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\Normals.frag.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Fragment2.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\ShadowMap.frag.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\ShadowMap.vert.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\VisualizeDepth.frag.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\VisualizeDepth.vert.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\AABB.frag.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Systems">
+      <UniqueIdentifier>{657e11f4-52e7-4336-b77f-80f00b85c33f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Components">
+      <UniqueIdentifier>{59929465-a139-43b9-9c75-48121d156e78}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shaders">
+      <UniqueIdentifier>{54f1eb6f-dc00-4e97-a3ef-ac255d755e2e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Util">
+      <UniqueIdentifier>{d985d7a7-c041-46fe-ae03-aa40295a7aad}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GUI">
+      <UniqueIdentifier>{7bdb0f69-049e-4f16-b271-2495e02e4b28}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

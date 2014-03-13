@@ -10,9 +10,12 @@ namespace Components
 
 struct SoundEmitter : Component
 {
-	std::string SoundFile;
-	float Volume;
-	float MaxRange;
+	float Gain;
+	//float MaxDistance;
+	float ReferenceDistance;
+	float Pitch;
+	bool Loop;
+	std::string Path;
 };
 
 }
