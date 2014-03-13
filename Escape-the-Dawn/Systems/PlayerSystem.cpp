@@ -69,7 +69,6 @@ void Systems::PlayerSystem::UpdateEntity(double dt, EntityID entity, EntityID pa
 
 		float TurnSpeed = 2.0f;
 		glm::vec3 Euler = glm::eulerAngles(transform->Orientation);
-		LOG_DEBUG("Euler: %f", Euler.z);
 
 		if(input->KeyState[GLFW_KEY_LEFT]) {
 			transform->Position -= Ship_Right * (float)dt * speed;
