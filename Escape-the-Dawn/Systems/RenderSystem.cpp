@@ -32,9 +32,9 @@ void Systems::RenderSystem::UpdateEntity( double dt, EntityID entity, EntityID p
 #ifdef DEBUG
 	auto bounds = m_World->GetComponent<Components::Bounds>(entity, "Bounds");
 	if (bounds != nullptr) {
-		glm::vec3 origin = transformComponent->Scale * (transformComponent->Position + bounds->Origin);
+		glm::vec3 origin = transformComponent->Position + (transformComponent->Scale * bounds->Origin);
 		glm::vec3 volumeVector = transformComponent->Scale * bounds->VolumeVector;
-		m_Renderer->AddAABBToDraw(origin, volumeVector);
+		m_Renderer->AddAABBToDraw(origin, volumeVector, true);
 	}
 #endif
 
