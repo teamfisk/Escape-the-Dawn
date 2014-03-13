@@ -4,16 +4,15 @@ Systems::LevelGenerationSystem::LevelGenerationSystem( World* world )
 	: System(world)
 {
 	elapsedtime = 0;
+
+	
+	startx = 0;
 	startyz = glm::vec2(0, -1000);
 }
 
 void Systems::LevelGenerationSystem::SpawnObstacle()
 {
-	
-	
-	
 	typeRandom = 0 + (rand() % 3);
-	
 
 	EntityID ent;
 
@@ -25,7 +24,7 @@ void Systems::LevelGenerationSystem::SpawnObstacle()
 	collision = m_World->AddComponent<Components::Collision>(ent, "Collision");
 	model = m_World->AddComponent<Components::Model>(ent, "Model");
 
-	positionRandom = -500 + (rand() % 1000);
+	positionRandom = -500 + startx + (rand() % 1000);
 
 	switch (typeRandom)
 	{
@@ -101,6 +100,16 @@ void Systems::LevelGenerationSystem::Update( double dt )
 	}
 	removethis.clear();
 	
+}
+
+void Systems::LevelGenerationSystem::UpdateEntity( double dt, EntityID entity, EntityID parent )
+{
+	if( m_World->GetProperty<std::string>(entity, "Name") == "PlayerShip")
+	{
+		auto transformComponent = m_World->GetComponent<Components::Transform>(entity, "Transform");
+		startyz = glm::vec2(0, transformComponent->Position.z - 1000);
+		startx = transformComponent->Position.x;
+	}
 }
 
 

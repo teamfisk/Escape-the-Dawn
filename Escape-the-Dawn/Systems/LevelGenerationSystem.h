@@ -7,7 +7,6 @@
 #include "Components/Bounds.h"
 #include "Components/Collision.h"
 #include "Components/Model.h"
-#include "Components/PointLight.h"
 
 namespace Systems
 {
@@ -20,11 +19,14 @@ namespace Systems
 		void SpawnObstacle();
 
 		void Update(double dt) override;
-		
+		void UpdateEntity(double dt, EntityID entity, EntityID parent) override;
+
 	private:
 		int typeRandom;
 		int positionRandom;
 		glm::vec2 startyz;
+		float startx;
+
 		double elapsedtime;
 
 		std::list<EntityID> obstacles;
