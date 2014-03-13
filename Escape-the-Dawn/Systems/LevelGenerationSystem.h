@@ -31,10 +31,7 @@ namespace Systems
 		int positionRandom;
 		glm::vec2 startyz;
 		float startx;
-		std::list<EntityID> removethis;
 		double elapsedtime;
-
-		std::list<EntityID> obstacles;
 		float velocity;
 	};
 }

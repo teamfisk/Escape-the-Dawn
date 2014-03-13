@@ -17,7 +17,6 @@ void Systems::LevelGenerationSystem::SpawnObstacle()
 	EntityID ent;
 
 	ent = m_World->CreateEntity();
-	obstacles.push_back(ent);
 	
 	auto transform = m_World->AddComponent<Components::Transform>(ent, "Transform");
 	auto bounds = m_World->AddComponent<Components::Bounds>(ent, "Bounds");
@@ -28,7 +27,7 @@ void Systems::LevelGenerationSystem::SpawnObstacle()
 
 	positionRandom = -500 + startx + (rand() % 1000);
 	transform->Position = glm::vec3(positionRandom, startyz);
-	//transform->Velocity = glm::vec3(0.f, 10.f, 100.f);
+	transform->Velocity = glm::vec3(0.f, 10.f, 0);
 
 	sound->Loop = true;
 	sound->Gain = 1.f;
@@ -78,7 +77,7 @@ void Systems::LevelGenerationSystem::SpawnObstacle()
 	
 
 	// Put it below ground level
-	//transform->Position.y -= bounds->VolumeVector.y * 2.f;
+	transform->Position.y -= bounds->VolumeVector.y * 2.f;
 	
 }
 
@@ -94,40 +93,30 @@ void Systems::LevelGenerationSystem::Update( double dt )
 
 	
 
-	for(auto ent : obstacles)
-	{
-		auto transform = m_World->GetComponent<Components::Transform>(ent, "Transform");
-		if(transform != nullptr)
-		{
-
-		
-		transform->Velocity.z = velocity;
-		transform->Position += transform->Velocity * (float)dt;
-
-		// Stop raising obstacles when they reach ground level
-		if (transform->Velocity.y > 0 && transform->Position.y >= 0) {
-			transform->Position.y = 0;
-			transform->Velocity.y = 0;
-		}
-
-		if(transform->Position.z > 800)
-		{
-			removethis.push_back(ent);	
-		}
-		}
-	}
-
-	for(auto ent : removethis)
-	{
-		m_World->RemoveEntity(ent);
-		obstacles.remove(ent);
-	}
-	removethis.clear();
+	
 	
 }
 
 void Systems::LevelGenerationSystem::UpdateEntity( double dt, EntityID entity, EntityID parent )
 {
+	if( m_World->GetProperty<std::string>(entity, "Name") == "Obstacle" || m_World->GetProperty<std::string>(entity, "Name") == "PowerUp")
+	{
+		auto transform = m_World->GetComponent<Components::Transform>(entity, "Transform");
+		transform->Velocity.z = velocity;
+		transform->Position += transform->Velocity * (float)dt;
+
+		// Stop raising obstacles when they reach ground level
+		if (transform->Velocity.y > 0 && transform->Position.y >= 0)
+		{
+			transform->Position.y = 0;
+			transform->Velocity.y = 0;
+		}
+
+		if(transform->Position.z > 800)
+			m_World->RemoveEntity(entity);
+		
+	}
+
 	if( m_World->GetProperty<std::string>(entity, "Name") == "Player")
 	{
 		auto transformComponent = m_World->GetComponent<Components::Transform>(entity, "Transform");

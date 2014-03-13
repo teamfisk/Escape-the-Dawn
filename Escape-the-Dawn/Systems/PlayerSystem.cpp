@@ -153,18 +153,16 @@ void Systems::PlayerSystem::UpdateEntity(double dt, EntityID entity, EntityID pa
 			if(name == "PowerUp")
 			{
 				auto powerupComp = m_World->GetComponent<Components::PowerUp>(ent, "PowerUp");
-				if(powerupComp != nullptr)
-				{
-					transform->Velocity.z = powerupComp->Speed;
-					m_poweruptimeleft = 3.f;
-					m_World->RemoveEntity(ent);	
-				}
+				transform->Velocity.z = powerupComp->Speed;
+				m_poweruptimeleft = 3.f;
+				m_World->RemoveEntity(ent);	
 			}
 		}
 		if(m_poweruptimeleft <= 0)
 		{
 			transform->Velocity.z = m_basespeed;
 		}
+		//fixa FOV
 		
 
 		// Update camera
