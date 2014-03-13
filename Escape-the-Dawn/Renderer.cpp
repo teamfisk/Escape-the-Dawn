@@ -428,8 +428,6 @@ GLuint Renderer::CreateAABB()
 	return vao;
 }
 
-}
-
 void Renderer::ClearStuff()
 {
 	AABBsToRender.clear();
@@ -441,3 +439,4 @@ void Renderer::ClearStuff()
 	Light_linearAttenuation.clear();
 	Light_quadraticAttenuation.clear();
 	Light_spotExponent.clear();
+}
