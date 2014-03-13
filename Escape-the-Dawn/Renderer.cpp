@@ -9,7 +9,7 @@ Renderer::Renderer()
 	m_SunPosition = glm::vec3(0, 10, 10);
 	m_SunTarget = glm::vec3(0, 0, 0);
 	m_SunProjection = glm::ortho<float>(-20, 20, -20, 20, -10, 20);
-	Lights = 512;
+	Lights = 0;
 }
 
 void Renderer::Initialize()
@@ -187,6 +187,7 @@ void Renderer::DrawScene()
 
 	m_ShaderProgram.Bind();
 	glUniformMatrix4fv(glGetUniformLocation(m_ShaderProgram.GetHandle(), "DepthMVP"), 1, GL_FALSE, glm::value_ptr(depthBiasMVP));
+	glUniform1i(glGetUniformLocation(m_ShaderProgram.GetHandle(), "numberOfLights"), Lights);
 	glUniform3fv(glGetUniformLocation(m_ShaderProgram.GetHandle(), "position"), Lights, Light_position.data());
 	glUniform3fv(glGetUniformLocation(m_ShaderProgram.GetHandle(), "specular"), Lights, Light_specular.data());
 	glUniform3fv(glGetUniformLocation(m_ShaderProgram.GetHandle(), "diffuse"), Lights, Light_diffuse.data());

@@ -29,7 +29,6 @@ public:
 	glm::mat4 projectionMatrix;
 
 	int HEIGHT, WIDTH;
-	float Lights;
 
 	struct ModelData
 	{
@@ -40,6 +39,7 @@ public:
 	};
 
 	std::vector<ModelData*> ModelsToRender;
+	int Lights;
 	std::vector<float> Light_position;
 	std::vector<float> Light_specular;
 	std::vector<float> Light_diffuse;

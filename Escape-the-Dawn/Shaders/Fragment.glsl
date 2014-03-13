@@ -6,15 +6,15 @@ uniform mat4 view;
 layout(binding=0) uniform sampler2D texture0;
 layout(binding=1) uniform sampler2D shadowMap;
 
-const int numberOfLights = 128;
-
-uniform vec3 position[numberOfLights];
-uniform vec3 specular[numberOfLights];
-uniform vec3 diffuse[numberOfLights];
-uniform float constantAttenuation[numberOfLights];
-uniform float linearAttenuation[numberOfLights];
-uniform float quadraticAttenuation[numberOfLights];
-uniform float spotExponent[numberOfLights];
+const int maxNumberOfLights = 82;
+uniform int numberOfLights;
+uniform vec3 position[maxNumberOfLights];
+uniform vec3 specular[maxNumberOfLights];
+uniform vec3 diffuse[maxNumberOfLights];
+uniform float constantAttenuation[maxNumberOfLights];
+uniform float linearAttenuation[maxNumberOfLights];
+uniform float quadraticAttenuation[maxNumberOfLights];
+uniform float spotExponent[maxNumberOfLights];
 
 in VertexData {
 	vec3 Position;
