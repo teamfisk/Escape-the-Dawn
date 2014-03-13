@@ -72,12 +72,25 @@ void Systems::SoundSystem::UpdateEntity(double dt, EntityID entity, EntityID par
 	}
 }
 
-void Systems::SoundSystem::PlaySound(std::shared_ptr<Components::SoundEmitter> emitter, std::string fileName)
+void Systems::SoundSystem::PlaySound(std::shared_ptr<Components::SoundEmitter> emitter, std::string path)
 {
-	ALuint buffer = LoadFile(fileName);
+	ALuint buffer = LoadFile(path);
 	ALuint source = m_Source[emitter.get()];
 	alSourcei(source, AL_BUFFER, buffer);
 	alSourcePlay(m_Source[emitter.get()]);
+}
+
+void Systems::SoundSystem::PlaySound(std::shared_ptr<Components::SoundEmitter> emitter)
+{
+	ALuint buffer = LoadFile(emitter->Path);
+	ALuint source = m_Source[emitter.get()];
+	alSourcei(source, AL_BUFFER, buffer);
+	alSourcePlay(m_Source[emitter.get()]);
+}
+
+void Systems::SoundSystem::StopSound(std::shared_ptr<Components::SoundEmitter> emitter)
+{
+	alSourceStop(m_Source[emitter.get()]);
 }
 
 void Systems::SoundSystem::OnComponentCreated(std::string type, std::shared_ptr<Component> component)
@@ -88,13 +101,13 @@ void Systems::SoundSystem::OnComponentCreated(std::string type, std::shared_ptr<
 	}
 }
 
-ALuint Systems::SoundSystem::LoadFile(std::string fileName)
+ALuint Systems::SoundSystem::LoadFile(std::string path)
 {
-	if (m_BufferCache.find(fileName) != m_BufferCache.end())
-		return m_BufferCache[fileName];
+	if (m_BufferCache.find(path) != m_BufferCache.end())
+		return m_BufferCache[path];
 
 	FILE *fp = NULL;
-	fp = fopen(fileName.c_str(), "rb");
+	fp = fopen(path.c_str(), "rb");
 
 	//CHECK FOR VALID WAVE-FILE
 	fread(type, sizeof(char), 4, fp);
@@ -160,7 +173,7 @@ ALuint Systems::SoundSystem::LoadFile(std::string fileName)
 	alBufferData(buffer, format, buf, dataSize, sampleRate);
 	delete[] buf;
 
-	m_BufferCache[fileName] = buffer;
+	m_BufferCache[path] = buffer;
 	return buffer;
 }
 
@@ -168,6 +181,9 @@ ALuint Systems::SoundSystem::CreateSource()
 {
 	ALuint source;
 	alGenSources((ALuint)1, &source);
+
+	alDopplerFactor(2.f); // Numbers greater than 1 will increase Doppler effect, numbers lower than 1 will decrease the Doppler effect 
+	alDopplerVelocity(350.f); // Defines the velocity of the sound
 
 	return source;
 }

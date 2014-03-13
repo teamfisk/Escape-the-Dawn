@@ -12,7 +12,6 @@ void Systems::CollisionSystem::UpdateEntity(double dt, EntityID entity, EntityID
 		transform->Position[1] += parentTransform->Position[1];
 		transform->Position[2] += parentTransform->Position[2];
 	}
-	LOG_INFO("Updating entity %i with parent %i", entity, parent);
 
 	auto entities = m_World->GetEntities();
 

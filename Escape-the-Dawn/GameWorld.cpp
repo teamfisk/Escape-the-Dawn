@@ -19,6 +19,7 @@ void GameWorld::Initialize()
 	std::shared_ptr<Components::Camera> camera;
 	std::shared_ptr<Components::Bounds> bounds;
 	std::shared_ptr<Components::Collision> collision;
+	std::shared_ptr<Components::SoundEmitter> soundEmitter;
 	EntityID ent;
 
 	// Camera
@@ -103,6 +104,14 @@ void GameWorld::Initialize()
 	bounds = AddComponent<Components::Bounds>(m_Player, "Bounds");
 	bounds->Origin = glm::vec3(transform->Position.x, transform->Position.y - 4, transform->Position.z + 3);
 	bounds->VolumeVector = glm::vec3(4.f,0.7f,4);
+	soundEmitter = AddComponent<Components::SoundEmitter>(m_Player, "SoundEmitter");
+	soundEmitter->Loop = true;
+	soundEmitter->MaxDistance = FLT_MAX;
+	soundEmitter->ReferenceDistance = 10;
+	soundEmitter->Gain = 1;
+	soundEmitter->Pitch = 1;
+	soundEmitter->Path = "Sounds/hallelujah.wav";
+	GetSystem<Systems::SoundSystem>("SoundSystem")->PlaySound(soundEmitter);
 
 	ent = CreateEntity();
 	transform = AddComponent<Components::Transform>(ent, "Transform");
