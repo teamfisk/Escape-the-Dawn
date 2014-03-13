@@ -81,7 +81,7 @@ protected:
 
 	std::unordered_map<EntityID, std::unordered_map<std::string, boost::any>> m_EntityProperties;
 
-	std::unordered_map<std::string, std::vector<std::shared_ptr<Component>>> m_ComponentsOfType;
+	std::unordered_map<std::string, std::list<std::shared_ptr<Component>>> m_ComponentsOfType;
 	std::unordered_map<EntityID, std::map<std::string, std::shared_ptr<Component>>> m_EntityComponents;
 
 	EntityID GenerateEntityID();

@@ -65,7 +65,7 @@ void World::RemoveEntity(EntityID entity)
 	for (auto pair : m_EntityComponents[entity]) {
 		auto type = pair.first;
 		auto component = pair.second;
-		m_ComponentsOfType[type].erase(std::remove(m_ComponentsOfType[type].begin(), m_ComponentsOfType[type].end(), component));
+		m_ComponentsOfType[type].remove(component);
 	}
 	RecycleEntityID(entity);
 }
