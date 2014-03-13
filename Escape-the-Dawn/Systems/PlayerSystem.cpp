@@ -26,6 +26,15 @@ void Systems::PlayerSystem::UpdateEntity(double dt, EntityID entity, EntityID pa
 	if (input == nullptr)
 		return;
 
+	auto collision = m_World->GetComponent<Components::Collision>(entity, "Collision");
+	if(collision == nullptr)
+		return;
+
+	if(collision->CollidingEntities.size() > 0)
+	{
+		m_World->RemoveEntity(entity);
+	}
+
 	auto name = m_World->GetProperty<std::string>(entity, "Name");
 	if (name == "Camera" && freecamEnabled) {
 		glm::vec3 Camera_Right = glm::vec3(glm::vec4(1, 0, 0, 0) * transform->Orientation);
