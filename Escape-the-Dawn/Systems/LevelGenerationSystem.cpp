@@ -10,7 +10,6 @@ Systems::LevelGenerationSystem::LevelGenerationSystem( World* world )
 void Systems::LevelGenerationSystem::SpawnObstacle()
 {
 	typeRandom = 0 + (rand() % 3);
-	
 
 	EntityID ent;
 
@@ -21,37 +20,43 @@ void Systems::LevelGenerationSystem::SpawnObstacle()
 	bounds = m_World->AddComponent<Components::Bounds>(ent, "Bounds");
 	collision = m_World->AddComponent<Components::Collision>(ent, "Collision");
 	model = m_World->AddComponent<Components::Model>(ent, "Model");
+	auto sound = m_World->AddComponent<Components::SoundEmitter>(ent, "SoundEmitter");
 	//pointLight = m_World->AddComponent<Components::PointLight>(ent, "PointLight");
 
 	positionRandom = -500 + (rand() % 1000);
+	transform->Position = glm::vec3(positionRandom, startyz); // fix position
+	transform->Velocity = glm::vec3(0.f, 10.f, 100.f);
+
+	sound->Loop = true;
+	sound->Gain = 1.f;
+	sound->ReferenceDistance = 15.f;
+	m_World->GetSystem<Systems::SoundSystem>("SoundSystem")->PlaySound(sound, "Sounds/hum.wav");
 
 	switch (typeRandom)
 	{
 	case 0:
-		transform->Position = glm::vec3( positionRandom, startyz); // fix position
 		bounds->VolumeVector = glm::vec3(9, 12, 7);
 		bounds->Origin = glm::vec3(1,11,-1);
 		model->ModelFile = "Models/obstacle_mountain_1.obj";
 
 		break;
 	case 1:
-		transform->Position = glm::vec3( positionRandom, startyz); // fix position
 		bounds->VolumeVector = glm::vec3(3.5f, 7.5f, 3.5f);
 		bounds->Origin = glm::vec3(0,7.5f,0);
 		model->ModelFile = "Models/obstacle_mountain_2.obj";
 
 		break;
 	case 2:
-		transform->Position = glm::vec3( positionRandom, startyz); // fix position
 		bounds->VolumeVector = glm::vec3(1, 1, 1);
 		bounds->Origin = glm::vec3(0,1,0);
-// 		pointLight->Specular = glm::vec3(1.0,  1.0,  1.0);
-// 		pointLight->Diffuse = glm::vec3(1.0,  1.0,  1.0);
-// 		pointLight->Diffuse = glm::vec3(0.0,  3.0,  0.0);
-// 		pointLight->constantAttenuation = 0.f;
-// 		pointLight->linearAttenuation = 1.f;
-// 		pointLight->quadraticAttenuation = 0.f;
-// 		pointLight->spotExponent = 0.0f;
+	
+ 		//pointLight->Specular = glm::vec3(1.0,  1.0,  1.0);
+ 		//pointLight->Diffuse = glm::vec3(1.0,  1.0,  1.0);
+ 		//pointLight->Diffuse = glm::vec3(0.0,  3.0,  0.0);
+ 		//pointLight->constantAttenuation = 0.f;
+ 		//pointLight->linearAttenuation = 1.f;
+ 		//pointLight->quadraticAttenuation = 0.f;
+ 		//pointLight->spotExponent = 0.0f;
 		model->ModelFile = "Models/obstacle_cube_1.obj";
 
 		break;
@@ -59,6 +64,9 @@ void Systems::LevelGenerationSystem::SpawnObstacle()
 
 		break;
 	}
+
+	// Put it below ground level
+	transform->Position.y -= bounds->VolumeVector.y * 2.f;
 	
 }
 
@@ -76,10 +84,16 @@ void Systems::LevelGenerationSystem::Update( double dt )
 
 	for(auto ent : obstacles)
 	{
-		auto transformComponent = m_World->GetComponent<Components::Transform>(ent, "Transform");
-		transformComponent->Position.z += 100.f * dt;
+		auto transform = m_World->GetComponent<Components::Transform>(ent, "Transform");
+		transform->Position += transform->Velocity * (float)dt;
 
-		if(transformComponent->Position.z > 100)
+		// Stop raising obstacles when they reach ground level
+		if (transform->Velocity.y > 0 && transform->Position.y >= 0) {
+			transform->Position.y = 0;
+			transform->Velocity.y = 0;
+		}
+
+		if(transform->Position.z > 800)
 		{
 			removethis.push_back(ent);
 		}

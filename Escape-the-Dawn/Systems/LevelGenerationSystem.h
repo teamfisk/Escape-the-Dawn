@@ -2,12 +2,14 @@
 #define LevelGenerationSystem_h__
 
 #include "System.h"
+#include "Systems/SoundSystem.h"
 #include "World.h"
 #include "Components/Transform.h"
 #include "Components/Bounds.h"
 #include "Components/Collision.h"
 #include "Components/Model.h"
 #include "Components/PointLight.h"
+#include "Components/SoundEmitter.h"
 
 
 namespace Systems
