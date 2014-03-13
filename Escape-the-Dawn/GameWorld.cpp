@@ -24,12 +24,12 @@ void GameWorld::Initialize()
 	SetProperty(ent, "Name", std::string("Camera"));
 	transform = AddComponent<Components::Transform>(ent, "Transform");
 	AddComponent<Components::Input>(ent, "Input");
-	transform->Position = glm::vec3(0.f, 2.f, 10.f);
+	transform->Position = glm::vec3(0.f, 10.f, 14.f);
 	camera = AddComponent<Components::Camera>(ent, "Camera");
 	camera->FOV		= 45.f;
 	camera->FarClip	= 1000.f;
 	camera->NearClip	= 0.01f;
-	transform->Orientation = glm::angleAxis<float>(glm::radians(25.0f),glm::vec3(1,0,0));
+	transform->Orientation = glm::angleAxis<float>(glm::radians(15.0f),glm::vec3(1,0,0));
 
 	// Fucking lights
 	ent = CreateEntity();
@@ -92,8 +92,8 @@ void GameWorld::Initialize()
 	model->ModelFile = "ship.obj";
 	AddComponent<Components::Input>(m_Player, "Input");
 	auto bounds = AddComponent<Components::Bounds>(m_Player, "Bounds");
-	bounds->Origin = glm::vec3(0.f);
-	bounds->VolumeVector = glm::vec3(1.0f, 2.0f, 3.0f);
+	bounds->Origin = glm::vec3(0.f, 0.f, 2.f);
+	bounds->VolumeVector = glm::vec3(3.0f, 0.5f, 2.0f);
 
 	ent = CreateEntity();
 	transform = AddComponent<Components::Transform>(ent, "Transform");
