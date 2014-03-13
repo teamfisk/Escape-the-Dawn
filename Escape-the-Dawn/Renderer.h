@@ -29,6 +29,7 @@ public:
 	glm::mat4 projectionMatrix;
 
 	int HEIGHT, WIDTH;
+	float Lights;
 
 	struct ModelData
 	{
@@ -101,7 +102,8 @@ private:
 	ShaderProgram m_ShaderProgramShadows;
 	ShaderProgram m_ShaderProgramShadowsDrawDepth;
 	ShaderProgram m_ShaderProgramDebugAABB;
-
+	
+	void ClearStuff();
 	void DrawScene();
 	void DrawModels(ShaderProgram &shader);
 	void DrawShadowMap();

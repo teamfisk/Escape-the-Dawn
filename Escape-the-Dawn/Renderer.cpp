@@ -9,6 +9,7 @@ Renderer::Renderer()
 	m_SunPosition = glm::vec3(0, 10, 10);
 	m_SunTarget = glm::vec3(0, 0, 0);
 	m_SunProjection = glm::ortho<float>(-20, 20, -20, 20, -10, 20);
+	Lights = 512;
 }
 
 void Renderer::Initialize()
@@ -138,12 +139,12 @@ void Renderer::Draw(double dt)
 		glBindVertexArray(m_DebugAABB);
 		glDrawArrays(GL_LINES, 0, 24);
 	}
-	AABBsToRender.clear();
+	
 #endif
 
 	DrawDebugShadowMap();
 
-	ModelsToRender.clear();
+	ClearStuff();
 	glfwSwapBuffers(m_Window);
 }
 
@@ -177,13 +178,13 @@ void Renderer::DrawScene()
 
 	m_ShaderProgram.Bind();
 	glUniformMatrix4fv(glGetUniformLocation(m_ShaderProgram.GetHandle(), "DepthMVP"), 1, GL_FALSE, glm::value_ptr(depthBiasMVP));
-	glUniform3fv(glGetUniformLocation(m_ShaderProgram.GetHandle(), "position"), 3, Light_position.data());
-	glUniform3fv(glGetUniformLocation(m_ShaderProgram.GetHandle(), "specular"), 3, Light_specular.data());
-	glUniform3fv(glGetUniformLocation(m_ShaderProgram.GetHandle(), "diffuse"), 3, Light_diffuse.data());
-	glUniform1fv(glGetUniformLocation(m_ShaderProgram.GetHandle(), "constantAttenuation"), 3, Light_constantAttenuation.data());
-	glUniform1fv(glGetUniformLocation(m_ShaderProgram.GetHandle(), "linearAttenuation"), 3, Light_linearAttenuation.data());
-	glUniform1fv(glGetUniformLocation(m_ShaderProgram.GetHandle(), "quadraticAttenuation"), 3, Light_quadraticAttenuation.data());
-	glUniform1fv(glGetUniformLocation(m_ShaderProgram.GetHandle(), "spotExponent"), 3, Light_spotExponent.data());
+	glUniform3fv(glGetUniformLocation(m_ShaderProgram.GetHandle(), "position"), Lights, Light_position.data());
+	glUniform3fv(glGetUniformLocation(m_ShaderProgram.GetHandle(), "specular"), Lights, Light_specular.data());
+	glUniform3fv(glGetUniformLocation(m_ShaderProgram.GetHandle(), "diffuse"), Lights, Light_diffuse.data());
+	glUniform1fv(glGetUniformLocation(m_ShaderProgram.GetHandle(), "constantAttenuation"), Lights, Light_constantAttenuation.data());
+	glUniform1fv(glGetUniformLocation(m_ShaderProgram.GetHandle(), "linearAttenuation"), Lights, Light_linearAttenuation.data());
+	glUniform1fv(glGetUniformLocation(m_ShaderProgram.GetHandle(), "quadraticAttenuation"), Lights, Light_quadraticAttenuation.data());
+	glUniform1fv(glGetUniformLocation(m_ShaderProgram.GetHandle(), "spotExponent"), Lights, Light_spotExponent.data());
 	if (m_DrawWireframe) {
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	}
@@ -315,7 +316,7 @@ void Renderer::AddPointLightToDraw(
 	Light_linearAttenuation.push_back(_linearAttenuation);
 	Light_quadraticAttenuation.push_back(_quadraticAttenuation);
 	Light_spotExponent.push_back(_spotExponent);
-
+	Lights = Light_constantAttenuation.size();
 }
 
 GLuint Renderer::CreateQuad()
@@ -416,4 +417,17 @@ void Renderer::AddAABBToDraw(glm::vec3 origin, glm::vec3 volumeVector)
 	model *= glm::translate(origin);
 	model *= glm::scale(volumeVector);
 	AABBsToRender.push_back(model);
+}
+
+void Renderer::ClearStuff()
+{
+	AABBsToRender.clear();
+	ModelsToRender.clear();
+	Light_position.clear();
+	Light_specular.clear();
+	Light_diffuse.clear();
+	Light_constantAttenuation.clear();
+	Light_linearAttenuation.clear();
+	Light_quadraticAttenuation.clear();
+	Light_spotExponent.clear();
 }

@@ -24,6 +24,7 @@ void Systems::LevelGenerationSystem::SpawnObstacle()
 	bounds = m_World->AddComponent<Components::Bounds>(ent, "Bounds");
 	collision = m_World->AddComponent<Components::Collision>(ent, "Collision");
 	model = m_World->AddComponent<Components::Model>(ent, "Model");
+	//pointLight = m_World->AddComponent<Components::PointLight>(ent, "PointLight");
 
 	positionRandom = -500 + (rand() % 1000);
 
@@ -47,6 +48,13 @@ void Systems::LevelGenerationSystem::SpawnObstacle()
 		transform->Position = glm::vec3( positionRandom, startyz); // fix position
 		bounds->VolumeVector = glm::vec3(1, 1, 1);
 		bounds->Origin = glm::vec3(0,1,0);
+// 		pointLight->Specular = glm::vec3(1.0,  1.0,  1.0);
+// 		pointLight->Diffuse = glm::vec3(1.0,  1.0,  1.0);
+// 		pointLight->Diffuse = glm::vec3(0.0,  3.0,  0.0);
+// 		pointLight->constantAttenuation = 0.f;
+// 		pointLight->linearAttenuation = 1.f;
+// 		pointLight->quadraticAttenuation = 0.f;
+// 		pointLight->spotExponent = 0.0f;
 		model->ModelFile = "Models/obstacle_cube_1.obj";
 
 		break;

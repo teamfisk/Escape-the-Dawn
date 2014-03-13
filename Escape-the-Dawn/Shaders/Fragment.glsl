@@ -6,7 +6,7 @@ uniform mat4 view;
 layout(binding=0) uniform sampler2D texture0;
 layout(binding=1) uniform sampler2D shadowMap;
 
-const int numberOfLights = 3;
+const int numberOfLights = 128;
 
 uniform vec3 position[numberOfLights];
 uniform vec3 specular[numberOfLights];

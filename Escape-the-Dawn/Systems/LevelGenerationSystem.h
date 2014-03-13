@@ -7,6 +7,7 @@
 #include "Components/Bounds.h"
 #include "Components/Collision.h"
 #include "Components/Model.h"
+#include "Components/PointLight.h"
 
 
 namespace Systems
@@ -34,6 +35,7 @@ namespace Systems
 		std::shared_ptr<Components::Bounds> bounds;
 		std::shared_ptr<Components::Collision> collision;
 		std::shared_ptr<Components::Model> model;
+		std::shared_ptr<Components::PointLight> pointLight;
 	};
 }
 

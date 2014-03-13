@@ -3,6 +3,7 @@
 
 Systems::PlayerSystem::PlayerSystem( World* world ) : System(world)
 {
+	speed = 20;
 }
 
 void Systems::PlayerSystem::Update(double dt)
@@ -17,8 +18,6 @@ void Systems::PlayerSystem::UpdateEntity(double dt, EntityID entity, EntityID pa
 	auto input = m_World->GetComponent<Components::Input>(entity, "Input");
 	if (input == nullptr)
 		return;
-
-	float speed = 20.0f;
 
 	auto name = m_World->GetProperty<std::string>(entity, "Name");
 	if (name == "Camera") {
@@ -60,7 +59,6 @@ void Systems::PlayerSystem::UpdateEntity(double dt, EntityID entity, EntityID pa
 			// TOUCHING THIS CODE MIGHT COUSE THE UNIVERSE TO IMPLODE, ALSO DRAGONS
 		}
 	}
-
 	name = m_World->GetProperty<std::string>(entity, "Name");
 	if (name == "PlayerShip") 
 	{

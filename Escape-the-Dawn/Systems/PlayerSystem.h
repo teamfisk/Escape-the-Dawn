@@ -20,7 +20,7 @@ namespace Systems
 		void UpdateEntity(double dt, EntityID entity, EntityID parent) override;
 
 	private:
-
+		float speed;
 	};
 
 }
