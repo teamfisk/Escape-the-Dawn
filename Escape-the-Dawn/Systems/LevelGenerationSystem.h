@@ -7,7 +7,7 @@
 #include "Components/Bounds.h"
 #include "Components/Collision.h"
 #include "Components/Model.h"
-
+#include "Components/PointLight.h"
 
 namespace Systems
 {
