@@ -88,7 +88,7 @@ void GameWorld::Initialize()
 	SetProperty(m_Player, "Name", std::string("PlayerShip"));
 	transform = AddComponent<Components::Transform>(m_Player, "Transform");
 	transform->Position = glm::vec3(0.f, 4.f, 0.f);
-	transform->Scale = glm::vec3(2.0f);
+	transform->Scale = glm::vec3(1.0f);
 	model = AddComponent<Components::Model>(m_Player, "Model");
 	model->ModelFile = "Models/ship.obj";
 	AddComponent<Components::Input>(m_Player, "Input");
