@@ -9,12 +9,14 @@ Systems::PlayerSystem::PlayerSystem( World* world ) : System(world)
 	m_CameraOffset = glm::vec3(0.f, 5.f, 14.f);
 	m_CameraOrientation = glm::angleAxis<float>(glm::radians(15.0f),glm::vec3(1,0,0));
 
-	freecamEnabled = false;
-
+	m_freecamEnabled = false;
+	m_poweruptimeleft = 0;
+	m_basespeed = 100.f;
 }
 
 void Systems::PlayerSystem::Update(double dt)
 {
+	m_poweruptimeleft -= (float)dt;
 }
 
 void Systems::PlayerSystem::UpdateEntity(double dt, EntityID entity, EntityID parent)
@@ -29,12 +31,12 @@ void Systems::PlayerSystem::UpdateEntity(double dt, EntityID entity, EntityID pa
 	auto name = m_World->GetProperty<std::string>(entity, "Name");
 	if (name == "Camera") {
 		if(input->KeyState[GLFW_KEY_F4] && !input->LastKeyState[GLFW_KEY_F4]) {
-			if(freecamEnabled)
-				freecamEnabled = false;
+			if(m_freecamEnabled)
+				m_freecamEnabled = false;
 			else
-				freecamEnabled = true;
+				m_freecamEnabled = true;
 		}
-		if(freecamEnabled)
+		if(m_freecamEnabled)
 		{
 			glm::vec3 Camera_Right = glm::vec3(glm::vec4(1, 0, 0, 0) * transform->Orientation);
 			glm::vec3 Camera_Forward = glm::vec3(glm::vec4(0, 0, 1, 0) * transform->Orientation);
@@ -154,15 +156,19 @@ void Systems::PlayerSystem::UpdateEntity(double dt, EntityID entity, EntityID pa
 				if(powerupComp != nullptr)
 				{
 					transform->Velocity.z = powerupComp->Speed;
+					m_poweruptimeleft = 3.f;
 					m_World->RemoveEntity(ent);	
 				}
 			}
 		}
-
-
+		if(m_poweruptimeleft <= 0)
+		{
+			transform->Velocity.z = m_basespeed;
+		}
+		
 
 		// Update camera
-		if(! freecamEnabled)
+		if(! m_freecamEnabled)
 		{
 			auto cameraEntity = m_World->GetProperty<EntityID>(entity, "Camera");
 			auto cameraTransform = m_World->GetComponent<Components::Transform>(cameraEntity, "Transform");

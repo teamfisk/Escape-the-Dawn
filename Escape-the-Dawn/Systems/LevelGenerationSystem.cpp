@@ -99,19 +99,21 @@ void Systems::LevelGenerationSystem::Update( double dt )
 		auto transform = m_World->GetComponent<Components::Transform>(ent, "Transform");
 		if(transform != nullptr)
 		{
-			transform->Velocity.z = velocity;
-			transform->Position += transform->Velocity * (float)dt;
 
-			// Stop raising obstacles when they reach ground level
-			if (transform->Velocity.y > 0 && transform->Position.y >= 0) {
-				transform->Position.y = 0;
-				transform->Velocity.y = 0;
-			}
+		
+		transform->Velocity.z = velocity;
+		transform->Position += transform->Velocity * (float)dt;
 
-			if(transform->Position.z > 800)
-			{
-				removethis.push_back(ent);	
-			}
+		// Stop raising obstacles when they reach ground level
+		if (transform->Velocity.y > 0 && transform->Position.y >= 0) {
+			transform->Position.y = 0;
+			transform->Velocity.y = 0;
+		}
+
+		if(transform->Position.z > 800)
+		{
+			removethis.push_back(ent);	
+		}
 		}
 	}
 
