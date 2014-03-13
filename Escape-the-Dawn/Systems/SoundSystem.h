@@ -20,6 +20,7 @@ public:
 	void Update(double dt) override;
 	void UpdateEntity(double dt, EntityID entity, EntityID parent) override;
 	void OnComponentCreated(std::string type, std::shared_ptr<Component> component) override;
+	void OnComponentRemoved(std::string type, Component* component) override;
 	void PlaySound(std::shared_ptr<Components::SoundEmitter> emitter, std::string fileName);
 
 private:
@@ -35,7 +36,7 @@ private:
 	unsigned long dataSize;
 	
 	
-	std::map<Component*, ALuint> m_Source; 
+	std::map<Component*, ALuint> m_Sources; 
 	std::map<std::string, ALuint> m_BufferCache; // string = fileName
 };
 

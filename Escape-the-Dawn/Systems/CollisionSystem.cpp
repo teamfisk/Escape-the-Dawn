@@ -20,6 +20,10 @@ void Systems::CollisionSystem::UpdateEntity(double dt, EntityID entity, EntityID
 	// Clear old collisions
 	collisionComponent->CollidingEntities.clear();
 
+	// Quit out if we're not interested in collision events
+	if (!collisionComponent->Interested)
+		return;
+
 	auto entities = m_World->GetEntities();
 
 	for (auto pair : *entities) {
@@ -43,7 +47,8 @@ void Systems::CollisionSystem::UpdateEntity(double dt, EntityID entity, EntityID
 	
 		//pair.first, pair.second;
 		if(entity == entity2)
-			break;
+			continue;
+
 		Intersects(entity, entity2);
 	}
 }

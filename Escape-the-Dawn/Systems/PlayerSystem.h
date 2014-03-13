@@ -7,6 +7,7 @@
 #include "Components/Transform.h"
 #include "Components/Input.h"
 #include "Components/Collision.h"
+#include "Components/Bounds.h"
 #include "logging.h"
 
 
@@ -23,7 +24,8 @@ namespace Systems
 		void UpdateEntity(double dt, EntityID entity, EntityID parent) override;
 
 	private:
-
+		float m_PlayerSpeed;
+		glm::vec3 m_PlayerOriginalBounds;
 	};
 
 }

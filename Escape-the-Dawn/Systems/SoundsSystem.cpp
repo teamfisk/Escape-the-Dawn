@@ -18,6 +18,9 @@ Systems::SoundSystem::SoundSystem(World* world)
 	}
 
 	alGetError();
+
+	alSpeedOfSound(340.29f); // Speed of sound
+	alDistanceModel(AL_INVERSE_DISTANCE);
 }
 
 void Systems::SoundSystem::Update(double dt)
@@ -54,10 +57,10 @@ void Systems::SoundSystem::UpdateEntity(double dt, EntityID entity, EntityID par
 	auto soundEmitter = m_World->GetComponent<Components::SoundEmitter>(entity, "SoundEmitter");
 	if(soundEmitter != nullptr)
 	{
-		ALuint source = m_Source[soundEmitter.get()];
-		alSourcei(source, AL_GAIN, soundEmitter->Gain);
-		alSourcei(source, AL_MAX_DISTANCE, soundEmitter->MaxDistance);
-		alSourcei(source, AL_REFERENCE_DISTANCE, soundEmitter->ReferenceDistance);
+		ALuint source = m_Sources[soundEmitter];
+		alSourcef(source, AL_GAIN, soundEmitter->Gain);
+		//alSourcef(source, AL_MAX_DISTANCE, soundEmitter->MaxDistance);
+		alSourcef(source, AL_REFERENCE_DISTANCE, soundEmitter->ReferenceDistance);
 		alSourcef(source, AL_PITCH, soundEmitter->Pitch); 
 		alSourcei(source, AL_LOOPING, soundEmitter->Loop);
 
@@ -74,17 +77,30 @@ void Systems::SoundSystem::UpdateEntity(double dt, EntityID entity, EntityID par
 
 void Systems::SoundSystem::PlaySound(std::shared_ptr<Components::SoundEmitter> emitter, std::string fileName)
 {
+	if (m_Sources.find(emitter.get()) == m_Sources.end())
+		return;
+
 	ALuint buffer = LoadFile(fileName);
-	ALuint source = m_Source[emitter.get()];
+	ALuint source = m_Sources[emitter.get()];
 	alSourcei(source, AL_BUFFER, buffer);
-	alSourcePlay(m_Source[emitter.get()]);
+	alSourcePlay(m_Sources[emitter.get()]);
 }
 
 void Systems::SoundSystem::OnComponentCreated(std::string type, std::shared_ptr<Component> component)
 {
 	if(type == "SoundEmitter") {
 		ALuint source = CreateSource();
-		m_Source[component.get()] = source;
+		m_Sources[component.get()] = source;
+	}
+}
+
+void Systems::SoundSystem::OnComponentRemoved(std::string type, Component* component)
+{
+	if(type == "SoundEmitter") {
+		if (m_Sources.find(component) != m_Sources.end()) {
+			ALuint source = m_Sources[component];
+			alDeleteSources(1, &source);
+		}
 	}
 }
 

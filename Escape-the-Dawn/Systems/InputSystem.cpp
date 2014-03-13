@@ -47,6 +47,10 @@ void Systems::InputSystem::Update(double dt)
 	if (m_CurrentKeyState[GLFW_KEY_F2] && !m_LastKeyState[GLFW_KEY_F2]) {
 		m_Renderer->DrawNormals(!m_Renderer->DrawNormals());
 	}
+	// Bounds
+	if (m_CurrentKeyState[GLFW_KEY_F3] && !m_LastKeyState[GLFW_KEY_F3]) {
+		m_Renderer->DrawBounds(!m_Renderer->DrawBounds());
+	}
 #endif
 }
 

@@ -60,7 +60,7 @@ public:
 	std::shared_ptr<T> AddComponent(EntityID entity, std::string componentType);
 	std::shared_ptr<Component> AddComponent(EntityID entity, std::string componentType);
 	template <class T>
-	std::shared_ptr<T> GetComponent(EntityID entity, std::string componentType);
+	T* GetComponent(EntityID entity, std::string componentType);
 
 	/*std::vector<EntityID> GetEntityChildren(EntityID entity);*/
 
@@ -117,9 +117,9 @@ std::shared_ptr<T> World::AddComponent(EntityID entity, std::string componentTyp
 
 
 template <class T>
-std::shared_ptr<T> World::GetComponent(EntityID entity, std::string componentType)
+T* World::GetComponent(EntityID entity, std::string componentType)
 {
-	return std::static_pointer_cast<T>(m_EntityComponents[entity][componentType]);
+	return (T*)m_EntityComponents[entity][componentType].get();
 }
 
 #endif // World_h__
