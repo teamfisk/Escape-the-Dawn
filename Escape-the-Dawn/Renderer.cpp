@@ -3,8 +3,15 @@
 Renderer::Renderer()
 {
 	m_VSync = false;
+#ifdef DEBUG
 	m_DrawNormals = false;
 	m_DrawWireframe = false;
+	m_DrawBounds = true;
+#else
+	m_DrawNormals = false;
+	m_DrawWireframe = false;
+	m_DrawBounds = false;
+#endif
 
 	m_ShadowMapRes = 2048*2;
 	m_SunPosition = glm::vec3(0, 0.3f, 10);
@@ -131,27 +138,29 @@ void Renderer::Draw(double dt)
 
 #ifdef DEBUG
 	// Draw bounding boxes
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_ONE_MINUS_DST_COLOR, GL_ZERO);
-	m_ShaderProgramDebugAABB.Bind();
-	for (auto tuple : AABBsToRender) {
-		glm::mat4 modelMatrix;
-		bool colliding;
-		std::tie(modelMatrix, colliding) = tuple;
-		// Model matrix
-		glm::mat4 cameraMatrix = m_Camera->ProjectionMatrix() * m_Camera->ViewMatrix();
-		glm::mat4 MVP = cameraMatrix * modelMatrix;
-		glUniformMatrix4fv(glGetUniformLocation(m_ShaderProgramDebugAABB.GetHandle(), "MVP"), 1, GL_FALSE, glm::value_ptr(MVP));
-		// Color
-		glm::vec4 color(1.f, 1.f, 1.f, 0.f);
-		if (colliding)
-			color = glm::vec4(1.f, 0.f, 0.f, 0.f);
-		glUniform4fv(glGetUniformLocation(m_ShaderProgramDebugAABB.GetHandle(), "Color"), 1, glm::value_ptr(color));
-		glBindVertexArray(m_DebugAABB);
-		glDrawArrays(GL_LINES, 0, 24);
+	if (m_DrawBounds) {
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_ONE_MINUS_DST_COLOR, GL_ZERO);
+		m_ShaderProgramDebugAABB.Bind();
+		for (auto tuple : AABBsToRender) {
+			glm::mat4 modelMatrix;
+			bool colliding;
+			std::tie(modelMatrix, colliding) = tuple;
+			// Model matrix
+			glm::mat4 cameraMatrix = m_Camera->ProjectionMatrix() * m_Camera->ViewMatrix();
+			glm::mat4 MVP = cameraMatrix * modelMatrix;
+			glUniformMatrix4fv(glGetUniformLocation(m_ShaderProgramDebugAABB.GetHandle(), "MVP"), 1, GL_FALSE, glm::value_ptr(MVP));
+			// Color
+			glm::vec4 color(1.f, 1.f, 1.f, 0.f);
+			if (colliding)
+				color = glm::vec4(1.f, 0.f, 0.f, 0.f);
+			glUniform4fv(glGetUniformLocation(m_ShaderProgramDebugAABB.GetHandle(), "Color"), 1, glm::value_ptr(color));
+			glBindVertexArray(m_DebugAABB);
+			glDrawArrays(GL_LINES, 0, 24);
+		}
 	}
 
-	DrawDebugShadowMap();
+	//DrawDebugShadowMap();
 #endif
 
 	ClearStuff();

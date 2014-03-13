@@ -69,6 +69,8 @@ public:
 	void DrawNormals(bool val) { m_DrawNormals = val; }
 	bool DrawWireframe() const { return m_DrawWireframe; }
 	void DrawWireframe(bool val) { m_DrawWireframe = val; }
+	bool DrawBounds() const { return m_DrawBounds; }
+	void DrawBounds(bool val) { m_DrawBounds = val; }
 
 private:
 	GLFWwindow* m_Window;
@@ -77,6 +79,7 @@ private:
 	bool m_VSync;
 	bool m_DrawNormals;
 	bool m_DrawWireframe;
+	bool m_DrawBounds;
 
 	int m_ShadowMapRes;
 	glm::vec3 m_SunPosition;
