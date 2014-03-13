@@ -33,6 +33,7 @@ namespace Systems
 		float startx;
 		double elapsedtime;
 		float velocity;
+		float spawnFrequency;
 	};
 }
 

@@ -65,7 +65,7 @@ void GameWorld::Initialize()
 	AddComponent<Components::Input>(entcamera, "Input");
 	transform->Position = glm::vec3(0.f, 10.f, 14.f);
 	camera = AddComponent<Components::Camera>(entcamera, "Camera");
-	camera->FOV		= 45.f;
+	camera->FOV		= glm::radians(45.f);
 	camera->FarClip	= 1000.f;
 	camera->NearClip	= 0.01f;
 	transform->Orientation = glm::angleAxis<float>(glm::radians(15.0f),glm::vec3(1,0,0));

@@ -8,6 +8,7 @@ Systems::LevelGenerationSystem::LevelGenerationSystem( World* world )
 	velocity = 0;
 	startx = 0;
 	startyz = glm::vec2(0, -1000);
+	spawnFrequency = 0.1f;
 }
 
 void Systems::LevelGenerationSystem::SpawnObstacle()
@@ -55,7 +56,7 @@ void Systems::LevelGenerationSystem::SpawnObstacle()
 	else if(typeRandom >= 5 && typeRandom < 8)
 		{
 		m_World->SetProperty(ent, "Name", std::string("Obstacle"));
-		float scale = (float)(rand() % 1000) / 100;
+		float scale = 1.f + (float)(rand() % 1000) / 100;
 		transform->Scale = glm::vec3(scale);
 		bounds->VolumeVector = glm::vec3(1, 1, 1);
 		bounds->Origin = glm::vec3(0,1,0);
@@ -85,8 +86,9 @@ void Systems::LevelGenerationSystem::Update( double dt )
 {
 	
 	elapsedtime += dt;
+	spawnFrequency = velocity/1000;
 
-	if(elapsedtime > 0.1){
+	if(elapsedtime > spawnFrequency){
 		SpawnObstacle();
 		elapsedtime = 0;
 	}

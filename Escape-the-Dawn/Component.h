@@ -1,6 +1,8 @@
 #ifndef Component_h__
 #define Component_h__
 
+#include "GLM.h"
+
 #include "Factory.h"
 #include "Entity.h"
 

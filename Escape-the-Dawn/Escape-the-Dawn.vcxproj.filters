@@ -154,6 +154,7 @@
     <ClInclude Include="Systems\TransformSystem.h">
       <Filter>Systems</Filter>
     </ClInclude>
+    <ClInclude Include="GLM.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Shaders\Fragment.glsl">

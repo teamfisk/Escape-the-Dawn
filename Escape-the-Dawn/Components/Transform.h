@@ -2,7 +2,6 @@
 #define Components_Transform_h__
 
 #include "Component.h"
-#include <glm/gtc/quaternion.hpp>
 
 namespace Components
 {
