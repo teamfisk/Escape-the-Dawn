@@ -162,6 +162,9 @@ void Systems::PlayerSystem::UpdateEntity(double dt, EntityID entity, EntityID pa
 		
 		
 		//powerup
+		auto cameraEntity = m_World->GetProperty<EntityID>(entity, "Camera");
+		auto cameracamera = m_World->GetComponent<Components::Camera>(cameraEntity, "Camera");
+
 		auto collisionComponent = m_World->GetComponent<Components::Collision>(entity, "Collision");
 		for(auto ent : collisionComponent->CollidingEntities)
 		{
@@ -171,25 +174,29 @@ void Systems::PlayerSystem::UpdateEntity(double dt, EntityID entity, EntityID pa
 				auto powerupComp = m_World->GetComponent<Components::PowerUp>(ent, "PowerUp");
 				transform->Velocity.z = powerupComp->Speed;
 				m_poweruptimeleft = 3.f;
-				m_World->RemoveEntity(ent);	
+				m_World->RemoveEntity(ent);
+
+				
+				cameracamera->FOV = 55.f;
 			}
 		}
 		if(m_poweruptimeleft <= 0)
 		{
 			transform->Velocity.z = m_basespeed;
+			cameracamera->FOV = 45.f;
 		}
-		//fixa FOV
 		
 
 		// Update camera
 		if(! freecamEnabled)
 		{
-			auto cameraEntity = m_World->GetProperty<EntityID>(entity, "Camera");
 			auto cameraTransform = m_World->GetComponent<Components::Transform>(cameraEntity, "Transform");
 			if (cameraTransform) {
 				cameraTransform->Position = transform->Position + m_CameraOffset;
 				cameraTransform->Orientation = m_CameraOrientation;
 			}
+			
+			
 		}
 	}
 }
