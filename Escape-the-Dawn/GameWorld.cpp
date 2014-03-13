@@ -85,11 +85,13 @@ void GameWorld::Initialize()
 
 	// Player
 	m_Player = CreateEntity();
+	SetProperty(m_Player, "Name", std::string("PlayerShip"));
 	transform = AddComponent<Components::Transform>(m_Player, "Transform");
 	transform->Position = glm::vec3(0.f, 4.f, 0.f);
 	transform->Scale = glm::vec3(2.0f);
 	model = AddComponent<Components::Model>(m_Player, "Model");
 	model->ModelFile = "ship.obj";
+	AddComponent<Components::Input>(m_Player, "Input");
 	auto bounds = AddComponent<Components::Bounds>(m_Player, "Bounds");
 	bounds->VolumeVector = glm::vec3(1.0f, 2.0f, 3.0f);
 
@@ -103,9 +105,6 @@ void GameWorld::Initialize()
 void GameWorld::Update(double dt)
 {
 	World::Update(dt);
-
-	auto transform = GetComponent<Components::Transform>(m_Player, "Transform");
-	transform->Orientation = transform->Orientation * glm::angleAxis<float>(dt, glm::vec3(0, 0, 1));
 }
 
 void GameWorld::RegisterComponents()

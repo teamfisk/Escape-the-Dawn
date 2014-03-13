@@ -14,8 +14,7 @@ namespace Systems
 	class PlayerSystem : public System
 	{
 	public:
-		PlayerSystem(World* world) 
-			: System(world) {	}
+		PlayerSystem(World* world);
 
 		void Update(double dt) override;
 		void UpdateEntity(double dt, EntityID entity, EntityID parent) override;
