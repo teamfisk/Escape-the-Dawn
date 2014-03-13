@@ -103,7 +103,7 @@ ALuint Systems::SoundSystem::LoadFile(std::string fileName)
 		return 0;
 	}
 
-	fread(&size, sizeof(DWORD), 1, fp);
+	fread(&size, sizeof(unsigned long), 1, fp);
 	fread(type, sizeof(char), 4, fp);
 	if(type[0]!='W' || type[1]!='A' || type[2]!='V' || type[3]!='E') {
 		LOG_ERROR("ERROR: Not WAVE-file");
@@ -117,11 +117,11 @@ ALuint Systems::SoundSystem::LoadFile(std::string fileName)
 	}
 
 	//READ THE DATA FROM WAVE-FILE
-	fread(&chunkSize, sizeof(DWORD), 1, fp);
+	fread(&chunkSize, sizeof(unsigned long), 1, fp);
 	fread(&formatType, sizeof(short), 1, fp);
 	fread(&channels, sizeof(short), 1, fp);
-	fread(&sampleRate, sizeof(DWORD), 1, fp);
-	fread(&avgBytesPerSec, sizeof(DWORD), 1, fp);
+	fread(&sampleRate, sizeof(unsigned long), 1, fp);
+	fread(&avgBytesPerSec, sizeof(unsigned long), 1, fp);
 	fread(&bytesPerSample, sizeof(short), 1, fp);
 	fread(&bitsPerSample, sizeof(short), 1, fp);
 
@@ -132,10 +132,10 @@ ALuint Systems::SoundSystem::LoadFile(std::string fileName)
 		return 0;
 	}
 
-	fread(&dataSize, sizeof(DWORD), 1, fp);
+	fread(&dataSize, sizeof(unsigned long), 1, fp);
 
 	unsigned char* buf = new unsigned char[dataSize];
-	fread(buf, sizeof(BYTE), dataSize, fp);
+	fread(buf, sizeof(unsigned char), dataSize, fp);
 	fclose(fp);
 
 	// Create buffer
