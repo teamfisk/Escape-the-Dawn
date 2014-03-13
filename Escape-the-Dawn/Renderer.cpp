@@ -132,10 +132,19 @@ void Renderer::Draw(double dt)
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_ONE_MINUS_DST_COLOR, GL_ZERO);
 	m_ShaderProgramDebugAABB.Bind();
-	for (auto aabbModelMatrix : AABBsToRender) {
+	for (auto tuple : AABBsToRender) {
+		glm::mat4 modelMatrix;
+		bool colliding;
+		std::tie(modelMatrix, colliding) = tuple;
+		// Model matrix
 		glm::mat4 cameraMatrix = m_Camera->ProjectionMatrix() * m_Camera->ViewMatrix();
-		glm::mat4 MVP = cameraMatrix * aabbModelMatrix;
+		glm::mat4 MVP = cameraMatrix * modelMatrix;
 		glUniformMatrix4fv(glGetUniformLocation(m_ShaderProgramDebugAABB.GetHandle(), "MVP"), 1, GL_FALSE, glm::value_ptr(MVP));
+		// Color
+		glm::vec4 color(1.f, 1.f, 1.f, 0.f);
+		if (colliding)
+			color = glm::vec4(1.f, 0.f, 0.f, 0.f);
+		glUniform4fv(glGetUniformLocation(m_ShaderProgramDebugAABB.GetHandle(), "Color"), 1, glm::value_ptr(color));
 		glBindVertexArray(m_DebugAABB);
 		glDrawArrays(GL_LINES, 0, 24);
 	}
@@ -319,6 +328,14 @@ void Renderer::AddPointLightToDraw(
 	Lights = Light_constantAttenuation.size();
 }
 
+void Renderer::AddAABBToDraw(glm::vec3 origin, glm::vec3 volumeVector, bool colliding)
+{
+	glm::mat4 model;
+	model *= glm::translate(origin);
+	model *= glm::scale(volumeVector);
+	AABBsToRender.push_back(std::make_tuple(model, colliding));
+}
+
 GLuint Renderer::CreateQuad()
 {
 	float quadVertices[] = {
@@ -411,12 +428,6 @@ GLuint Renderer::CreateAABB()
 	return vao;
 }
 
-void Renderer::AddAABBToDraw(glm::vec3 origin, glm::vec3 volumeVector)
-{
-	glm::mat4 model;
-	model *= glm::translate(origin);
-	model *= glm::scale(volumeVector);
-	AABBsToRender.push_back(model);
 }
 
 void Renderer::ClearStuff()
@@ -430,4 +441,3 @@ void Renderer::ClearStuff()
 	Light_linearAttenuation.clear();
 	Light_quadraticAttenuation.clear();
 	Light_spotExponent.clear();
-}

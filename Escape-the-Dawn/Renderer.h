@@ -47,7 +47,7 @@ public:
 	std::vector<float> Light_linearAttenuation;
 	std::vector<float> Light_quadraticAttenuation;
 	std::vector<float> Light_spotExponent;
-	std::vector<glm::mat4> AABBsToRender;
+	std::vector<std::tuple<glm::mat4, bool>> AABBsToRender;
 
 	Renderer();
 
@@ -66,7 +66,7 @@ public:
 		float _quadraticAttenuation, 
 		float _spotExponent
 		);
-	void AddAABBToDraw(glm::vec3 origin, glm::vec3 volumeVector);
+	void AddAABBToDraw(glm::vec3 origin, glm::vec3 volumeVector, bool colliding);
 
 	void LoadContent();
 

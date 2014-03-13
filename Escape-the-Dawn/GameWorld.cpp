@@ -7,7 +7,7 @@ void GameWorld::Initialize()
 
 	AddSystem("LevelGenerationSystem");
 	AddSystem("InputSystem");
-	//AddSystem("CollisionSystem");
+	AddSystem("CollisionSystem");
 	//AddSystem("ParticleSystem");
 	AddSystem("PlayerSystem");
 	AddSystem("SoundSystem");
@@ -17,19 +17,25 @@ void GameWorld::Initialize()
 	std::shared_ptr<Components::Model> model;
 	std::shared_ptr<Components::PointLight> pointLight;
 	std::shared_ptr<Components::Camera> camera;
+	std::shared_ptr<Components::Bounds> bounds;
+	std::shared_ptr<Components::Collision> collision;
 	EntityID ent;
 
 	// Camera
-	ent = CreateEntity();
-	SetProperty(ent, "Name", std::string("Camera"));
-	transform = AddComponent<Components::Transform>(ent, "Transform");
-	AddComponent<Components::Input>(ent, "Input");
+	entcamera = CreateEntity();
+	SetProperty(entcamera, "Name", std::string("Camera"));
+	transform = AddComponent<Components::Transform>(entcamera, "Transform");
+	AddComponent<Components::Input>(entcamera, "Input");
 	transform->Position = glm::vec3(0.f, 10.f, 14.f);
-	camera = AddComponent<Components::Camera>(ent, "Camera");
+	camera = AddComponent<Components::Camera>(entcamera, "Camera");
 	camera->FOV		= 45.f;
 	camera->FarClip	= 1000.f;
 	camera->NearClip	= 0.01f;
 	transform->Orientation = glm::angleAxis<float>(glm::radians(15.0f),glm::vec3(1,0,0));
+	collision = AddComponent<Components::Collision>(entcamera, "Collision");
+	collision->Phantom = false;
+	bounds = AddComponent<Components::Bounds>(entcamera, "Bounds");
+	bounds->VolumeVector = glm::vec3(0.1f,0.1f,0.1f);
 
 	// Fucking lights
 	ent = CreateEntity();
@@ -80,7 +86,7 @@ void GameWorld::Initialize()
 	m_Player = CreateEntity();
 	SetProperty(m_Player, "Name", std::string("PlayerShip"));
 	transform = AddComponent<Components::Transform>(m_Player, "Transform");
-	transform->Position = glm::vec3(0.f, 4.f, 0.f);
+	transform->Position = glm::vec3(0.f, 4.f, -5.f);
 	transform->Scale = glm::vec3(1.0f);
 	model = AddComponent<Components::Model>(m_Player, "Model");
 	model->ModelFile = "Models/ship.obj";
@@ -92,15 +98,22 @@ void GameWorld::Initialize()
 	pointLight->quadraticAttenuation = 0.f;
 	pointLight->spotExponent = 0.0f;
 	AddComponent<Components::Input>(m_Player, "Input");
-	auto bounds = AddComponent<Components::Bounds>(m_Player, "Bounds");
-	bounds->Origin = glm::vec3(0.f, 0.f, 2.f);
-	bounds->VolumeVector = glm::vec3(3.0f, 0.5f, 2.0f);
+	collision = AddComponent<Components::Collision>(m_Player, "Collision");
+	collision->Phantom = false;
+	bounds = AddComponent<Components::Bounds>(m_Player, "Bounds");
+	bounds->Origin = glm::vec3(transform->Position.x, transform->Position.y - 4, transform->Position.z + 3);
+	bounds->VolumeVector = glm::vec3(4.f,0.7f,4);
 
 	ent = CreateEntity();
 	transform = AddComponent<Components::Transform>(ent, "Transform");
 	transform->Position = glm::vec3(10.f, 4.f, 0.f);
 	model = AddComponent<Components::Model>(ent, "Model");
 	model->ModelFile = "Models/ship.obj";
+	collision = AddComponent<Components::Collision>(player2, "Collision");
+	collision->Phantom = false;
+	bounds = AddComponent<Components::Bounds>(player2, "Bounds");
+	bounds->Origin = transform->Position;
+	bounds->VolumeVector = glm::vec3(2.f,2.f,2.f);
 }
 
 void GameWorld::Update(double dt)
@@ -130,7 +143,7 @@ void GameWorld::RegisterSystems()
 {
 	m_SystemFactory.Register("LevelGenerationSystem", [this]() { return new Systems::LevelGenerationSystem(this); });
 	m_SystemFactory.Register("InputSystem", [this]() { return new Systems::InputSystem(this, m_Renderer); });
-	//m_SystemFactory.Register("CollisionSystem", [this]() { return new Systems::CollisionSystem(this); });
+	m_SystemFactory.Register("CollisionSystem", [this]() { return new Systems::CollisionSystem(this); });
 	//m_SystemFactory.Register("ParticleSystem", [this]() { return new Systems::ParticleSystem(this); });
 	m_SystemFactory.Register("PlayerSystem", [this]() { return new Systems::PlayerSystem(this); });
 	m_SystemFactory.Register("SoundSystem", [this]() { return new Systems::SoundSystem(this); });
