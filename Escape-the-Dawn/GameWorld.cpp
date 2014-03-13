@@ -70,11 +70,25 @@ void GameWorld::Initialize()
 	model = AddComponent<Components::Model>(ent, "Model");
 	model->ModelFile = "Models/plane.obj";
 
+	// Camera
+	entcamera = CreateEntity();
+	SetProperty(entcamera, "Name", std::string("Camera"));
+	transform = AddComponent<Components::Transform>(entcamera, "Transform");
+	AddComponent<Components::Input>(entcamera, "Input");
+	transform->Position = glm::vec3(0.f, 10.f, 14.f);
+	camera = AddComponent<Components::Camera>(entcamera, "Camera");
+	camera->FOV		= 45.f;
+	camera->FarClip	= 1000.f;
+	camera->NearClip	= 0.01f;
+	transform->Orientation = glm::angleAxis<float>(glm::radians(15.0f),glm::vec3(1,0,0));
+
 	// Player
 	m_Player = CreateEntity();
-	SetProperty(m_Player, "Name", std::string("PlayerShip"));
+	SetProperty(m_Player, "Name", std::string("Player"));
+	SetProperty(m_Player, "Camera", entcamera);
 	transform = AddComponent<Components::Transform>(m_Player, "Transform");
 	transform->Position = glm::vec3(0.f, 2.f, -5.f);
+	transform->Velocity = glm::vec3(10.f, 0.f, 100.f);
 	transform->Scale = glm::vec3(1.0f);
 	model = AddComponent<Components::Model>(m_Player, "Model");
 	model->ModelFile = "Models/ship.obj";
@@ -102,17 +116,7 @@ void GameWorld::Initialize()
 	GetSystem<Systems::SoundSystem>("SoundSystem")->PlaySound(soundEmitter);
 
 
-	// Camera
-	entcamera = CreateEntity(m_Player);
-	SetProperty(entcamera, "Name", std::string("Camera"));
-	transform = AddComponent<Components::Transform>(entcamera, "Transform");
-	AddComponent<Components::Input>(entcamera, "Input");
-	transform->Position = glm::vec3(0.f, 10.f, 14.f);
-	camera = AddComponent<Components::Camera>(entcamera, "Camera");
-	camera->FOV		= 45.f;
-	camera->FarClip	= 1000.f;
-	camera->NearClip	= 0.01f;
-	transform->Orientation = glm::angleAxis<float>(glm::radians(15.0f),glm::vec3(1,0,0));
+	
 	
 	
 
