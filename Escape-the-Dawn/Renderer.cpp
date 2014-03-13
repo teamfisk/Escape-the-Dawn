@@ -285,12 +285,11 @@ void Renderer::AddTextToDraw()
 	//Add to draw shit vector
 }
 
-void Renderer::AddModelToDraw(std::shared_ptr<Model> _model, glm::vec3 _position, glm::quat _orientation)
+void Renderer::AddModelToDraw(std::shared_ptr<Model> model, glm::vec3 position, glm::quat orientation, glm::vec3 scale)
 {
-	glm::mat4 RotationMatrix = glm::toMat4(_orientation);
-	glm::mat4 ModelMatrix = glm::translate(glm::mat4(), _position) * RotationMatrix ;
+	glm::mat4 ModelMatrix = glm::translate(glm::mat4(), position) * glm::toMat4(orientation) * glm::scale(scale);
 	// You can now use ModelMatrix to build the MVP matrix
-	ModelsToRender.push_back(new ModelData(_model, ModelMatrix));
+	ModelsToRender.push_back(new ModelData(model, ModelMatrix));
 }
 
 void Renderer::AddPointLightToDraw(
