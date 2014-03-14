@@ -108,7 +108,7 @@ void Systems::PlayerSystem::UpdateEntity(double dt, EntityID entity, EntityID pa
 		glm::vec3 Ship_Forward = glm::vec3(glm::vec4(0, 0, 1, 0));
 
 		float TurnSpeed = 1.0f;
-		glm::vec3 Euler = glm::eulerAngles(transform->Orientation);
+		glm::vec3 Euler = glm::degrees(glm::eulerAngles(transform->Orientation));
 
 		if(input->KeyState[GLFW_KEY_LEFT]) {
 			transform->Position -= Ship_Right * (float)dt * (m_PlayerSpeed + Euler.z);

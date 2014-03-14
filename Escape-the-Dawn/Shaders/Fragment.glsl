@@ -23,7 +23,7 @@ in VertexData {
 	vec3 ShadowCoord;
 } Input;
 
-vec3 scene_ambient = vec3(0.98f, 0.95f, 0.8f);
+vec3 scene_ambient = vec3(0.98, 0.95, 0.7);
  
 out vec4 fragmentColor;
 
