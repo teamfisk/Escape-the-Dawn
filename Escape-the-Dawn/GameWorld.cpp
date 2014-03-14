@@ -85,6 +85,7 @@ void GameWorld::Initialize()
 	transform->Scale = glm::vec3(1.0f);
 	model = AddComponent<Components::Model>(m_Player, "Model");
 	model->ModelFile = "Models/ship.obj";
+	model->ShadowCaster = false;
 	AddComponent<Components::Input>(m_Player, "Input");
 	collision = AddComponent<Components::Collision>(m_Player, "Collision");
 	collision->Phantom = false;

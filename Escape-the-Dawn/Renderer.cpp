@@ -239,7 +239,7 @@ void Renderer::DrawScene()
 		Model* model;
 		glm::mat4 modelMatrix;
 		bool visible;
-		std::tie(model, modelMatrix, visible) = tuple;
+		std::tie(model, modelMatrix, visible, std::ignore) = tuple;
 		if (!visible)
 			continue;
 
@@ -293,8 +293,10 @@ void Renderer::DrawShadowMap()
 	{
 		Model* model;
 		glm::mat4 modelMatrix;
-		bool visible;
-		std::tie(model, modelMatrix, visible) = tuple;
+		bool shadow;
+		std::tie(model, modelMatrix, std::ignore, shadow) = tuple;
+		if (!shadow)
+			continue;
 
 		MVP = depthCamera * modelMatrix;
 		glUniformMatrix4fv(glGetUniformLocation(m_ShaderProgramShadows.GetHandle(), "MVP"), 1, GL_FALSE, glm::value_ptr(MVP));
@@ -355,11 +357,11 @@ void Renderer::AddTextToDraw()
 	//Add to draw shit vector
 }
 
-void Renderer::AddModelToDraw(std::shared_ptr<Model> model, glm::vec3 position, glm::quat orientation, glm::vec3 scale, bool visible)
+void Renderer::AddModelToDraw(std::shared_ptr<Model> model, glm::vec3 position, glm::quat orientation, glm::vec3 scale, bool visible, bool shadowCaster)
 {
 	glm::mat4 modelMatrix = glm::translate(glm::mat4(), position) * glm::toMat4(orientation) * glm::scale(scale);
 	// You can now use ModelMatrix to build the MVP matrix
-	ModelsToRender.push_back(std::make_tuple(model.get(), modelMatrix, visible));
+	ModelsToRender.push_back(std::make_tuple(model.get(), modelMatrix, visible, shadowCaster));
 }
 
 void Renderer::AddPointLightToDraw(
