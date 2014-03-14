@@ -47,6 +47,8 @@
     <ClCompile Include="OBJ.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="GameWorld.cpp" />
+    <ClCompile Include="Skybox.cpp" />
+    <ClCompile Include="CubemapTexture.cpp" />
     <ClCompile Include="Systems\TransformSystem.cpp">
       <Filter>Systems</Filter>
     </ClCompile>
@@ -151,6 +153,8 @@
     <ClInclude Include="Camera.h" />
     <ClInclude Include="OBJ.h" />
     <ClInclude Include="OpenGL.h" />
+    <ClInclude Include="Skybox.h" />
+    <ClInclude Include="CubemapTexture.h" />
     <ClInclude Include="Systems\TransformSystem.h">
       <Filter>Systems</Filter>
     </ClInclude>
@@ -185,6 +189,12 @@
       <Filter>Shaders</Filter>
     </None>
     <None Include="Shaders\AABB.frag.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\Skybox.frag.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\Skybox.vert.glsl">
       <Filter>Shaders</Filter>
     </None>
   </ItemGroup>

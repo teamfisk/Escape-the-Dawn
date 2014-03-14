@@ -99,6 +99,13 @@ void Renderer::LoadContent()
 	m_ShaderProgramDebugAABB.Compile();
 	m_ShaderProgramDebugAABB.Link();
 
+	m_ShaderProgramSkybox.AddShader(std::shared_ptr<Shader>(new VertexShader("Shaders/Skybox.vert.glsl")));
+	m_ShaderProgramSkybox.AddShader(std::shared_ptr<Shader>(new FragmentShader("Shaders/Skybox.frag.glsl")));
+	m_ShaderProgramSkybox.Compile();
+	m_ShaderProgramSkybox.Link();
+
+	m_Skybox = std::make_shared<Skybox>(CubemapTexture("Textures/right.jpg", "Textures/left.jpg", "Textures/top.jpg", "Textures/bottom.jpg", "Textures/front.jpg", "Textures/back.jpg"));
+
 	m_DebugAABB = CreateAABB();
 	m_ScreenQuad = CreateQuad();
 	CreateShadowMap(m_ShadowMapRes);
@@ -133,6 +140,7 @@ void Renderer::Draw(double dt)
 {
 	glDisable(GL_BLEND);
 
+	DrawSkybox();
 	DrawShadowMap();
 	DrawScene();
 
@@ -167,13 +175,26 @@ void Renderer::Draw(double dt)
 	glfwSwapBuffers(m_Window);
 }
 
-void Renderer::DrawScene()
+void Renderer::DrawSkybox()
 {
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	glViewport(0, 0, WIDTH, HEIGHT);
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glClearColor(1.0f, 1.0f, 0.0f, 1.0f);
+	m_ShaderProgramSkybox.Bind();
+	glm::mat4 cameraMatrix = m_Camera->ProjectionMatrix() * glm::toMat4(m_Camera->Orientation());
+	glUniformMatrix4fv(glGetUniformLocation(m_ShaderProgramSkybox.GetHandle(), "MVP"), 1, GL_FALSE, glm::value_ptr(cameraMatrix));
+	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+	m_Skybox->Draw();
+}
+
+void Renderer::DrawScene()
+{
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	glViewport(0, 0, WIDTH, HEIGHT);
+
+	glClear(GL_DEPTH_BUFFER_BIT);
+	//glClearColor(1.0f, 1.0f, 0.0f, 1.0f);
 
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_CULL_FACE);
@@ -466,6 +487,33 @@ GLuint Renderer::CreateAABB()
 	return vao;
 }
 
+GLuint Renderer::CreateSkybox()
+{
+	glm::vec3 skyBoxVertices[] = 
+	{
+		glm::vec3( 1.0f, -1.0f, -1.0f), glm::vec3( 1.0f, -1.0f,  1.0f), glm::vec3( 1.0f,  1.0f,  1.0f), glm::vec3( 1.0f,  1.0f,  1.0f), glm::vec3( 1.0f,  1.0f, -1.0f), glm::vec3( 1.0f, -1.0f, -1.0f),
+		glm::vec3(-1.0f, -1.0f,  1.0f), glm::vec3(-1.0f, -1.0f, -1.0f), glm::vec3(-1.0f,  1.0f, -1.0f), glm::vec3(-1.0f,  1.0f, -1.0f), glm::vec3(-1.0f,  1.0f,  1.0f), glm::vec3(-1.0f, -1.0f,  1.0f),
+		glm::vec3(-1.0f,  1.0f, -1.0f), glm::vec3( 1.0f,  1.0f, -1.0f), glm::vec3( 1.0f,  1.0f,  1.0f), glm::vec3( 1.0f,  1.0f,  1.0f), glm::vec3(-1.0f,  1.0f,  1.0f), glm::vec3(-1.0f,  1.0f, -1.0f),
+		glm::vec3(-1.0f, -1.0f,  1.0f), glm::vec3( 1.0f, -1.0f,  1.0f), glm::vec3( 1.0f, -1.0f, -1.0f), glm::vec3( 1.0f, -1.0f, -1.0f), glm::vec3(-1.0f, -1.0f, -1.0f), glm::vec3(-1.0f, -1.0f,  1.0f),
+		glm::vec3( 1.0f, -1.0f,  1.0f), glm::vec3(-1.0f, -1.0f,  1.0f), glm::vec3(-1.0f,  1.0f,  1.0f), glm::vec3(-1.0f,  1.0f,  1.0f), glm::vec3( 1.0f,  1.0f,  1.0f), glm::vec3( 1.0f, -1.0f,  1.0f), 
+		glm::vec3(-1.0f, -1.0f, -1.0f), glm::vec3( 1.0f, -1.0f, -1.0f), glm::vec3( 1.0f,  1.0f, -1.0f), glm::vec3( 1.0f,  1.0f, -1.0f), glm::vec3(-1.0f,  1.0f, -1.0f), glm::vec3(-1.0f, -1.0f, -1.0f) 
+	};
+
+	GLuint vbo, vao;
+	glGenBuffers(1, &vbo);
+	glBindBuffer(GL_ARRAY_BUFFER, vbo);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(skyBoxVertices), skyBoxVertices, GL_STATIC_DRAW);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+	glGenVertexArrays(1, &vao);
+	glBindVertexArray(vao);
+	glBindBuffer(GL_ARRAY_BUFFER, vbo);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
+	glEnableVertexAttribArray(0);
+	glBindVertexArray(0);
+
+	return vao;
+}
 void Renderer::ClearStuff()
 {
 	AABBsToRender.clear();

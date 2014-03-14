@@ -32,7 +32,7 @@ void Systems::LevelGenerationSystem::SpawnObstacle()
 
 	sound->Loop = true;
 	sound->Gain = 1.f;
-	sound->ReferenceDistance = 15.f;
+	sound->ReferenceDistance = 4.f;
 	m_World->GetSystem<Systems::SoundSystem>("SoundSystem")->PlaySound(sound, "Sounds/hum.wav");
 
 	if(typeRandom >= 0 && typeRandom < 1) // Mountain stuff :D

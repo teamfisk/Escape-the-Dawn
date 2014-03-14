@@ -10,7 +10,6 @@ public:
 
 	glm::vec3 Forward();
 	glm::vec3 Right();
-	glm::quat Orientation();
 
 	float AspectRatio() const { return m_AspectRatio; }
 	void AspectRatio(float val);

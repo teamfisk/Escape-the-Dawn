@@ -75,13 +75,18 @@ void Systems::SoundSystem::UpdateEntity(double dt, EntityID entity, EntityID par
 	}
 }
 
-void Systems::SoundSystem::PlaySound(std::shared_ptr<Components::SoundEmitter> emitter, std::string fileName)
+void Systems::SoundSystem::PlaySound(std::shared_ptr<Components::SoundEmitter> emitter, std::string path)
 {
+<<<<<<< HEAD
+	ALuint buffer = LoadFile(path);
+	ALuint source = m_Source[emitter.get()];
+=======
 	if (m_Sources.find(emitter.get()) == m_Sources.end())
 		return;
 
 	ALuint buffer = LoadFile(fileName);
 	ALuint source = m_Sources[emitter.get()];
+>>>>>>> f76c0b336f87a259a7eabf3c532fc885f155a605
 	alSourcei(source, AL_BUFFER, buffer);
 	alSourcePlay(m_Sources[emitter.get()]);
 }
@@ -89,14 +94,14 @@ void Systems::SoundSystem::PlaySound(std::shared_ptr<Components::SoundEmitter> e
 void Systems::SoundSystem::PlaySound(std::shared_ptr<Components::SoundEmitter> emitter)
 {
 	ALuint buffer = LoadFile(emitter->Path);
-	ALuint source = m_Sources[emitter.get()];
+	ALuint source = m_Source[emitter.get()];
 	alSourcei(source, AL_BUFFER, buffer);
-	alSourcePlay(m_Sources[emitter.get()]);
+	alSourcePlay(m_Source[emitter.get()]);
 }
 
 void Systems::SoundSystem::StopSound(std::shared_ptr<Components::SoundEmitter> emitter)
 {
-	alSourceStop(m_Sources[emitter.get()]);
+	alSourceStop(m_Source[emitter.get()]);
 }
 
 void Systems::SoundSystem::OnComponentCreated(std::string type, std::shared_ptr<Component> component)
@@ -198,7 +203,7 @@ ALuint Systems::SoundSystem::CreateSource()
 	ALuint source;
 	alGenSources((ALuint)1, &source);
 
-	alDopplerFactor(1); // Numbers greater than 1 will increase Doppler effect, numbers lower than 1 will decrease the Doppler effect 
+	alDopplerFactor(2.f); // Numbers greater than 1 will increase Doppler effect, numbers lower than 1 will decrease the Doppler effect 
 	alDopplerVelocity(350.f); // Defines the velocity of the sound
 
 	return source;

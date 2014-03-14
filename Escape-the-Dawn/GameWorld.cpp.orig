@@ -5,6 +5,14 @@ void GameWorld::Initialize()
 {
 	World::Initialize();
 
+	AddSystem("LevelGenerationSystem");
+	AddSystem("InputSystem");
+	AddSystem("CollisionSystem");
+	//AddSystem("ParticleSystem");
+	AddSystem("PlayerSystem");
+	AddSystem("SoundSystem");
+	AddSystem("RenderSystem");
+
 	std::shared_ptr<Components::Transform> transform;
 	std::shared_ptr<Components::Model> model;
 	std::shared_ptr<Components::PointLight> pointLight;
@@ -14,8 +22,11 @@ void GameWorld::Initialize()
 	std::shared_ptr<Components::SoundEmitter> soundEmitter;
 	EntityID ent;
 
+
+
+
 	// Fucking lights
-	/*ent = CreateEntity();
+	ent = CreateEntity();
 	transform = AddComponent<Components::Transform>(ent, "Transform");
 	transform->Position = glm::vec3(0.f, 7.f, 0.f);
 	pointLight = AddComponent<Components::PointLight>(ent, "PointLight");
@@ -50,7 +61,7 @@ void GameWorld::Initialize()
 	pointLight->quadraticAttenuation = 0.f;
 	pointLight->spotExponent = 0.0f;
 	model = AddComponent<Components::Model>(ent, "Model");
-	model->ModelFile = "Models/sphere.obj";*/
+	model->ModelFile = "Models/sphere.obj";
 
 	//ground
 	ent = CreateEntity();
@@ -59,72 +70,57 @@ void GameWorld::Initialize()
 	model = AddComponent<Components::Model>(ent, "Model");
 	model->ModelFile = "Models/plane.obj";
 
-	// Camera
-	entcamera = CreateEntity();
-	SetProperty(entcamera, "Name", std::string("Camera"));
-	transform = AddComponent<Components::Transform>(entcamera, "Transform");
-	AddComponent<Components::Input>(entcamera, "Input");
-	transform->Position = glm::vec3(0.f, 10.f, 14.f);
-	camera = AddComponent<Components::Camera>(entcamera, "Camera");
-	camera->FOV		= glm::radians(45.f);
-	camera->FarClip	= 1000.f;
-	camera->NearClip	= 0.01f;
-	transform->Orientation = glm::angleAxis<float>(glm::radians(15.0f),glm::vec3(1,0,0));
-
 	// Player
 	m_Player = CreateEntity();
-	SetProperty(m_Player, "Name", std::string("Player"));
-	SetProperty(m_Player, "Camera", entcamera);
+	SetProperty(m_Player, "Name", std::string("PlayerShip"));
 	transform = AddComponent<Components::Transform>(m_Player, "Transform");
 	transform->Position = glm::vec3(0.f, 2.f, -5.f);
-	transform->Velocity = glm::vec3(10.f, 0.f, 100.f);
 	transform->Scale = glm::vec3(1.0f);
 	model = AddComponent<Components::Model>(m_Player, "Model");
 	model->ModelFile = "Models/ship.obj";
+	pointLight = AddComponent<Components::PointLight>(m_Player, "PointLight");
+	pointLight->Specular = glm::vec3(1.0,  1.0,  1.0);
+	pointLight->Diffuse = glm::vec3(0.4,  0.4,  1.0);
+	pointLight->constantAttenuation = 0.f;
+	pointLight->linearAttenuation = 1.f;
+	pointLight->quadraticAttenuation = 0.f;
+	pointLight->spotExponent = 0.0f;
 	AddComponent<Components::Input>(m_Player, "Input");
 	collision = AddComponent<Components::Collision>(m_Player, "Collision");
 	collision->Phantom = false;
 	collision->Interested = true;
 	bounds = AddComponent<Components::Bounds>(m_Player, "Bounds");
+<<<<<<< HEAD
+	bounds->Origin = glm::vec3(transform->Position.x, transform->Position.y - 4, transform->Position.z + 3);
+	bounds->VolumeVector = glm::vec3(4.f,0.7f,4);
+	soundEmitter = AddComponent<Components::SoundEmitter>(m_Player, "SoundEmitter");
+	soundEmitter->Loop = true;
+	soundEmitter->MaxDistance = FLT_MAX;
+	soundEmitter->ReferenceDistance = 10;
+	soundEmitter->Gain = 1;
+	soundEmitter->Pitch = 1;
+	soundEmitter->Path = "Sounds/hallelujah.wav";
+	GetSystem<Systems::SoundSystem>("SoundSystem")->PlaySound(soundEmitter);
+=======
 	bounds->Origin = glm::vec3(0, 0, 2.f);
-	bounds->VolumeVector = glm::vec3(3.4f, 0.7f, 1);
-	// Player light
-	auto playerLight = CreateEntity(m_Player);
-	transform = AddComponent<Components::Transform>(playerLight, "Transform");
-	transform->Position = glm::vec3(1.5f, 0.25f, 2.5f);
-	pointLight = AddComponent<Components::PointLight>(playerLight, "PointLight");
-	pointLight->Specular = glm::vec3(0.1f, 0.1f, 0.1f);
-	pointLight->Diffuse = glm::vec3(0.45f, 0.65f, 1.f);
-	pointLight->constantAttenuation = 0.f;
-	pointLight->linearAttenuation = 0.9f;
-	pointLight->quadraticAttenuation = 0.f;
-	pointLight->spotExponent = 0.0f;
-	bounds = AddComponent<Components::Bounds>(playerLight, "Bounds");
-	bounds->VolumeVector = glm::vec3(0.5f);
-	playerLight = CreateEntity(m_Player);
-	transform = AddComponent<Components::Transform>(playerLight, "Transform");
-	transform->Position = glm::vec3(-1.5f, 0.25f, 2.5f);
-	pointLight = AddComponent<Components::PointLight>(playerLight, "PointLight");
-	pointLight->Specular = glm::vec3(0.1f, 0.1f, 0.1f);
-	pointLight->Diffuse = glm::vec3(0.45f, 0.65f, 1.f);
-	pointLight->constantAttenuation = 0.f;
-	pointLight->linearAttenuation = 0.9f;
-	pointLight->quadraticAttenuation = 0.f;
-	pointLight->spotExponent = 0.0f;
-	bounds = AddComponent<Components::Bounds>(playerLight, "Bounds");
-	bounds->VolumeVector = glm::vec3(0.5f);
-	playerLight = CreateEntity(m_Player);
-	transform = AddComponent<Components::Transform>(playerLight, "Transform");
-	transform->Position = glm::vec3(0.0f, 2.0f, 2.5f);
-	pointLight = AddComponent<Components::PointLight>(playerLight, "PointLight");
-	pointLight->Specular = glm::vec3(0.1f, 0.1f, 0.1f);
-	pointLight->Diffuse = glm::vec3(0.45f, 0.65f, 1.f);
-	pointLight->constantAttenuation = 0.f;
-	pointLight->linearAttenuation = 1.0f;
-	pointLight->quadraticAttenuation = 0.f;
-	pointLight->spotExponent = 0.0f;
-	bounds = AddComponent<Components::Bounds>(playerLight, "Bounds");
-	bounds->VolumeVector = glm::vec3(0.5f);
+	bounds->VolumeVector = glm::vec3(4.f, 0.7f, 1);
+>>>>>>> f76c0b336f87a259a7eabf3c532fc885f155a605
+
+
+	// Camera
+	entcamera = CreateEntity(m_Player);
+	SetProperty(entcamera, "Name", std::string("Camera"));
+	transform = AddComponent<Components::Transform>(entcamera, "Transform");
+	AddComponent<Components::Input>(entcamera, "Input");
+	transform->Position = glm::vec3(0.f, 10.f, 14.f);
+	camera = AddComponent<Components::Camera>(entcamera, "Camera");
+	camera->FOV		= 45.f;
+	camera->FarClip	= 1000.f;
+	camera->NearClip	= 0.01f;
+	transform->Orientation = glm::angleAxis<float>(glm::radians(15.0f),glm::vec3(1,0,0));
+	
+	
+
 
 	/*ent = CreateEntity();
 	transform = AddComponent<Components::Transform>(ent, "Transform");
@@ -169,18 +165,5 @@ void GameWorld::RegisterSystems()
 	//m_SystemFactory.Register("ParticleSystem", [this]() { return new Systems::ParticleSystem(this); });
 	m_SystemFactory.Register("PlayerSystem", [this]() { return new Systems::PlayerSystem(this); });
 	m_SystemFactory.Register("SoundSystem", [this]() { return new Systems::SoundSystem(this); });
-	m_SystemFactory.Register("TransformSystem", [this]() { return new Systems::TransformSystem(this); });
 	m_SystemFactory.Register("RenderSystem", [this]() { return new Systems::RenderSystem(this, m_Renderer); });
-}
-
-void GameWorld::AddSystems()
-{
-	AddSystem("TransformSystem");
-	AddSystem("LevelGenerationSystem");
-	AddSystem("InputSystem");
-	AddSystem("CollisionSystem");
-	//AddSystem("ParticleSystem");
-	AddSystem("PlayerSystem");
-	AddSystem("SoundSystem");
-	AddSystem("RenderSystem");
 }
