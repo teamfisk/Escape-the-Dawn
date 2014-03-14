@@ -98,6 +98,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="CubemapTexture.cpp" />
     <ClCompile Include="Engine.h" />
     <ClCompile Include="Frame.cpp" />
     <ClCompile Include="GameFrame.cpp" />
@@ -109,6 +110,7 @@
     <ClCompile Include="OBJ.cpp" />
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="ShaderProgram.cpp" />
+    <ClCompile Include="Skybox.cpp" />
     <ClCompile Include="Systems\CollisionSystem.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="TextFrame.cpp" />
@@ -125,6 +127,7 @@
     <ClInclude Include="Color.h" />
     <ClInclude Include="Component.h" />
     <ClInclude Include="Components\Camera.h" />
+    <ClInclude Include="CubemapTexture.h" />
     <ClInclude Include="Factory.h" />
     <ClInclude Include="Components\Bounds.h" />
     <ClInclude Include="Components\Collision.h" />
@@ -153,6 +156,7 @@
     <ClInclude Include="OpenGL.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="ShaderProgram.h" />
+    <ClInclude Include="Skybox.h" />
     <ClInclude Include="Systems\InputSystem.h" />
     <ClInclude Include="System.h" />
     <ClInclude Include="Systems\CollisionSystem.h" />
@@ -171,6 +175,8 @@
     <None Include="Shaders\Fragment.glsl" />
     <None Include="Shaders\Normals.frag.glsl" />
     <None Include="Shaders\Normals.geo.glsl" />
+    <None Include="Shaders\Skybox.frag.glsl" />
+    <None Include="Shaders\Skybox.vert.glsl" />
     <None Include="Shaders\VisualizeDepth.frag.glsl" />
     <None Include="Shaders\VisualizeDepth.vert.glsl" />
     <None Include="Shaders\ShadowMap.frag.glsl" />

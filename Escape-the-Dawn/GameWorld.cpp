@@ -108,12 +108,12 @@ void GameWorld::Initialize()
 	bounds->VolumeVector = glm::vec3(4.f, 0.7f, 1);
 	soundEmitter = AddComponent<Components::SoundEmitter>(m_Player, "SoundEmitter");
 	soundEmitter->Loop = true;
-	//soundEmitter->MaxDistance = FLT_MAX;
+	//soundEmitter->MaxDistance = 10;
 	soundEmitter->ReferenceDistance = 10;
 	soundEmitter->Gain = 1;
 	soundEmitter->Pitch = 1;
 	soundEmitter->Path = "Sounds/hallelujah.wav";
-	GetSystem<Systems::SoundSystem>("SoundSystem")->PlaySound(soundEmitter);
+	//GetSystem<Systems::SoundSystem>("SoundSystem")->PlaySound(soundEmitter);
 
 
 	

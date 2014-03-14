@@ -20,6 +20,7 @@
 #include "ShaderProgram.h"
 #include "Model.h"
 #include "Components/PointLight.h"
+#include "Skybox.h"
 
 class Renderer
 {
@@ -71,6 +72,9 @@ public:
 	void DrawWireframe(bool val) { m_DrawWireframe = val; }
 	bool DrawBounds() const { return m_DrawBounds; }
 	void DrawBounds(bool val) { m_DrawBounds = val; }
+	void DrawSkybox();
+
+	
 
 private:
 	GLFWwindow* m_Window;
@@ -80,6 +84,8 @@ private:
 	bool m_DrawNormals;
 	bool m_DrawWireframe;
 	bool m_DrawBounds;
+
+	std::shared_ptr<Skybox> m_Skybox;
 
 	int m_ShadowMapRes;
 	glm::vec3 m_SunPosition;
@@ -98,6 +104,7 @@ private:
 	ShaderProgram m_ShaderProgramShadows;
 	ShaderProgram m_ShaderProgramShadowsDrawDepth;
 	ShaderProgram m_ShaderProgramDebugAABB;
+	ShaderProgram m_ShaderProgramSkybox;
 	
 	void ClearStuff();
 	void DrawScene();
@@ -107,6 +114,7 @@ private:
 	GLuint CreateQuad();
 	void DrawDebugShadowMap();
 	GLuint CreateAABB();
+	GLuint CreateSkybox(void);
 
 };
 

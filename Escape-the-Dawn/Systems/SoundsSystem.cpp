@@ -198,7 +198,7 @@ ALuint Systems::SoundSystem::CreateSource()
 	ALuint source;
 	alGenSources((ALuint)1, &source);
 
-	alDopplerFactor(2.f); // Numbers greater than 1 will increase Doppler effect, numbers lower than 1 will decrease the Doppler effect 
+	alDopplerFactor(1); // Numbers greater than 1 will increase Doppler effect, numbers lower than 1 will decrease the Doppler effect 
 	alDopplerVelocity(350.f); // Defines the velocity of the sound
 
 	return source;
