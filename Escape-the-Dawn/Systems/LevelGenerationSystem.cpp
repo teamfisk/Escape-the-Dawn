@@ -7,7 +7,7 @@ Systems::LevelGenerationSystem::LevelGenerationSystem( World* world )
 
 	velocity = 0;
 	startx = 0;
-	startyz = glm::vec2(0, -1000);
+	startyz = glm::vec2(0, -1500);
 	spawnFrequency = 0.1f;
 }
 
@@ -31,8 +31,9 @@ void Systems::LevelGenerationSystem::SpawnObstacle()
 
 	sound->Loop = true;
 	sound->Gain = 1.f;
-	sound->ReferenceDistance = 0.5f;
-	m_World->GetSystem<Systems::SoundSystem>("SoundSystem")->PlaySound(sound, "Sounds/hum.wav");
+	sound->MaxDistance = 2.f;
+	sound->ReferenceDistance = 1.f;
+	m_World->GetSystem<Systems::SoundSystem>("SoundSystem")->PlaySound(sound.get(), "Sounds/hum.wav");
 
 	if(typeRandom >= 0 && typeRandom < 1) // Mountain stuff :D
 		{

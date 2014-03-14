@@ -39,26 +39,26 @@ void GameWorld::Initialize()
 	pointLight->spotExponent = 0.0f;
 	model = AddComponent<Components::Model>(ent, "Model");
 	model->ModelFile = "Models/sphere.obj";*/
-	ent = CreateEntity();
-	SetProperty(ent, "Name", std::string("Sun"));
-	transform = AddComponent<Components::Transform>(ent, "Transform");
+	auto sun = CreateEntity();
+	SetProperty(sun, "Name", std::string("Sun"));
+	transform = AddComponent<Components::Transform>(sun, "Transform");
 	transform->Position = glm::vec3(0.f, 100.f, 30.f);
-	AddComponent<Components::Input>(ent, "Input");
-	pointLight = AddComponent<Components::PointLight>(ent, "PointLight");
+	AddComponent<Components::Input>(sun, "Input");
+	pointLight = AddComponent<Components::PointLight>(sun, "PointLight");
 	pointLight->Specular = glm::vec3(1.0,  1.0,  1.0);
 	pointLight->Diffuse = glm::vec3(1.0,  0.45,  0.0);
 	pointLight->constantAttenuation = 0.009f;
 	pointLight->linearAttenuation = -0.0177f;
 	pointLight->quadraticAttenuation = 0.00043f;
 	pointLight->spotExponent = 0.0f;
-	model = AddComponent<Components::Model>(ent, "Model");
+	model = AddComponent<Components::Model>(sun, "Model");
 	model->ModelFile = "Models/sphere.obj";
 
 	//ground
-	ent = CreateEntity();
-	transform = AddComponent<Components::Transform>(ent, "Transform");
+	auto ground = CreateEntity();
+	transform = AddComponent<Components::Transform>(ground, "Transform");
 	transform->Position = glm::vec3(0.f, 0.f, 0.f);
-	model = AddComponent<Components::Model>(ent, "Model");
+	model = AddComponent<Components::Model>(ground, "Model");
 	model->ModelFile = "Models/plane.obj";
 
 	// Camera
@@ -77,6 +77,8 @@ void GameWorld::Initialize()
 	m_Player = CreateEntity();
 	SetProperty(m_Player, "Name", std::string("Player"));
 	SetProperty(m_Player, "Camera", entcamera);
+	SetProperty(m_Player, "Ground", ground);
+	SetProperty(m_Player, "Sun", sun);
 	transform = AddComponent<Components::Transform>(m_Player, "Transform");
 	transform->Position = glm::vec3(0.f, 2.f, -5.f);
 	transform->Velocity = glm::vec3(10.f, 0.f, 100.f);
@@ -89,9 +91,12 @@ void GameWorld::Initialize()
 	collision->Interested = true;
 	bounds = AddComponent<Components::Bounds>(m_Player, "Bounds");
 	bounds->Origin = glm::vec3(0, 0, 2.f);
-	bounds->VolumeVector = glm::vec3(3.4f, 0.7f, 1);
+	bounds->VolumeVector = glm::vec3(2.7f, 0.7f, 1);
+	soundEmitter = AddComponent<Components::SoundEmitter>(m_Player, "SoundEmitter");
+	soundEmitter->Gain = 2.5f;
 	// Player light
 	auto playerLight = CreateEntity(m_Player);
+	SetProperty(m_Player, "LightLeft", playerLight);
 	transform = AddComponent<Components::Transform>(playerLight, "Transform");
 	transform->Position = glm::vec3(1.5f, 0.25f, 2.5f);
 	pointLight = AddComponent<Components::PointLight>(playerLight, "PointLight");
@@ -104,6 +109,7 @@ void GameWorld::Initialize()
 	bounds = AddComponent<Components::Bounds>(playerLight, "Bounds");
 	bounds->VolumeVector = glm::vec3(0.5f);
 	playerLight = CreateEntity(m_Player);
+	SetProperty(m_Player, "LightRight", playerLight);
 	transform = AddComponent<Components::Transform>(playerLight, "Transform");
 	transform->Position = glm::vec3(-1.5f, 0.25f, 2.5f);
 	pointLight = AddComponent<Components::PointLight>(playerLight, "PointLight");

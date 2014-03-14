@@ -3,7 +3,7 @@
 
 Systems::PlayerSystem::PlayerSystem( World* world ) : System(world)
 {
-	m_PlayerSpeed = 20;
+	m_PlayerSpeed = 35;
 	m_PlayerOriginalBounds = glm::vec3(0);
 
 	m_CameraOffset = glm::vec3(0.f, 5.f, 14.f);
@@ -11,8 +11,8 @@ Systems::PlayerSystem::PlayerSystem( World* world ) : System(world)
 
 	freecamEnabled = false;
 	m_poweruptimeleft = 0;
-	m_basespeed = 100.f;
-	m_maxspeed = 100.f;
+	m_basespeed = 125.f;
+	m_maxspeed = 125.f;
 }
 
 void Systems::PlayerSystem::Update(double dt)
@@ -29,18 +29,40 @@ void Systems::PlayerSystem::UpdateEntity(double dt, EntityID entity, EntityID pa
 	if (input == nullptr)
 		return;
 
-	auto collision = m_World->GetComponent<Components::Collision>(entity, "Collision");
-
 	auto name = m_World->GetProperty<std::string>(entity, "Name");
-	if(collision != nullptr)
-	{
-		for(auto ent : collision->CollidingEntities)
+
+	if (name == "Sun") {
+		auto light = m_World->GetComponent<Components::PointLight>(entity, "PointLight");
+
+		if (input->KeyState[GLFW_KEY_KP_ADD])
 		{
-			if(m_World->GetProperty<std::string>(ent, "Name") == "Obstacle")
-			{
-				m_World->RemoveEntity(entity);
+			if (input->KeyState[GLFW_KEY_1]) {
+				light->constantAttenuation += 0.001;
+			}
+			if (input->KeyState[GLFW_KEY_2]) {
+				light->linearAttenuation += 0.001;
+			}
+			if (input->KeyState[GLFW_KEY_3]) {
+				light->quadraticAttenuation += 0.00001;
 			}
 		}
+		if (input->KeyState[GLFW_KEY_KP_SUBTRACT])
+		{
+			if (input->KeyState[GLFW_KEY_1]) {
+				light->constantAttenuation -= 0.001;
+
+			}
+			if (input->KeyState[GLFW_KEY_2]) {
+				light->linearAttenuation -= 0.001;
+
+			}
+			if (input->KeyState[GLFW_KEY_3]) {
+				light->quadraticAttenuation -= 0.00001;
+
+			}
+		}
+
+		LOG_DEBUG("Constant: %f\nLinear: %f\nQuadratic: %f", light->constantAttenuation, light->linearAttenuation, light->quadraticAttenuation);
 	}
 
 	if (name == "Camera") {
@@ -104,12 +126,15 @@ void Systems::PlayerSystem::UpdateEntity(double dt, EntityID entity, EntityID pa
 			m_PlayerOriginalBounds = bounds->VolumeVector;
 		}
 
+		auto soundEmitter = m_World->GetComponent<Components::SoundEmitter>(entity, "SoundEmitter");
+
 		glm::vec3 Ship_Right = glm::vec3(glm::vec4(1, 0, 0, 0));
 		glm::vec3 Ship_Forward = glm::vec3(glm::vec4(0, 0, 1, 0));
 
 		float TurnSpeed = 1.0f;
 		glm::vec3 Euler = glm::degrees(glm::eulerAngles(transform->Orientation));
 
+		// Controls
 		if(input->KeyState[GLFW_KEY_LEFT]) {
 			transform->Position -= Ship_Right * (float)dt * (m_PlayerSpeed + Euler.z);
 			
@@ -158,46 +183,56 @@ void Systems::PlayerSystem::UpdateEntity(double dt, EntityID entity, EntityID pa
 			Euler = glm::eulerAngles(transform->Orientation);
 			bounds->VolumeVector.x = m_PlayerOriginalBounds.x * glm::cos(glm::radians(Euler.z));
 		}
-
-
 		
-		
-		//powerup
 		auto cameraEntity = m_World->GetProperty<EntityID>(entity, "Camera");
 		auto cameracamera = m_World->GetComponent<Components::Camera>(cameraEntity, "Camera");
-		cameracamera->FOV = glm::radians(20.f + transform->Velocity.z/3 );
+		cameracamera->FOV = glm::radians(45.f + transform->Velocity.z/3.f );
 
-		auto collisionComponent = m_World->GetComponent<Components::Collision>(entity, "Collision");
-		for(auto ent : collisionComponent->CollidingEntities)
+		auto collision = m_World->GetComponent<Components::Collision>(entity, "Collision");
+		if(collision != nullptr)
 		{
-			std::string name = m_World->GetProperty<std::string>(ent, "Name");
-			if(name == "PowerUp")
+			// Obstacle collision
+			for(auto ent : collision->CollidingEntities)
 			{
-				auto powerupComp = m_World->GetComponent<Components::PowerUp>(ent, "PowerUp");
-				m_maxspeed = powerupComp->Speed;
-				m_poweruptimeleft = 5.f;
-				m_World->RemoveEntity(ent);
-				
+				if(m_World->GetProperty<std::string>(ent, "Name") == "Obstacle")
+				{
+					m_World->RemoveEntity(entity);
+				}
+			}
+
+			//powerup
+			for(auto ent : collision->CollidingEntities)
+			{
+				std::string name = m_World->GetProperty<std::string>(ent, "Name");
+				if(name == "PowerUp")
+				{
+					auto powerupComp = m_World->GetComponent<Components::PowerUp>(ent, "PowerUp");
+					m_maxspeed = powerupComp->Speed;
+					m_poweruptimeleft = 5.f;
+					m_World->RemoveEntity(ent);
+					SetPlayerLightColor(entity, glm::vec3(0.0, 1.0, 0.0));
+					auto soundSystem = m_World->GetSystem<Systems::SoundSystem>("SoundSystem");
+					soundSystem->PlaySound(soundEmitter, "Sounds/boom.wav");
+				}
+			}
+			if(m_poweruptimeleft <= 0)
+			{
+				m_maxspeed = m_basespeed;
+				SetPlayerLightColor(entity, glm::vec3(0.05f, 0.36f, 1.f));
+			}
+			if(transform->Velocity.z < m_maxspeed)
+			{
+				transform->Velocity.z += 100.f*dt;
+				if(transform->Velocity.z >= m_maxspeed)
+					transform->Velocity.z = m_maxspeed;
+			}
+			else if(transform->Velocity.z > m_maxspeed)
+			{
+				transform->Velocity.z -= 50.f*dt;
+				if(transform->Velocity.z <= m_maxspeed)
+					transform->Velocity.z = m_maxspeed;
 			}
 		}
-		if(m_poweruptimeleft <= 0)
-		{
-			m_maxspeed = m_basespeed;
-		}
-		if(transform->Velocity.z < m_maxspeed)
-		{
-			transform->Velocity.z += 100.f*dt;
-			if(transform->Velocity.z >= m_maxspeed)
-				transform->Velocity.z = m_maxspeed;
-		}
-		else if(transform->Velocity.z > m_maxspeed)
-		{
-			transform->Velocity.z -= 50.f*dt;
-			if(transform->Velocity.z <= m_maxspeed)
-				transform->Velocity.z = m_maxspeed;
-		}
-
-		
 
 		// Update camera
 		if(! freecamEnabled)
@@ -210,6 +245,32 @@ void Systems::PlayerSystem::UpdateEntity(double dt, EntityID entity, EntityID pa
 			
 			
 		}
+
+		// Update ground
+		auto groundEntity = m_World->GetProperty<EntityID>(entity, "Ground");
+		if (m_World->ValidEntity(groundEntity)) {
+			auto groundTransform = m_World->GetComponent<Components::Transform>(groundEntity, "Transform");
+			groundTransform->Position.x = transform->Position.x;
+		}
+
+		// Update Sun
+		auto sunEntity = m_World->GetProperty<EntityID>(entity, "Sun");
+		if (m_World->ValidEntity(sunEntity)) {
+			auto sunTransform = m_World->GetComponent<Components::Transform>(sunEntity, "Transform");
+			sunTransform->Position.x = transform->Position.x;
+		}
 	}
+}
+
+void Systems::PlayerSystem::SetPlayerLightColor(EntityID player, glm::vec3 color)
+{
+	auto light1 = m_World->GetProperty<EntityID>(player, "LightLeft");
+	auto light2 = m_World->GetProperty<EntityID>(player, "LightRight");
+	
+	auto lightComponent1 = m_World->GetComponent<Components::PointLight>(light1, "PointLight");
+	auto lightComponent2 = m_World->GetComponent<Components::PointLight>(light2, "PointLight");
+
+	lightComponent1->Diffuse = color;
+	lightComponent2->Diffuse = color;
 }
 

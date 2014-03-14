@@ -20,7 +20,7 @@ Systems::SoundSystem::SoundSystem(World* world)
 	alGetError();
 
 	alSpeedOfSound(340.29f); // Speed of sound
-	alDistanceModel(AL_INVERSE_DISTANCE);
+	alDistanceModel(AL_INVERSE_DISTANCE_CLAMPED);
 }
 
 void Systems::SoundSystem::Update(double dt)
@@ -75,15 +75,15 @@ void Systems::SoundSystem::UpdateEntity(double dt, EntityID entity, EntityID par
 	}
 }
 
-void Systems::SoundSystem::PlaySound(std::shared_ptr<Components::SoundEmitter> emitter, std::string fileName)
+void Systems::SoundSystem::PlaySound(Components::SoundEmitter* emitter, std::string fileName)
 {
-	if (m_Sources.find(emitter.get()) == m_Sources.end())
+	if (m_Sources.find(emitter) == m_Sources.end())
 		return;
 
 	ALuint buffer = LoadFile(fileName);
-	ALuint source = m_Sources[emitter.get()];
+	ALuint source = m_Sources[emitter];
 	alSourcei(source, AL_BUFFER, buffer);
-	alSourcePlay(m_Sources[emitter.get()]);
+	alSourcePlay(m_Sources[emitter]);
 }
 
 void Systems::SoundSystem::PlaySound(std::shared_ptr<Components::SoundEmitter> emitter)

@@ -4,12 +4,15 @@
 #include <array>
 
 #include "System.h"
+#include "Systems/SoundSystem.h"
 #include "Components/Transform.h"
 #include "Components/Input.h"
 #include "Components/Collision.h"
 #include "Components/Camera.h"
 #include "Components/Bounds.h"
 #include "Components/PowerUp.h"
+#include "Components/PointLight.h"
+#include "Components/SoundEmitter.h"
 
 #include "logging.h"
 
@@ -39,6 +42,9 @@ namespace Systems
 		float m_maxspeed;
 
 		float m_poweruptimeleft;
+
+		void SetPlayerLightColor(EntityID player, glm::vec3 color);
+
 	};
 
 }

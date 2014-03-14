@@ -11,7 +11,7 @@ namespace Components
 struct SoundEmitter : Component
 {
 	float Gain;
-	//float MaxDistance;
+	float MaxDistance;
 	float ReferenceDistance;
 	float Pitch;
 	bool Loop;
