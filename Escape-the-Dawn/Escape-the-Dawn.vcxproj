@@ -112,6 +112,7 @@
     <ClCompile Include="ShaderProgram.cpp" />
     <ClCompile Include="Skybox.cpp" />
     <ClCompile Include="Systems\CollisionSystem.cpp" />
+    <ClCompile Include="Systems\TransformSystem.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="TextFrame.cpp" />
     <ClCompile Include="World.cpp" />
@@ -146,6 +147,7 @@
     <ClInclude Include="Frame.h" />
     <ClInclude Include="GameFrame.h" />
     <ClInclude Include="GameWorld.h" />
+    <ClInclude Include="GLM.h" />
     <ClInclude Include="GUIManager.h" />
     <ClInclude Include="logging.h" />
     <ClInclude Include="glerror.h" />
@@ -165,6 +167,7 @@
     <ClInclude Include="Systems\PlayerSystem.h" />
     <ClInclude Include="Systems\RenderSystem.h" />
     <ClInclude Include="Systems\SoundSystem.h" />
+    <ClInclude Include="Systems\TransformSystem.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="TextFrame.h" />
     <ClInclude Include="World.h" />

@@ -1,13 +1,7 @@
 #ifndef Camera_h__
 #define Camera_h__
 
-#define GLM_FORCE_RADIANS
-#include <glm/glm.hpp>
-#include <glm/gtc/constants.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtx/rotate_vector.hpp>
-#include <glm/gtc/quaternion.hpp>
-#include <glm/gtx/quaternion.hpp>
+#include "GLM.h"
 
 class Camera
 {
@@ -38,13 +32,13 @@ public:
 	void ViewMatrix(glm::mat4 val) { m_ViewMatrix = val; }
 	
 	float FOV() const { return m_FOV; }
-	void FOV(float val) { m_FOV = val; }
+	void FOV(float val);
 
 	float NearClip() const { return m_NearClip; }
-	void NearClip(float val) { m_NearClip = val; }
+	void NearClip(float val);
 
 	float FarClip() const { return m_FarClip; }
-	void FarClip(float val) { m_FarClip = val; }
+	void FarClip(float val);
 
 private:
 	void UpdateProjectionMatrix();
@@ -54,7 +48,6 @@ private:
 	float m_AspectRatio;
 	float m_NearClip;
 	float m_FarClip;
-	
 
 	glm::vec3 m_Position;
 	glm::quat m_Orientation;

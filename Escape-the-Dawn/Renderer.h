@@ -8,12 +8,7 @@
 #include <vector>
 
 #include "OpenGL.h"
-#include <glm/glm.hpp>
-#include <glm/gtc/constants.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
-#include <glm/gtc/quaternion.hpp>
-#include <glm/gtx/quaternion.hpp>
+#include "GLM.h"
 
 #include "glerror.h"
 #include "Camera.h"
@@ -31,7 +26,7 @@ public:
 
 	int HEIGHT, WIDTH;
 
-	std::list<std::tuple<Model*, glm::mat4>> ModelsToRender;
+	std::list<std::tuple<Model*, glm::mat4, bool>> ModelsToRender;
 	int Lights;
 	std::vector<float> Light_position;
 	std::vector<float> Light_specular;
@@ -48,7 +43,7 @@ public:
 	void Draw(double dt);
 	void DrawText();
 
-	void AddModelToDraw(std::shared_ptr<Model> model, glm::vec3 position, glm::quat orientation, glm::vec3 scale);
+	void AddModelToDraw(std::shared_ptr<Model> model, glm::vec3 position, glm::quat orientation, glm::vec3 scale, bool visible);
 	void AddTextToDraw();
 	void AddPointLightToDraw(
 		glm::vec3 _position,

@@ -85,8 +85,8 @@ void Systems::CollisionSystem::Intersects(EntityID aEntity, EntityID bEntity)
 	if (aMin.x <= bMax.x && bMin.x <= aMax.x) {
 		if (aMin.y <= bMax.y && bMin.y <= aMax.y) {
 			if (aMin.z <= bMax.z && bMin.z <= aMax.z) {
-				aCollisionComponent->CollidingEntities.push_back(aEntity);
-				bCollisionComponent->CollidingEntities.push_back(bEntity);
+				aCollisionComponent->CollidingEntities.push_back(bEntity);
+				bCollisionComponent->CollidingEntities.push_back(aEntity);
 				return;
 			}
 		}

@@ -25,8 +25,10 @@ public:
 
 	virtual void Initialize();
 
-	virtual void RegisterComponents();
-	virtual void RegisterSystems();
+	virtual void RegisterSystems() = 0;
+	virtual void AddSystems() = 0;
+	virtual void RegisterComponents() = 0;
+	
 
 	void AddSystem(std::string systemType);
 	template <class T>
@@ -85,9 +87,13 @@ protected:
 	std::unordered_map<std::string, std::list<std::shared_ptr<Component>>> m_ComponentsOfType;
 	std::unordered_map<EntityID, std::map<std::string, std::shared_ptr<Component>>> m_EntityComponents;
 
+	std::list<EntityID> m_EntitiesToRemove;
+	void ProcessEntityRemovals();
+
 	EntityID GenerateEntityID();
 
 	void RecycleEntityID(EntityID id);
+
 };
 
 template <class T>

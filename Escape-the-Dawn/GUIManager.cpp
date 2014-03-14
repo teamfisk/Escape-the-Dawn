@@ -2,7 +2,7 @@
 
 int GUI::GUIManager::Add(Frame frame)
 {
-	//Frame.Add(frame);
-	//return CreateUID();
+	Frame.Add(frame);
+	return CreateUID();
 }
 */

@@ -49,6 +49,9 @@
     <ClCompile Include="GameWorld.cpp" />
     <ClCompile Include="Skybox.cpp" />
     <ClCompile Include="CubemapTexture.cpp" />
+    <ClCompile Include="Systems\TransformSystem.cpp">
+      <Filter>Systems</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component.h" />
@@ -152,6 +155,10 @@
     <ClInclude Include="OpenGL.h" />
     <ClInclude Include="Skybox.h" />
     <ClInclude Include="CubemapTexture.h" />
+    <ClInclude Include="Systems\TransformSystem.h">
+      <Filter>Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="GLM.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Shaders\Fragment.glsl">

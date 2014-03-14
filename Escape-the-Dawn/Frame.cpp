@@ -3,51 +3,74 @@
 GUI::Frame::Frame()
 {
 	rectangle = new Rectangle();
+	texture = nullptr;
 }
 
 int GUI::Frame::GetWidth()
 {
-	return rectangle;
+	return rectangle->Width();
 }
 
 int GUI::Frame::GetHeight()
 {
-	return rectangle.Height();
+	return rectangle->Height();
 }
 
 int GUI::Frame::GetX()
 {
-	return rectangle;
+	return rectangle->X();
 }
 
 int GUI::Frame::GetY()
 {
-	return rectangle.Y();
+	return rectangle->Y();
 }
 
-void GUI::Frame::SetWidth(int wid)
+int GUI::Frame::GetRight()
 {
-	rectangle.width(wid);
+	return rectangle->Right();
 }
 
-void GUI::Frame::SetHeight(int hei)
+int GUI::Frame::GetLeft()
 {
-	rectangle.height(hei);
+	return rectangle->Left();
 }
 
-void GUI::Frame::SetX(int xcord)
+int GUI::Frame::GetBottom()
 {
-	rectangle.X(xcord)
+	return rectangle->Bottom();
 }
 
-void GUI::Frame::SetY(int ycord)
+int GUI::Frame::GetTop()
 {
-	rectangle.Y(ycord)
+	return rectangle->Right();
 }
+
+void GUI::Frame::SetWidth(int _width)
+{
+	rectangle->Width(_width);
+}
+
+void GUI::Frame::SetHeight(int _height)
+{
+	rectangle->Height(_height);
+}
+
+void GUI::Frame::SetX(int _x)
+{
+	rectangle->X(_x);
+}
+
+void GUI::Frame::SetY(int _y)
+{
+	rectangle->Y(_y);
+}
+
+
 
 Rectangle GUI::Frame::AbsouluteRectangle()
 {
-	
+
 }
 
 bool GUI::Frame::Visible()
@@ -85,8 +108,48 @@ void GUI::Frame::Update(double dt)
 
 }
 
+void AddChild(GUI::Frame childFrame)
+{
+	childFrame.Parent = this;
+	if (!Children.Contains(childFrame))
+		Children.Add(childFrame);
+}
+
+/// <summary>
+/// Remove a child frame from the frame.
+/// </summary>
+/// <param name="childFrame">The child frame to remove.</param>
+void RemoveChild(GUI::Frame childFrame)
+{
+	if (Children.Contains(childFrame))
+		Children.Remove(childFrame);
+}
+
+/// <summary>
+/// Destroys the frame and all its children.
+/// </summary>
+void Destroy()
+{
+	if (Parent != null)
+		Parent.RemoveChild(this);
+
+	Manager.Remove(this);
+}
+
+void GUI::Frame::SetTexture(std::string fileName)
+{
+	//texture == någonTextureIDunno;
+}
+
 void GUI::Frame::Draw()
 {
-
+	if (Visible)
+	{
+		if (texture != nullptr)
+		{
+			//Drawshit
+		}
+	}
 }
+
 */

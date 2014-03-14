@@ -4,6 +4,7 @@
 #include "World.h"
 #include "Renderer.h"
 
+#include "Systems/TransformSystem.h"
 #include "Systems/CollisionSystem.h"
 #include "Systems/InputSystem.h"
 #include "Systems/LevelGenerationSystem.h"
@@ -36,9 +37,10 @@ public:
 	void Initialize();
 
 	void RegisterSystems() override;
+	void AddSystems() override;
 	void RegisterComponents() override;
 
-	void Update(double dt) ;
+	void Update(double dt);
 
 private:
 	std::shared_ptr<Renderer> m_Renderer;

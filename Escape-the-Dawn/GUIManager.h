@@ -1,4 +1,4 @@
-/*#ifndef GUIManager_h__
+#ifndef GUIManager_h__
 #define GUIManager_h__
 
 #include "Frame.h"
@@ -18,9 +18,8 @@ private:
 	static int uidIndex;
 
 };
-
 }
 
 
 
-#endif */
+#endif 
