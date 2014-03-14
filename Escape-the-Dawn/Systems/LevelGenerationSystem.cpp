@@ -85,7 +85,7 @@ void Systems::LevelGenerationSystem::Update( double dt )
 {
 	
 	elapsedtime += dt;
-	spawnFrequency = velocity/1000;
+	spawnFrequency = 10/velocity;
 
 	if(elapsedtime > spawnFrequency){
 		SpawnObstacle();
