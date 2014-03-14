@@ -38,7 +38,7 @@ void Systems::LevelGenerationSystem::SpawnObstacle()
 	if(typeRandom >= 0 && typeRandom < 2) // Mountain stuff :D
 		{
 		m_World->SetProperty(ent, "Name", std::string("Obstacle"));
-		float scale = (float)(rand() % 1000) / 250;
+		float scale = 1.0f + (float)(rand() % 1000) / 250;
 		transform->Scale = glm::vec3(scale);
 		bounds->VolumeVector = glm::vec3(9, 12, 7);
 		bounds->Origin = glm::vec3(1,11,-1);
@@ -47,7 +47,7 @@ void Systems::LevelGenerationSystem::SpawnObstacle()
 	else if(typeRandom >= 2 && typeRandom < 5) // Single Mountain :D
 		{
 		m_World->SetProperty(ent, "Name", std::string("Obstacle"));
-		float scale = (float)(rand() % 1000) / 200;
+		float scale = 1.0f + (float)(rand() % 1000) / 200;
 		transform->Scale = glm::vec3(scale);
 		bounds->VolumeVector = glm::vec3(3.5f, 7.5f, 3.5f);
 		bounds->Origin = glm::vec3(0,7.5f,0);
@@ -65,7 +65,6 @@ void Systems::LevelGenerationSystem::SpawnObstacle()
 	if(typeRandom >= 8 && typeRandom < 10)
 		{
 			m_World->SetProperty(ent, "Name", std::string("PowerUp"));
-			float scale = (float)(rand() % 1000) / 100;
 			bounds->VolumeVector = glm::vec3(4, 4, 4);
 			bounds->Origin = glm::vec3(0,4,0);
 			
