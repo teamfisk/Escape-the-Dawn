@@ -86,7 +86,7 @@ void GameWorld::Initialize()
 	collision->Interested = true;
 	bounds = AddComponent<Components::Bounds>(m_Player, "Bounds");
 	bounds->Origin = glm::vec3(0, 0, 2.f);
-	bounds->VolumeVector = glm::vec3(4.f, 0.7f, 1);
+	bounds->VolumeVector = glm::vec3(3.4f, 0.7f, 1);
 	// Player light
 	auto playerLight = CreateEntity(m_Player);
 	transform = AddComponent<Components::Transform>(playerLight, "Transform");

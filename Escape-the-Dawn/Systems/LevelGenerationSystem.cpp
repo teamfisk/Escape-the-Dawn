@@ -35,16 +35,16 @@ void Systems::LevelGenerationSystem::SpawnObstacle()
 	sound->ReferenceDistance = 15.f;
 	m_World->GetSystem<Systems::SoundSystem>("SoundSystem")->PlaySound(sound, "Sounds/hum.wav");
 
-	if(typeRandom >= 0 && typeRandom < 2) // Mountain stuff :D
+	if(typeRandom >= 0 && typeRandom < 1) // Mountain stuff :D
 		{
 		m_World->SetProperty(ent, "Name", std::string("Obstacle"));
 		float scale = 1.0f + (float)(rand() % 1000) / 250;
 		transform->Scale = glm::vec3(scale);
-		bounds->VolumeVector = glm::vec3(9, 12, 7);
+		bounds->VolumeVector = glm::vec3(8.5f, 12, 5);
 		bounds->Origin = glm::vec3(1,11,-1);
 		model->ModelFile = "Models/obstacle_mountain_1.obj";
 		}
-	else if(typeRandom >= 2 && typeRandom < 5) // Single Mountain :D
+	else if(typeRandom >= 1 && typeRandom < 5) // Single Mountain :D
 		{
 		m_World->SetProperty(ent, "Name", std::string("Obstacle"));
 		float scale = 1.0f + (float)(rand() % 1000) / 200;
@@ -53,16 +53,16 @@ void Systems::LevelGenerationSystem::SpawnObstacle()
 		bounds->Origin = glm::vec3(0,7.5f,0);
 		model->ModelFile = "Models/obstacle_mountain_2.obj";
 		}
-	else if(typeRandom >= 5 && typeRandom < 8)
+	else if(typeRandom >= 5 && typeRandom < 9)
 		{
 		m_World->SetProperty(ent, "Name", std::string("Obstacle"));
-		float scale = 1.f + (float)(rand() % 1000) / 100;
+		float scale = 2.f + (float)(rand() % 1000) / 100;
 		transform->Scale = glm::vec3(scale);
 		bounds->VolumeVector = glm::vec3(1, 1, 1);
 		bounds->Origin = glm::vec3(0,1,0);
 		model->ModelFile = "Models/obstacle_cube_1.obj";
 		}
-	if(typeRandom >= 8 && typeRandom < 10)
+	if(typeRandom >= 9 && typeRandom < 10)
 		{
 			m_World->SetProperty(ent, "Name", std::string("PowerUp"));
 			bounds->VolumeVector = glm::vec3(4, 4, 4);
