@@ -25,14 +25,13 @@ void Systems::LevelGenerationSystem::SpawnObstacle()
 	auto model = m_World->AddComponent<Components::Model>(ent, "Model");
 	auto sound = m_World->AddComponent<Components::SoundEmitter>(ent, "SoundEmitter");
 	
-
 	positionRandom = -500 + startx + (rand() % 1000);
 	transform->Position = glm::vec3(positionRandom, startyz);
-	transform->Velocity = glm::vec3(0.f, 10.f, 0);
+	transform->Velocity = glm::vec3(0.f, 30.f, 0);
 
 	sound->Loop = true;
 	sound->Gain = 1.f;
-	sound->ReferenceDistance = 4.f;
+	sound->ReferenceDistance = 0.5f;
 	m_World->GetSystem<Systems::SoundSystem>("SoundSystem")->PlaySound(sound, "Sounds/hum.wav");
 
 	if(typeRandom >= 0 && typeRandom < 1) // Mountain stuff :D
@@ -77,7 +76,7 @@ void Systems::LevelGenerationSystem::SpawnObstacle()
 	
 
 	// Put it below ground level
-	transform->Position.y -= bounds->VolumeVector.y * 2.f;
+	transform->Position.y -= transform->Scale.y * bounds->VolumeVector.y * 2.f;
 	
 }
 

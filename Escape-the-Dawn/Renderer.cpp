@@ -13,10 +13,10 @@ Renderer::Renderer()
 	m_DrawBounds = false;
 #endif
 
-	m_ShadowMapRes = 2048*2;
+	m_ShadowMapRes = 2048*8;
 	m_SunPosition = glm::vec3(0, 1.5f, 10);
 	m_SunTarget = glm::vec3(0, 0, 0);
-	m_SunProjection = glm::ortho<float>(-200, 200, -10, 100, -800, 800);
+	m_SunProjection = glm::ortho<float>(-200, 200, -100, 400, -800, 600);
 	Lights = 0;
 }
 
@@ -29,8 +29,9 @@ void Renderer::Initialize()
 	}
 
 	// Create a window
-	WIDTH = 1280;
-	HEIGHT = 720;
+	WIDTH = 1920;
+	HEIGHT = 1080;
+	glfwWindowHint(GLFW_SAMPLES, 16);
 	m_Window = glfwCreateWindow(WIDTH, HEIGHT, "OpenGL", nullptr, nullptr);
 	if (!m_Window) {
 		LOG_ERROR("GLFW: Failed to create window");
@@ -308,7 +309,7 @@ void Renderer::DrawShadowMap()
 void Renderer::DrawDebugShadowMap()
 {
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-	glViewport(0, 0, 200*(16.f/9.f), 200);
+	glViewport(0, 0, 400, 400);
 
 	glClear(GL_DEPTH_BUFFER_BIT);
 	//glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
@@ -525,4 +526,5 @@ void Renderer::ClearStuff()
 	Light_linearAttenuation.clear();
 	Light_quadraticAttenuation.clear();
 	Light_spotExponent.clear();
+	Lights = 0;
 }

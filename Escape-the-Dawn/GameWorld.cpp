@@ -38,19 +38,21 @@ void GameWorld::Initialize()
 	pointLight->quadraticAttenuation = 0.f;
 	pointLight->spotExponent = 0.0f;
 	model = AddComponent<Components::Model>(ent, "Model");
-	model->ModelFile = "Models/sphere.obj";
+	model->ModelFile = "Models/sphere.obj";*/
 	ent = CreateEntity();
+	SetProperty(ent, "Name", std::string("Sun"));
 	transform = AddComponent<Components::Transform>(ent, "Transform");
-	transform->Position = glm::vec3(-10.f, 7.f, 0.f);
+	transform->Position = glm::vec3(0.f, 100.f, 30.f);
+	AddComponent<Components::Input>(ent, "Input");
 	pointLight = AddComponent<Components::PointLight>(ent, "PointLight");
 	pointLight->Specular = glm::vec3(1.0,  1.0,  1.0);
-	pointLight->Diffuse = glm::vec3(5.0,  0.0,  0.0);
-	pointLight->constantAttenuation = 0.f;
-	pointLight->linearAttenuation = 1.f;
-	pointLight->quadraticAttenuation = 0.f;
+	pointLight->Diffuse = glm::vec3(1.0,  0.45,  0.0);
+	pointLight->constantAttenuation = 0.009f;
+	pointLight->linearAttenuation = -0.0177f;
+	pointLight->quadraticAttenuation = 0.00043f;
 	pointLight->spotExponent = 0.0f;
 	model = AddComponent<Components::Model>(ent, "Model");
-	model->ModelFile = "Models/sphere.obj";*/
+	model->ModelFile = "Models/sphere.obj";
 
 	//ground
 	ent = CreateEntity();
@@ -94,7 +96,7 @@ void GameWorld::Initialize()
 	transform->Position = glm::vec3(1.5f, 0.25f, 2.5f);
 	pointLight = AddComponent<Components::PointLight>(playerLight, "PointLight");
 	pointLight->Specular = glm::vec3(0.1f, 0.1f, 0.1f);
-	pointLight->Diffuse = glm::vec3(0.45f, 0.65f, 1.f);
+	pointLight->Diffuse = glm::vec3(0.05f, 0.36f, 1.f);
 	pointLight->constantAttenuation = 0.f;
 	pointLight->linearAttenuation = 0.9f;
 	pointLight->quadraticAttenuation = 0.f;
@@ -106,7 +108,7 @@ void GameWorld::Initialize()
 	transform->Position = glm::vec3(-1.5f, 0.25f, 2.5f);
 	pointLight = AddComponent<Components::PointLight>(playerLight, "PointLight");
 	pointLight->Specular = glm::vec3(0.1f, 0.1f, 0.1f);
-	pointLight->Diffuse = glm::vec3(0.45f, 0.65f, 1.f);
+	pointLight->Diffuse = glm::vec3(0.05f, 0.36f, 1.f);
 	pointLight->constantAttenuation = 0.f;
 	pointLight->linearAttenuation = 0.9f;
 	pointLight->quadraticAttenuation = 0.f;
@@ -118,7 +120,7 @@ void GameWorld::Initialize()
 	transform->Position = glm::vec3(0.0f, 2.0f, 2.5f);
 	pointLight = AddComponent<Components::PointLight>(playerLight, "PointLight");
 	pointLight->Specular = glm::vec3(0.1f, 0.1f, 0.1f);
-	pointLight->Diffuse = glm::vec3(0.45f, 0.65f, 1.f);
+	pointLight->Diffuse = glm::vec3(0.05f, 0.36f, 1.f);
 	pointLight->constantAttenuation = 0.f;
 	pointLight->linearAttenuation = 1.0f;
 	pointLight->quadraticAttenuation = 0.f;

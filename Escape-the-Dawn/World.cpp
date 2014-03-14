@@ -63,6 +63,11 @@ bool World::ValidEntity(EntityID entity)
 void World::RemoveEntity(EntityID entity)
 {
 	m_EntitiesToRemove.push_back(entity);
+	for (auto pair : m_EntityParents) {
+		if (pair.second == entity) {
+			m_EntitiesToRemove.push_back(pair.first);
+		}
+	}
 }
 
 void World::ProcessEntityRemovals()
