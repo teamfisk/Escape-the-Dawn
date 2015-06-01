@@ -219,14 +219,14 @@ void Systems::PlayerSystem::UpdateEntity(double dt, EntityID entity, EntityID pa
 				m_World->AddComponent<Components::Transform>(swoosh, "Transform");
 				auto swooshSound = m_World->AddComponent<Components::SoundEmitter>(swoosh, "SoundEmitter");
 				float gainchanger = float(transform->Velocity.z) / float(m_basespeed);
-				swooshSound->Gain = 2 * gainchanger;
+				swooshSound->Gain = 2.f * gainchanger;
 				swooshSound->MaxDistance = 1000;
-				swooshSound->ReferenceDistance = 2.f;
+				swooshSound->ReferenceDistance = 1.5f * gainchanger;
 				swooshSound->Pitch = 1.f - (glm::length(parentTransform->Scale) / 12.f) * 0.5f;
 				LOG_ERROR("Pitch: %f", swooshSound->Pitch);
 				LOG_ERROR("Gain: %f. Vel: %f", swooshSound->Gain, transform->Velocity.z);
 				auto soundSystem = m_World->GetSystem<Systems::SoundSystem>("SoundSystem");
-				soundSystem->PlaySound(swooshSound.get(), "Sounds/swoosh.wav");
+				soundSystem->PlaySound(swooshSound.get(), "Sounds/swoosh3.wav");
 				m_World->RemoveEntity(ent);
 			}
 		}
