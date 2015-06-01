@@ -63,7 +63,7 @@ void Systems::PlayerSystem::UpdateEntity(double dt, EntityID entity, EntityID pa
 			}
 		}
 
-		LOG_DEBUG("Constant: %f\nLinear: %f\nQuadratic: %f", light->constantAttenuation, light->linearAttenuation, light->quadraticAttenuation);
+		//LOG_DEBUG("Constant: %f\nLinear: %f\nQuadratic: %f", light->constantAttenuation, light->linearAttenuation, light->quadraticAttenuation);
 	}
 
 	if (name == "Camera") {
@@ -211,6 +211,20 @@ void Systems::PlayerSystem::UpdateEntity(double dt, EntityID entity, EntityID pa
 					m_World->RemoveEntity(entity);
 
 					//TODO: Ljud som kommer från crashsite
+				}
+
+				if (m_World->GetProperty<std::string>(ent, "Name") == "Obstacle_SoundTrigger")
+				{
+					auto parent = m_World->GetEntityParent(ent);
+					auto swoosh = m_World->CreateEntity(parent);
+					m_World->AddComponent<Components::Transform>(swoosh, "Transform");
+					auto swooshSound = m_World->AddComponent<Components::SoundEmitter>(swoosh, "SoundEmitter");
+					swooshSound->Gain = 2.f;
+					swooshSound->MaxDistance = 5.f;
+					swooshSound->ReferenceDistance = 1.f;
+					auto soundSystem = m_World->GetSystem<Systems::SoundSystem>("SoundSystem");
+					soundSystem->PlaySound(swooshSound.get(), "Sounds/swoosh.wav");
+					m_World->RemoveEntity(ent);
 				}
 			}
 
