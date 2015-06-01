@@ -87,7 +87,8 @@ void World::ProcessEntityRemovals()
 		}
 		m_EntityComponents.erase(entity);
 
-		RecycleEntityID(entity);
+		// HACK: Disabled Entity ID recycling since something, somewhere doesn't care and makes us crash
+		//RecycleEntityID(entity);
 	}
 	m_EntitiesToRemove.clear();
 }
