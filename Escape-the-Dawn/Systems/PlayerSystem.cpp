@@ -14,6 +14,7 @@ Systems::PlayerSystem::PlayerSystem( World* world ) : System(world)
 	m_poweruptimeleft = 0;
 	m_basespeed = 125.f;
 	m_maxspeed = 125.f;
+
 }
 
 void Systems::PlayerSystem::Update(double dt)
@@ -195,7 +196,20 @@ void Systems::PlayerSystem::UpdateEntity(double dt, EntityID entity, EntityID pa
 		{
 			if(m_World->GetProperty<std::string>(ent, "Name") == "Obstacle")
 			{
+					
+					auto deathSoundEntity = m_World->CreateEntity(ent);
+
+					auto deathTransform = m_World->AddComponent<Components::Transform>(deathSoundEntity, "Transform");
+					auto deathSoundEmitter = m_World->AddComponent<Components::SoundEmitter>(deathSoundEntity, "SoundEmitter");
+					deathSoundEmitter->Gain = 5.f;
+					deathSoundEmitter->ReferenceDistance = 1.5f;
+
+					auto deathSoundSystem = m_World->GetSystem<Systems::SoundSystem>("SoundSystem");
+					deathSoundSystem->PlaySound(deathSoundEmitter.get(), "Sounds/Explosion3.wav");
+
 				m_World->RemoveEntity(entity);
+
+					//TODO: Ljud som kommer från crashsite
 			}
 
 			if (m_World->GetProperty<std::string>(ent, "Name") == "Obstacle_SoundTrigger")

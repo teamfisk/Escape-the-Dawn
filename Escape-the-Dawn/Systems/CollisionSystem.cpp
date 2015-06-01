@@ -70,7 +70,6 @@ void Systems::CollisionSystem::Intersects(EntityID aEntity, EntityID bEntity)
 		return;
 
 	auto transformSystem = m_World->GetSystem<Systems::TransformSystem>("TransformSystem");
-	
 	auto aBounds = m_World->GetComponent<Components::Bounds>(aEntity, "Bounds");
 	auto bBounds = m_World->GetComponent<Components::Bounds>(bEntity, "Bounds");
 

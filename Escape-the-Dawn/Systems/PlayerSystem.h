@@ -32,7 +32,6 @@ namespace Systems
 	private:
 		float m_PlayerSpeed;
 		glm::vec3 m_PlayerOriginalBounds;
-
 		glm::vec3 m_CameraOffset;
 		glm::quat m_CameraOrientation;
 
