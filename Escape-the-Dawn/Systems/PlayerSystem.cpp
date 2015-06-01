@@ -131,8 +131,6 @@ void Systems::PlayerSystem::UpdateEntity(double dt, EntityID entity, EntityID pa
 			m_PlayerOriginalBounds = bounds->VolumeVector;
 		}
 
-		auto soundEmitter = m_World->GetComponent<Components::SoundEmitter>(entity, "SoundEmitter");
-
 		glm::vec3 Ship_Right = glm::vec3(glm::vec4(1, 0, 0, 0));
 		glm::vec3 Ship_Forward = glm::vec3(glm::vec4(0, 0, 1, 0));
 
@@ -222,7 +220,7 @@ void Systems::PlayerSystem::UpdateEntity(double dt, EntityID entity, EntityID pa
 				swooshSound->Gain = 2.f;
 				swooshSound->MaxDistance = 5.f;
 				swooshSound->ReferenceDistance = 1.f;
-				swooshSound->Pitch = 1.f - (glm::length(parentTransform->Scale) / 12.f) * 0.5f;
+				swooshSound->Pitch = 1.f - (glm::length(parentTransform->Scale) / 12.f) * 0.5f;;
 				auto soundSystem = m_World->GetSystem<Systems::SoundSystem>("SoundSystem");
 				soundSystem->PlaySound(swooshSound.get(), "Sounds/swoosh.wav");
 				m_World->RemoveEntity(ent);
@@ -241,8 +239,9 @@ void Systems::PlayerSystem::UpdateEntity(double dt, EntityID entity, EntityID pa
 				m_poweruptimeleft = powerupComp->Duration;
 				m_World->RemoveEntity(ent);
 				SetPlayerLightColor(entity, glm::vec3(0.0, 1.0, 0.0));
+				auto soundEmitterPU = m_World->GetProperty<Components::SoundEmitter*>(entity, "SoundEmitterPowerUp");
 				auto soundSystem = m_World->GetSystem<Systems::SoundSystem>("SoundSystem");
-				soundSystem->PlaySound(soundEmitter, "Sounds/boom.wav");
+				soundSystem->PlaySound(soundEmitterPU, "Sounds/boom.wav");
 			}
 		}
 
@@ -266,6 +265,8 @@ void Systems::PlayerSystem::UpdateEntity(double dt, EntityID entity, EntityID pa
 
 		float percentage = m_poweruptimeleft / m_PowerUpTotalDuration;
 		SetPlayerLightColor(entity, glm::vec3(0.0, 1.0, 0.0) * percentage + (1.f - percentage) * glm::vec3(0.05f, 0.36f, 1.f));
+		auto soundEmitterEngine = m_World->GetProperty<Components::SoundEmitter*>(entity, "SoundEmitterEngine");
+		soundEmitterEngine->Pitch = 1.f + percentage * 0.5f;
 
 		// Update camera
 		if(! freecamEnabled)
