@@ -93,8 +93,26 @@ void GameWorld::Initialize()
 	bounds = AddComponent<Components::Bounds>(m_Player, "Bounds");
 	bounds->Origin = glm::vec3(0, 0, 2.f);
 	bounds->VolumeVector = glm::vec3(2.7f, 0.7f, 1);
-	soundEmitter = AddComponent<Components::SoundEmitter>(m_Player, "SoundEmitter");
-	soundEmitter->Gain = 2.5f;
+	// Sound Emitter PowerUp
+	auto soundPowerUp = CreateEntity(m_Player);
+	{
+		AddComponent<Components::Transform>(soundPowerUp, "Transform");
+		soundEmitter = AddComponent<Components::SoundEmitter>(soundPowerUp, "SoundEmitter");
+		soundEmitter->Gain = 2.5f;
+		SetProperty(m_Player, "SoundEmitterPowerUp", soundEmitter.get());
+	}
+	// Sound Emitter PowerUp
+	auto soundEngine = CreateEntity(m_Player);
+	{
+		AddComponent<Components::Transform>(soundEngine, "Transform");
+		soundEmitter = AddComponent<Components::SoundEmitter>(soundEngine, "SoundEmitter");
+		soundEmitter->Gain = 1.5f;
+		soundEmitter->Path = "Sounds/engine.wav";
+		soundEmitter->Loop = true;
+		auto soundSystem = GetSystem<Systems::SoundSystem>("SoundSystem");
+		soundSystem->PlaySound(soundEmitter.get(), "Sounds/engine.wav");
+		SetProperty(m_Player, "SoundEmitterEngine", soundEmitter.get());
+	}
 	// Player light
 	auto playerLight = CreateEntity(m_Player);
 	SetProperty(m_Player, "LightLeft", playerLight);
@@ -134,6 +152,7 @@ void GameWorld::Initialize()
 	pointLight->spotExponent = 0.0f;
 	bounds = AddComponent<Components::Bounds>(playerLight, "Bounds");
 	bounds->VolumeVector = glm::vec3(0.5f);
+	// Player sound
 
 	/*ent = CreateEntity();
 	transform = AddComponent<Components::Transform>(ent, "Transform");
