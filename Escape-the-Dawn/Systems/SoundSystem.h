@@ -2,6 +2,7 @@
 #define SoundEmitter_h__
 
 #include "System.h"
+#include "Systems/TransformSystem.h"
 #include "Components/Transform.h"
 #include "Components/SoundEmitter.h"
 #include <AL/al.h>

@@ -64,7 +64,8 @@ void Systems::SoundSystem::UpdateEntity(double dt, EntityID entity, EntityID par
 		alSourcef(source, AL_PITCH, soundEmitter->Pitch); 
 		alSourcei(source, AL_LOOPING, soundEmitter->Loop);
 
-		glm::vec3 emitterPos = transformComponent->Position;
+		auto transformSystem = m_World->GetSystem<Systems::TransformSystem>("TransformSystem");
+		glm::vec3 emitterPos = transformSystem->AbsolutePosition(entity);
 		ALfloat sourcePos[3] = { emitterPos.x, emitterPos.y, -emitterPos.z };
 
 		glm::vec3 emitterVel= transformComponent->Velocity;
