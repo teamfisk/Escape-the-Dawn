@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
@@ -19,14 +19,14 @@
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <CharacterSet>MultiByte</CharacterSet>
-    <PlatformToolset>v110</PlatformToolset>
+    <PlatformToolset>v120</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
-    <PlatformToolset>v110</PlatformToolset>
+    <PlatformToolset>v120</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -40,17 +40,17 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <LibraryPath>$(BOOST_ROOT)\lib32-msvc-11.0;$(SolutionDir)\Libraries\openal-soft-1.15.1-bin\lib\Win32\Debug;$(SolutionDir)\Libraries\SOIL\lib\Debug;$(SolutionDir)\Libraries\glew-1.10.0\lib\Debug\Win32;$(SolutionDir)\Libraries\glfw-3.0.4\lib\Debug;$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(BOOST_ROOT)\lib32-msvc-12.0;$(SolutionDir)\Libraries\openal-soft-1.15.1-bin\lib\Win32\Debug;$(SolutionDir)\Libraries\SOIL\lib\Debug;$(SolutionDir)\Libraries\glew-1.10.0\lib\Debug\Win32;$(SolutionDir)\Libraries\glfw-3.0.4\lib\Debug;$(LibraryPath)</LibraryPath>
     <OutDir>$(SolutionDir)bin\</OutDir>
     <IntDir>$(SolutionDir)obj\$(ProjectName)\</IntDir>
     <TargetName>$(ProjectName)-$(Configuration)</TargetName>
-    <IncludePath>$(BOOST_ROOT);$(SolutionDir)\Libraries\openal-soft-1.15.1-bin\include;$(SolutionDir)\Libraries\SOIL\src;$(ProjectDir);$(SolutionDir)\Libraries;$(SolutionDir)\Libraries\glew-1.10.0\include;$(SolutionDir)\Libraries\glfw-3.0.4\include;$(SolutionDir)\Libraries\glm-0.9.5.2;$(IncludePath)</IncludePath>
+    <IncludePath>$(BOOST_ROOT);$(SolutionDir)\Libraries\openal-soft-1.15.1-bin\include;$(SolutionDir)\Libraries\SOIL\src;$(ProjectDir);$(SolutionDir)\Libraries;$(SolutionDir)\Libraries\glew-1.10.0\include;$(SolutionDir)\Libraries\glfw-3.0.4\include;$(SolutionDir)\Libraries\glm-0.9.5.3;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>$(BOOST_ROOT);$(SolutionDir)\Libraries\openal-soft-1.15.1-bin\include;$(SolutionDir)\Libraries\SOIL\src;$(ProjectDir);$(SolutionDir)\Libraries;$(SolutionDir)\Libraries\glew-1.10.0\include;$(SolutionDir)\Libraries\glfw-3.0.4\include;$(SolutionDir)\Libraries\glm-0.9.5.2;$(IncludePath)</IncludePath>
+    <IncludePath>$(BOOST_ROOT);$(SolutionDir)\Libraries\openal-soft-1.15.1-bin\include;$(SolutionDir)\Libraries\SOIL\src;$(ProjectDir);$(SolutionDir)\Libraries;$(SolutionDir)\Libraries\glew-1.10.0\include;$(SolutionDir)\Libraries\glfw-3.0.4\include;$(SolutionDir)\Libraries\glm-0.9.5.3;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <LibraryPath>$(BOOST_ROOT)\lib32-msvc-11.0;$(SolutionDir)\Libraries\openal-soft-1.15.1-bin\lib\Win32\Release;$(SolutionDir)\Libraries\SOIL\lib\Release;$(SolutionDir)\Libraries\glew-1.10.0\lib\Release\Win32;$(SolutionDir)\Libraries\glfw-3.0.4\lib\Release;$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(BOOST_ROOT)\lib32-msvc-12.0;$(SolutionDir)\Libraries\openal-soft-1.15.1-bin\lib\Win32\Release;$(SolutionDir)\Libraries\SOIL\lib\Release;$(SolutionDir)\Libraries\glew-1.10.0\lib\Release\Win32;$(SolutionDir)\Libraries\glfw-3.0.4\lib\Release;$(LibraryPath)</LibraryPath>
     <OutDir>$(SolutionDir)bin\</OutDir>
     <IntDir>$(SolutionDir)obj\$(ProjectName)\</IntDir>
     <TargetName>$(ProjectName)-$(Configuration)</TargetName>
