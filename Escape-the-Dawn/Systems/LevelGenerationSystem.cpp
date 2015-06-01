@@ -80,6 +80,7 @@ void Systems::LevelGenerationSystem::SpawnObstacle()
 
 			auto powerUp = m_World->AddComponent<Components::PowerUp>(ent, "PowerUp");
 			powerUp->Speed = 200.f;
+			powerUp->Duration = 5.f;
 
 			model->ModelFile = "Models/powerup.obj";
 		}
