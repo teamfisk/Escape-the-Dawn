@@ -41,6 +41,7 @@ namespace Systems
 		float m_basespeed;
 		float m_maxspeed;
 
+		float m_PowerUpTotalDuration;
 		float m_poweruptimeleft;
 
 		void SetPlayerLightColor(EntityID player, glm::vec3 color);

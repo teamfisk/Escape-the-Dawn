@@ -10,6 +10,7 @@ Systems::PlayerSystem::PlayerSystem( World* world ) : System(world)
 	m_CameraOrientation = glm::angleAxis<float>(glm::radians(15.0f),glm::vec3(1,0,0));
 
 	freecamEnabled = false;
+	m_PowerUpTotalDuration = 5.f;
 	m_poweruptimeleft = 0;
 	m_basespeed = 125.f;
 	m_maxspeed = 125.f;
@@ -17,7 +18,10 @@ Systems::PlayerSystem::PlayerSystem( World* world ) : System(world)
 
 void Systems::PlayerSystem::Update(double dt)
 {
-	m_poweruptimeleft -= (float)dt;
+	if (m_poweruptimeleft > 0)
+		m_poweruptimeleft -= (float)dt;
+	else
+		m_poweruptimeleft = 0;
 }
 
 void Systems::PlayerSystem::UpdateEntity(double dt, EntityID entity, EntityID parent)
@@ -183,81 +187,85 @@ void Systems::PlayerSystem::UpdateEntity(double dt, EntityID entity, EntityID pa
 			Euler = glm::eulerAngles(transform->Orientation);
 			bounds->VolumeVector.x = m_PlayerOriginalBounds.x * glm::cos(glm::radians(Euler.z));
 		}
-		
-		auto cameraEntity = m_World->GetProperty<EntityID>(entity, "Camera");
-		auto cameracamera = m_World->GetComponent<Components::Camera>(cameraEntity, "Camera");
-		cameracamera->FOV = glm::radians(45.f + transform->Velocity.z/3.f );
 
 		auto collision = m_World->GetComponent<Components::Collision>(entity, "Collision");
-		if(collision != nullptr)
+
+		// Obstacle collision
+		for(auto ent : collision->CollidingEntities)
 		{
-			// Obstacle collision
-			for(auto ent : collision->CollidingEntities)
+			if(m_World->GetProperty<std::string>(ent, "Name") == "Obstacle")
 			{
-				if(m_World->GetProperty<std::string>(ent, "Name") == "Obstacle")
-				{
-					m_World->RemoveEntity(entity);
-				}
-
-				if (m_World->GetProperty<std::string>(ent, "Name") == "Obstacle_SoundTrigger")
-				{
-					auto parent = m_World->GetEntityParent(ent);
-					auto swoosh = m_World->CreateEntity(parent);
-					m_World->AddComponent<Components::Transform>(swoosh, "Transform");
-					auto swooshSound = m_World->AddComponent<Components::SoundEmitter>(swoosh, "SoundEmitter");
-					swooshSound->Gain = 2.f;
-					swooshSound->MaxDistance = 5.f;
-					swooshSound->ReferenceDistance = 1.f;
-					auto soundSystem = m_World->GetSystem<Systems::SoundSystem>("SoundSystem");
-					soundSystem->PlaySound(swooshSound.get(), "Sounds/swoosh.wav");
-					m_World->RemoveEntity(ent);
-				}
+				m_World->RemoveEntity(entity);
 			}
 
-			//powerup
-			for(auto ent : collision->CollidingEntities)
+			if (m_World->GetProperty<std::string>(ent, "Name") == "Obstacle_SoundTrigger")
 			{
-				std::string name = m_World->GetProperty<std::string>(ent, "Name");
-				if(name == "PowerUp")
-				{
-					auto powerupComp = m_World->GetComponent<Components::PowerUp>(ent, "PowerUp");
-					m_maxspeed = powerupComp->Speed;
-					m_poweruptimeleft = 5.f;
-					m_World->RemoveEntity(ent);
-					SetPlayerLightColor(entity, glm::vec3(0.0, 1.0, 0.0));
-					auto soundSystem = m_World->GetSystem<Systems::SoundSystem>("SoundSystem");
-					soundSystem->PlaySound(soundEmitter, "Sounds/boom.wav");
-				}
-			}
-			if(m_poweruptimeleft <= 0)
-			{
-				m_maxspeed = m_basespeed;
-				SetPlayerLightColor(entity, glm::vec3(0.05f, 0.36f, 1.f));
-			}
-			if(transform->Velocity.z < m_maxspeed)
-			{
-				transform->Velocity.z += 100.f*dt;
-				if(transform->Velocity.z >= m_maxspeed)
-					transform->Velocity.z = m_maxspeed;
-			}
-			else if(transform->Velocity.z > m_maxspeed)
-			{
-				transform->Velocity.z -= 50.f*dt;
-				if(transform->Velocity.z <= m_maxspeed)
-					transform->Velocity.z = m_maxspeed;
+				auto parent = m_World->GetEntityParent(ent);
+				auto parentTransform = m_World->GetComponent<Components::Transform>(parent, "Transform");
+				auto swoosh = m_World->CreateEntity(parent);
+				m_World->AddComponent<Components::Transform>(swoosh, "Transform");
+				auto swooshSound = m_World->AddComponent<Components::SoundEmitter>(swoosh, "SoundEmitter");
+				swooshSound->Gain = 2.f;
+				swooshSound->MaxDistance = 5.f;
+				swooshSound->ReferenceDistance = 1.f;
+				swooshSound->Pitch = 1.f - (glm::length(parentTransform->Scale) / 12.f) * 0.5f;
+				auto soundSystem = m_World->GetSystem<Systems::SoundSystem>("SoundSystem");
+				soundSystem->PlaySound(swooshSound.get(), "Sounds/swoosh.wav");
+				m_World->RemoveEntity(ent);
 			}
 		}
+
+		//powerup
+		for(auto ent : collision->CollidingEntities)
+		{
+			std::string name = m_World->GetProperty<std::string>(ent, "Name");
+			if(name == "PowerUp")
+			{
+				auto powerupComp = m_World->GetComponent<Components::PowerUp>(ent, "PowerUp");
+				m_maxspeed = powerupComp->Speed;
+				m_PowerUpTotalDuration = powerupComp->Duration;
+				m_poweruptimeleft = powerupComp->Duration;
+				m_World->RemoveEntity(ent);
+				SetPlayerLightColor(entity, glm::vec3(0.0, 1.0, 0.0));
+				auto soundSystem = m_World->GetSystem<Systems::SoundSystem>("SoundSystem");
+				soundSystem->PlaySound(soundEmitter, "Sounds/boom.wav");
+			}
+		}
+
+		if(m_poweruptimeleft <= 0)
+		{
+			m_maxspeed = m_basespeed;
+		}
+
+		if(transform->Velocity.z < m_maxspeed)
+		{
+			transform->Velocity.z += 100.f*dt;
+			if(transform->Velocity.z >= m_maxspeed)
+				transform->Velocity.z = m_maxspeed;
+		}
+		else if(transform->Velocity.z > m_maxspeed)
+		{
+			transform->Velocity.z -= 50.f*dt;
+			if(transform->Velocity.z <= m_maxspeed)
+				transform->Velocity.z = m_maxspeed;
+		}
+
+		float percentage = m_poweruptimeleft / m_PowerUpTotalDuration;
+		SetPlayerLightColor(entity, glm::vec3(0.0, 1.0, 0.0) * percentage + (1.f - percentage) * glm::vec3(0.05f, 0.36f, 1.f));
 
 		// Update camera
 		if(! freecamEnabled)
 		{
+			auto cameraEntity = m_World->GetProperty<EntityID>(entity, "Camera");
+
 			auto cameraTransform = m_World->GetComponent<Components::Transform>(cameraEntity, "Transform");
 			if (cameraTransform) {
 				cameraTransform->Position = transform->Position + m_CameraOffset;
 				cameraTransform->Orientation = m_CameraOrientation;
 			}
 			
-			
+			auto cameracamera = m_World->GetComponent<Components::Camera>(cameraEntity, "Camera");
+			cameracamera->FOV = glm::radians(45.f + transform->Velocity.z / 3.f);
 		}
 
 		// Update ground
