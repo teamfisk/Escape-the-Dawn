@@ -136,6 +136,7 @@ void Systems::PlayerSystem::UpdateEntity(double dt, EntityID entity, EntityID pa
 
 		float TurnSpeed = 1.0f;
 		glm::vec3 Euler = glm::degrees(glm::eulerAngles(transform->Orientation));
+		PitchAngleAdd = (float(abs(Euler.z))*float(abs(Euler.z))) / (25.0f*25.f);
 
 		// Controls
 		if(input->KeyState[GLFW_KEY_LEFT]) {
@@ -266,10 +267,11 @@ void Systems::PlayerSystem::UpdateEntity(double dt, EntityID entity, EntityID pa
 				transform->Velocity.z = m_maxspeed;
 		}
 
+		//Engine sound
 		float percentage = m_poweruptimeleft / m_PowerUpTotalDuration;
 		SetPlayerLightColor(entity, glm::vec3(0.0, 1.0, 0.0) * percentage + (1.f - percentage) * glm::vec3(0.05f, 0.36f, 1.f));
 		auto soundEmitterEngine = m_World->GetProperty<Components::SoundEmitter*>(entity, "SoundEmitterEngine");
-		soundEmitterEngine->Pitch = 1.f + percentage * 0.5f;
+		soundEmitterEngine->Pitch = 1.f + percentage * 0.5f + PitchAngleAdd * 0.5f;
 
 		// Update camera
 		if(! freecamEnabled)
