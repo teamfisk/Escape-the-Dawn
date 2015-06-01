@@ -83,7 +83,6 @@ void Systems::LevelGenerationSystem::SpawnObstacle()
 
 void Systems::LevelGenerationSystem::Update( double dt )
 {
-	
 	elapsedtime += dt;
 	spawnFrequency = 10/velocity;
 
@@ -91,9 +90,6 @@ void Systems::LevelGenerationSystem::Update( double dt )
 		SpawnObstacle();
 		elapsedtime = 0;
 	}
-
-
-	
 }
 
 void Systems::LevelGenerationSystem::UpdateEntity( double dt, EntityID entity, EntityID parent )

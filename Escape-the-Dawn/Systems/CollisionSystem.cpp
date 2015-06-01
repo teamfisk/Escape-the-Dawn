@@ -69,7 +69,6 @@ void Systems::CollisionSystem::Intersects(EntityID aEntity, EntityID bEntity)
 	if(bCollisionComponent == nullptr)
 		return;
 
-	
 	auto aBounds = m_World->GetComponent<Components::Bounds>(aEntity, "Bounds");
 	
 	auto bBounds = m_World->GetComponent<Components::Bounds>(bEntity, "Bounds");
