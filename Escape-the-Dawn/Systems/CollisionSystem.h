@@ -8,6 +8,7 @@
 #include "Components/Transform.h"
 #include "Components/Collision.h"
 #include "Components/Bounds.h"
+#include "Systems/TransformSystem.h"
 
 namespace Systems
 {

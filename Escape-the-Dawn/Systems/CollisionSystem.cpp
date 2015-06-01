@@ -69,13 +69,13 @@ void Systems::CollisionSystem::Intersects(EntityID aEntity, EntityID bEntity)
 	if(bCollisionComponent == nullptr)
 		return;
 
+	auto transformSystem = m_World->GetSystem<Systems::TransformSystem>("TransformSystem");
 	
 	auto aBounds = m_World->GetComponent<Components::Bounds>(aEntity, "Bounds");
-	
 	auto bBounds = m_World->GetComponent<Components::Bounds>(bEntity, "Bounds");
 
-	glm::vec3 aPos = aTransform->Position + (aBounds->Origin * aTransform->Scale);
-	glm::vec3 bPos = bTransform->Position + (bBounds->Origin * bTransform->Scale);
+	glm::vec3 aPos = transformSystem->AbsolutePosition(aEntity) + (aBounds->Origin * aTransform->Scale);
+	glm::vec3 bPos = transformSystem->AbsolutePosition(bEntity) + (bBounds->Origin * bTransform->Scale);
 
 	glm::vec3 aMax = aPos + aBounds->VolumeVector * aTransform->Scale;
 	glm::vec3 aMin = aPos - aBounds->VolumeVector * aTransform->Scale;
@@ -119,7 +119,7 @@ void Systems::CollisionSystem::CreateBoundingBox(std::shared_ptr<Components::Bou
 	GLushort elements[] = {
 		0, 1, 2, 3,
 		4, 5, 6, 7,
-		0, 4, 1, 5, 
+		0, 4, 1, 5,
 		2, 6, 3, 7
 	};
 	GLuint ibo_elements;
