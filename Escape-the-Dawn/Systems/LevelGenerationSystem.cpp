@@ -83,6 +83,17 @@ void Systems::LevelGenerationSystem::SpawnObstacle()
 			powerUp->Duration = 5.f;
 
 			model->ModelFile = "Models/powerup.obj";
+
+			auto lightEnt = m_World->CreateEntity(ent);
+			transform = m_World->AddComponent<Components::Transform>(lightEnt, "Transform");
+			transform->Position = glm::vec3(0.0f, 2.0f, 2.5f);
+			auto light = m_World->AddComponent<Components::PointLight>(lightEnt, "PointLight");
+			light->Specular = glm::vec3(0.1f, 0.1f, 0.1f);
+			light->Diffuse = glm::vec3(0.05f, 0.36f, 1.f);
+			light->constantAttenuation = 0.f;
+			light->linearAttenuation = 1.0f;
+			light->quadraticAttenuation = 0.f;
+			light->spotExponent = 0.0f;
 		}
 
 		// Put it below ground level
